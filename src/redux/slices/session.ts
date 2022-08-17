@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+export interface SessionState {
+  access_token: string;
+}
+
 const initialState = {
   access_token: ''
 }

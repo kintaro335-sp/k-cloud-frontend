@@ -1,11 +1,11 @@
 import { useRoutes, Navigate } from 'react-router-dom';
-import { LandingPage, LoginPage, RegisterPage, Page404 } from '../pages';
+import { LandingPage, LoginPage, RegisterPage, Page404, FilesPage } from '../pages';
 
 export default function Routes() {
   return useRoutes([
     {
       path: '/',
-      element: <LandingPage />,
+      element: <LandingPage />
     },
     {
       path: '/login',
@@ -17,11 +17,7 @@ export default function Routes() {
     },
     {
       path: '/files',
-      element: <div>Files</div>
-    },
-    {
-      path: '/files/*',
-      element: <div>Files</div>
+      element: <FilesPage />
     },
     {
       path: '*',

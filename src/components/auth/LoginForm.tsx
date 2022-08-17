@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
 // api
-import { registerApi } from '../../api/auth';
+import { loginApi } from '../../api/auth';
 // hooks
 import useAuth from '../../hooks/useAuth';
 
@@ -27,7 +27,7 @@ export default function LoginForm({ ...props }: CardProps) {
     setIsLoading(true);
     try {
       const { username, password } = data;
-      const { access_token } = await registerApi(username, password);
+      const { access_token } = await loginApi(username, password);
       enqueueSnackbar('Login success', { variant: 'success' });
       dispatch(setAccessToken(access_token));
     } catch (error) {

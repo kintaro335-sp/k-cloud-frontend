@@ -8,7 +8,7 @@ const rootPersistConfig = {
   key: 'root',
   storage,
   keyPrefix: 'redux-',
-  whitelist: []
+  whitelist: ['session']
 };
 
 const sessionPersistConfig = {

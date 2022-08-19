@@ -10,6 +10,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
+    "@iconify/icons-ant-design": "^1.2.4",
+    "@iconify/react": "^3.2.2",
     "@mui/lab": "^5.0.0-alpha.94",
     "@mui/material": "^5.10.0",
     "@reduxjs/toolkit": "^1.8.4",

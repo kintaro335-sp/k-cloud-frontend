@@ -1,31 +1,31 @@
-import { useRoutes } from 'react-router-dom';
-import { LandingPage } from '../pages';
+import { useRoutes, Navigate } from 'react-router-dom';
+import { LandingPage, LoginPage, RegisterPage, Page404, FilesPage } from '../pages';
 
 export default function Routes() {
   return useRoutes([
     {
       path: '/',
-      element: <LandingPage />,
-    },
-    {
-      path: '/about',
-      element: <div>About</div>
+      element: <LandingPage />
     },
     {
       path: '/login',
-      element: <div>Login</div>
+      element: <LoginPage />
     },
     {
-      path: '/signup',
-      element: <div>Signup</div>
+      path: '/register',
+      element: <RegisterPage />
     },
     {
       path: '/files',
-      element: <div>Files</div>
+      element: <FilesPage />
     },
     {
-      path: '/files/*',
-      element: <div>Files</div>
+      path: '*',
+      element: <Navigate to="/404" replace />
+    },
+    {
+      path: '/404',
+      element: <Page404 />
     }
   ]);
 }

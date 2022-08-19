@@ -15,7 +15,7 @@ export default function Page404() {
             Page not found
           </Typography>
         </Grid>
-        <Grid iten xs={12}>
+        <Grid item xs={12}>
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
             <Button component={Link} to="/" variant="contained" color="primary">
               Go back to home

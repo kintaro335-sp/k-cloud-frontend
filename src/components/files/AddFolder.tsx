@@ -46,7 +46,7 @@ export default function AddFolder() {
                 const KeyP = e.key;
                 if (KeyP === 'Enter') {
                   if (name !== '' && !['/'].includes(name)) {
-                    createFolder(`${path}${name}`, access_token).then((res) => {
+                    createFolder(`${path}/${name}`, access_token).then((res) => {
                       enqueueSnackbar(res.message, { variant: 'success' });
                       getListFiles(path, access_token).then((response) => {
                         dispatch(setFiles(response.list));

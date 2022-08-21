@@ -48,7 +48,7 @@ export default function RegisterForm({ ...props }: CardProps) {
 
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Register
+          Crear Usuario
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>

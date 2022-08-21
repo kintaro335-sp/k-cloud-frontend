@@ -8,13 +8,17 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 
+import AuthProvider from './contexts/AuthContext';
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <SnackbarProvider maxSnack={3}>
       <ReduxProvider store={store}>
         <PersistGate persistor={persistor}>
           <BrowserRouter>
-            <App />
+            <AuthProvider>
+              <App />
+            </AuthProvider>
           </BrowserRouter>
         </PersistGate>
       </ReduxProvider>

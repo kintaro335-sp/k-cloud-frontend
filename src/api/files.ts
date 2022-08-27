@@ -5,8 +5,7 @@ const connFiles = axios.create({
   baseURL: apiUrl,
   headers: {
     'Content-Type': 'application/json'
-  },
-  withCredentials: true
+  }
 });
 
 export interface FileP {

@@ -8,9 +8,11 @@ const connFiles = axios.create({
   }
 });
 
+type FileType = 'file' | 'folder'
+
 export interface FileP {
   name: string;
-  type: string;
+  type: FileType;
   size: number;
   extension: string;
   mime_type: string;

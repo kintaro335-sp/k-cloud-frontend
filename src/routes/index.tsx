@@ -1,5 +1,5 @@
 import { useRoutes, Navigate } from 'react-router-dom';
-import { LandingPage, LoginPage, RegisterPage, Page404, FilesPage } from '../pages';
+import { LandingPage, LoginPage, RegisterPage, Page404, FilesPage, ChangePasswordPage } from '../pages';
 import Authguard from '../guards/Authguard';
 
 export default function Routes() {
@@ -11,6 +11,10 @@ export default function Routes() {
     {
       path: '/login',
       element: <LoginPage />
+    },
+    {
+      path: '/passwd',
+      element: <ChangePasswordPage />
     },
     {
       path: '/register',

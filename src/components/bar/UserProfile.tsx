@@ -22,7 +22,7 @@ export default function UserProfile() {
 
   const handleChangePassword = () => {
     clickClose();
-    navigate('/change-password');
+    navigate('/passwd');
   };
 
   const handleLogout = () => {

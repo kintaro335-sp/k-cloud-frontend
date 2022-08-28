@@ -27,12 +27,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             setIsAuthenticated(false);
             setInit(true);
           });
+      } else {
+        setInit(true);
       }
     }
     verifyAuthToken();
   }, [access_token]);
 
-  const value = useMemo(() => ({ isAuthenticated, init }), [isAuthenticated]);
+  const value = useMemo(() => ({ isAuthenticated, init }), [isAuthenticated, init]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

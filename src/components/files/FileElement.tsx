@@ -9,7 +9,17 @@ import { apiUrl } from '../../config';
 import { SessionState } from '../../redux/slices/session';
 import { useSelector } from '../../redux/store';
 
-function FileInfo({ file, children, url }: { file: FileP; children: JSX.Element; url: string }) {
+function FileInfo({
+  file,
+  children,
+  url,
+  urlComplete
+}: {
+  file: FileP;
+  children: JSX.Element;
+  url: string;
+  urlComplete: string;
+}) {
   return (
     <Card>
       <CardContent>{children}</CardContent>
@@ -20,7 +30,7 @@ function FileInfo({ file, children, url }: { file: FileP; children: JSX.Element;
           </Box>
         }
         subheader={file.type}
-        action={<MenuFile url={url} />}
+        action={<MenuFile url={url} file={file} urlComplete={urlComplete} />}
       />
     </Card>
   );
@@ -36,27 +46,27 @@ export default function FileElement({ name, size, type, mime_type, extension }: 
   if (type === 'file') {
     if (mime_type.includes('image')) {
       return (
-        <FileInfo file={{ name, size, type, mime_type, extension }} url={url}>
+        <FileInfo file={{ name, size, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
           <ImgFile url={urlComplete} />
         </FileInfo>
       );
     }
     if (mime_type.includes('video')) {
       return (
-        <FileInfo file={{ name, size, type, mime_type, extension }} url={url}>
+        <FileInfo file={{ name, size, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
           <VideoFile url={urlComplete} />
         </FileInfo>
       );
     }
     return (
-      <FileInfo file={{ name, size, type, mime_type, extension }} url={url}>
+      <FileInfo file={{ name, size, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
         <OtherFile url={urlComplete} />
       </FileInfo>
     );
   }
 
   return (
-    <FileInfo file={{ name, size, type, mime_type, extension }} url={url}>
+    <FileInfo file={{ name, size, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
       <Folder url={url} />
     </FileInfo>
   );

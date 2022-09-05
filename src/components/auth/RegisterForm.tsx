@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
 // api
-import { registerApi, crsfToken } from '../../api/auth';
+import { registerApi } from '../../api/auth';
 // hooks
 import useAuth from '../../hooks/useAuth';
 

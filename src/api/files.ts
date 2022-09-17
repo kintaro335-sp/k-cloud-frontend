@@ -23,7 +23,7 @@ export interface ListFile {
 }
 
 export async function getListFiles(path: string, token: string): Promise<ListFile> {
-  const response = await connFiles.get(`/files/${path}?t=${token}`);
+  const response = await connFiles.get(`/files/list/${path}?t=${token}`);
   return response.data;
 }
 

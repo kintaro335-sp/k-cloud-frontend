@@ -35,7 +35,7 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileP; url:
         <Icon icon={moreIcon} width="25px" height="25px" />
       </IconButton>
       <Menu open={open} anchorEl={anchorRef.current} onClose={clickClose}>
-        <MenuItem component="a" href={urlComplete} download={file.name.split('.')[0]} target="_blank">
+        <MenuItem component="a" href={urlComplete} download={file.name.split('.')[0]}>
           <Icon icon={donloadIcon} width="25px" height="25px" /> Descargar
         </MenuItem>
         <MenuItem

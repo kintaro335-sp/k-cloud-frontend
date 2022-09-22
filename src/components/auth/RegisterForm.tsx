@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
 // api
-import { registerApi, crsfToken } from '../../api/auth';
+import { registerApi } from '../../api/auth';
 // hooks
 import useAuth from '../../hooks/useAuth';
 
@@ -48,7 +48,7 @@ export default function RegisterForm({ ...props }: CardProps) {
 
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Register
+          Crear Usuario
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>

@@ -6,10 +6,12 @@ import { useSelector } from '../redux/store';
 import { verifyAuth } from '../api/auth';
 
 export const AuthContext = createContext({
-  isAuthenticated: false
+  isAuthenticated: false,
+  init: false
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [init, setInit] = useState(false);
   const { access_token } = useSelector((state: { session: SessionState }) => state.session);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -19,16 +21,20 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         verifyAuth(access_token)
           .then(() => {
             setIsAuthenticated(true);
+            setInit(true);
           })
           .catch(() => {
             setIsAuthenticated(false);
+            setInit(true);
           });
+      } else {
+        setInit(true);
       }
     }
     verifyAuthToken();
   }, [access_token]);
 
-  const value = useMemo(() => ({ isAuthenticated }), [isAuthenticated]);
+  const value = useMemo(() => ({ isAuthenticated, init }), [isAuthenticated, init]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -10,7 +10,7 @@ export default function Folder({ url }: { url: string }) {
   const { path } = useSelector((state: { session: SessionState }) => state.session);
 
   const click = () => {
-    dispatch(setPath(path + '/' + url));
+    dispatch(setPath(url));
   };
 
   return (

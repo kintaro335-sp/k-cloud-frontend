@@ -5,13 +5,14 @@ const connFiles = axios.create({
   baseURL: apiUrl,
   headers: {
     'Content-Type': 'application/json'
-  },
-  withCredentials: true
+  }
 });
+
+type FileType = 'file' | 'folder'
 
 export interface FileP {
   name: string;
-  type: string;
+  type: FileType;
   size: number;
   extension: string;
   mime_type: string;
@@ -22,7 +23,7 @@ export interface ListFile {
 }
 
 export async function getListFiles(path: string, token: string): Promise<ListFile> {
-  const response = await connFiles.get(`/files/${path}?t=${token}`);
+  const response = await connFiles.get(`/files/list/${path}?t=${token}`);
   return response.data;
 }
 

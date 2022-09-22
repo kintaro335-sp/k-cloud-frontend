@@ -38,7 +38,6 @@ export default function Files() {
     <>
       <Box>Tu Carpeta/{path}</Box>
       <Box sx={{ width: '100vw', height: '85vh' }}>
-        {!isAuthenticated && <Navigate to="/login" />}
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={3}>
             <AddFolder />

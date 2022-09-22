@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AppBar, Container, Toolbar, Typography, Box, Button, Stack } from '@mui/material';
+import { UserProfile } from './bar';
 import useAuth from '../hooks/useAuth';
 
 export default function Bar() {
@@ -10,13 +11,16 @@ export default function Bar() {
       <AppBar position="fixed">
         <Container maxWidth="lg">
           <Toolbar disableGutters>
-            <Typography variant="h6">Cloud</Typography>
-            <Stack sx={{ float: 'right', display: 'flex' }}>
+            <Typography variant="h6" sx={{ marginRight: '5px' }}>
+              Cloud
+            </Typography>
+            <Stack>
               {!isAuthenticated && (
-                <Button component={Link} to="/login" variant="contained">
+                <Button component={Link} to="/login" variant="contained" sx={{ float: 'right' }}>
                   Login
                 </Button>
               )}
+              {isAuthenticated && <UserProfile />}
             </Stack>
           </Toolbar>
         </Container>

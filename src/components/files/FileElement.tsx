@@ -40,7 +40,7 @@ export default function FileElement({ name, size, type, mime_type, extension }: 
   const { path, access_token } = useSelector((state: { session: SessionState }) => state.session);
   const diagonal = path ? '/' : '';
 
-  const url = `${path}${name}`;
+  const url = `${path}${diagonal}${name}`;
   const urlComplete = `${apiUrl}/files/list/${path}${diagonal}${name}?t=${access_token}`;
 
   if (type === 'file') {

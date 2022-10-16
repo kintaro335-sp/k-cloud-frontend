@@ -9,17 +9,14 @@ import { useSnackbar } from 'notistack';
 
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { SessionState, setFiles } from '../redux/slices/session';
+import { setFiles } from '../redux/slices/session';
 // api
 import { getListFiles, FileP } from '../api/files';
-// hooks
-import useAuth from '../hooks/useAuth';
 
 export default function Files() {
-  const { isAuthenticated } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { access_token, path, files } = useSelector((state: { session: SessionState }) => state.session);
+  const { access_token, path, files } = useSelector((state) => state.session);
 
   useEffect(() => {
     async function getFiles() {

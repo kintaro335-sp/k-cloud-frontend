@@ -13,7 +13,7 @@ type FileType = 'file' | 'folder'
 export interface FileP {
   name: string;
   type: FileType;
-  size: number;
+  size: string;
   extension: string;
   mime_type: string;
 }

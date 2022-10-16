@@ -6,7 +6,6 @@ import { FileP } from '../../api/files';
 import { apiUrl } from '../../config';
 
 // redux
-import { SessionState } from '../../redux/slices/session';
 import { useSelector } from '../../redux/store';
 
 function FileInfo({
@@ -37,7 +36,7 @@ function FileInfo({
 }
 
 export default function FileElement({ name, size, type, mime_type, extension }: FileP) {
-  const { path, access_token } = useSelector((state: { session: SessionState }) => state.session);
+  const { path, access_token } = useSelector((state) => state.session);
   const diagonal = path ? '/' : '';
 
   const url = `${path}${diagonal}${name}`;

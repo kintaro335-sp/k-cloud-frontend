@@ -3,6 +3,7 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 // slices
 import sessionReducer from './slices/session';
+import adminReducer from './slices/admin';
 
 const rootPersistConfig = {
   key: 'root',
@@ -19,7 +20,8 @@ const sessionPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  session: persistReducer(sessionPersistConfig, sessionReducer)
+  session: persistReducer(sessionPersistConfig, sessionReducer),
+  admin: adminReducer
 });
 
 export { rootPersistConfig, rootReducer };

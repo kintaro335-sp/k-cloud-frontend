@@ -5,12 +5,12 @@ import fileAddIcon from '@iconify/icons-ant-design/file-add-filled';
 import { uploadFile, getListFiles } from '../../api/files';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
-import { SessionState, setFiles } from '../../redux/slices/session';
+import { setFiles } from '../../redux/slices/session';
 
 export default function AddFile() {
   const [progress, setProgress] = useState(0);
   const dispatch = useDispatch();
-  const { path, access_token } = useSelector((state: { session: SessionState }) => state.session);
+  const { path, access_token } = useSelector((state) => state.session);
   const fileRef = useRef<HTMLInputElement>(null);
 
   return (

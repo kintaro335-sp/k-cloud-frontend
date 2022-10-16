@@ -8,7 +8,6 @@ import { useSnackbar } from 'notistack';
 import { changePassword } from '../../api/auth';
 // redux
 import { useSelector } from '../../redux/store';
-import { SessionState } from '../../redux/slices/session';
 
 type FormValues = {
   password: string;
@@ -16,7 +15,7 @@ type FormValues = {
 };
 
 export default function CahngePasswordForm() {
-  const { access_token } = useSelector((state: { session: SessionState }) => state.session);
+  const { access_token } = useSelector((state) => state.session);
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, reset } = useForm<FormValues>();
   const { enqueueSnackbar } = useSnackbar();

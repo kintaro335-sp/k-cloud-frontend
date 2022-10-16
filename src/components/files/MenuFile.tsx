@@ -9,7 +9,7 @@ import donloadIcon from '@iconify/icons-ant-design/down-circle-outline';
 
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
-import { setFiles, SessionState } from '../../redux/slices/session';
+import { setFiles } from '../../redux/slices/session';
 
 // api
 import { deleteFile, getListFiles, FileP } from '../../api/files';
@@ -17,7 +17,7 @@ import { deleteFile, getListFiles, FileP } from '../../api/files';
 export default function MenuFile({ file, url, urlComplete }: { file: FileP; url: string; urlComplete: string }) {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  const { access_token, path } = useSelector((state: { session: SessionState }) => state.session);
+  const { access_token, path } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
   const anchorRef = useRef<HTMLButtonElement>(null);
 

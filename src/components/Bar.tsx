@@ -11,7 +11,7 @@ export default function Bar() {
       <AppBar position="fixed">
         <Container maxWidth="lg">
           <Toolbar disableGutters>
-            <Typography variant="h6" sx={{ marginRight: '5px' }}>
+            <Typography variant="h6" sx={{ marginRight: '5px', color: 'white', textDecoration: 'none' }} component={Link} to="/">
               Cloud
             </Typography>
             <Stack>

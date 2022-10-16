@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import { createFolder, getListFiles } from '../../api/files';
 
 // redux
-import { SessionState, setFiles } from '../../redux/slices/session';
+import { setFiles } from '../../redux/slices/session';
 import { useSelector, useDispatch } from '../../redux/store';
 
 export default function AddFolder() {
@@ -17,7 +17,7 @@ export default function AddFolder() {
   const anchorRef = useRef<HTMLButtonElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { path, access_token } = useSelector((state: { session: SessionState }) => state.session);
+  const { path, access_token } = useSelector((state) => state.session);
 
   const clickOpen = () => {
     setOpen(true);

@@ -13,11 +13,16 @@ export async function getAccounts(token: string): Promise<User[]> {
 }
 
 export async function setPassword(token: string, userid: string, newPassword: string): Promise<MessageResponse> {
-  const result = await conn.post(`/password/${userid}?t=${token}`);
+  const result = await conn.post(`/password/${userid}?t=${token}`, { password: newPassword });
   return result.data;
 }
 
 export async function setAdmin(token: string, userid: string, admin: boolean): Promise<MessageResponse> {
-  const result = await conn.post(`/admin/${userid}?t=${token}`);
+  const result = await conn.post(`/admin/${userid}?t=${token}`, { admin });
+  return result.data;
+}
+
+export async function createAccount(token: string, username: string, password: string): Promise<MessageResponse> {
+  const result = await conn.post(`/admin/create?t=${token}`, { username, password });
   return result.data;
 }

@@ -22,7 +22,11 @@ export default function LoginForm({ ...props }: CardProps) {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting }
+  } = useForm<FormValues>();
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setIsLoading(true);
     try {
@@ -50,7 +54,7 @@ export default function LoginForm({ ...props }: CardProps) {
               <TextField fullWidth label="Password" type="password" {...register('password')} />
             </Grid>
             <Grid item xs={12}>
-              <LoadingButton type="submit" variant="contained" color="primary" loading={isLoading}>
+              <LoadingButton type="submit" variant="contained" color="primary" loading={isSubmitting}>
                 Login
               </LoadingButton>
             </Grid>

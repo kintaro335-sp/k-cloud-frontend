@@ -1,6 +1,6 @@
 import { useRoutes, Navigate } from 'react-router-dom';
 import { LandingPage, LoginPage, RegisterPage, Page404, FilesPage, ChangePasswordPage } from '../pages';
-import { Accounts, Stats } from '../pages/dashboard';
+import { Accounts, Stats, AdminMenu } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
 
 export default function Routes() {
@@ -32,6 +32,10 @@ export default function Routes() {
           <FilesPage />
         </Authguard>
       )
+    },
+    {
+      path: '/admin',
+      element: <AdminMenu />
     },
     {
       path: '/admin/accounts',

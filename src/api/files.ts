@@ -8,7 +8,7 @@ const connFiles = axios.create({
   }
 });
 
-type FileType = 'file' | 'folder'
+type FileType = 'file' | 'folder';
 
 export interface FileP {
   name: string;
@@ -20,6 +20,11 @@ export interface FileP {
 
 export interface ListFile {
   list: FileP[];
+}
+
+export interface BlobFP {
+  position: number;
+  blob: string;
 }
 
 export async function getListFiles(path: string, token: string): Promise<ListFile> {
@@ -40,7 +45,7 @@ export async function uploadFile(
 ): Promise<any> {
   const formData = new FormData();
   formData.append(`file`, file);
-  await connFiles.post(`/files/${path}?t=${token}`, formData, {
+  await connFiles.post(`/files/upload/${path}?t=${token}`, formData, {
     onUploadProgress
   });
 }

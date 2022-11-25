@@ -18,11 +18,11 @@ export async function setPassword(token: string, userid: string, newPassword: st
 }
 
 export async function setAdmin(token: string, userid: string, admin: boolean): Promise<MessageResponse> {
-  const result = await conn.post(`/admin/${userid}?t=${token}`, { admin });
+  const result = await conn.post(`/${userid}?t=${token}`, { admin });
   return result.data;
 }
 
 export async function createAccount(token: string, username: string, password: string): Promise<MessageResponse> {
-  const result = await conn.post(`/admin/create?t=${token}`, { username, password });
+  const result = await conn.post(`/create?t=${token}`, { username, password, admin: false });
   return result.data;
 }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { Typography, Box } from '@mui/material';
-import { UsersList } from '../../components/dashboard/accounts';
+import { Typography, Box, Card, CardHeader } from '@mui/material';
+import { UsersList, NewUserForm } from '../../components/dashboard/accounts';
 import { getAccounts } from '../../api/admin';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -18,7 +18,9 @@ export default function Accounts() {
 
   return (
     <>
-      <Typography variant="h4">Administracion de usuarios</Typography>
+      <Card sx={{ mb: '5px' }}>
+        <CardHeader title={<Typography variant="h4">Administracion de usuarios</Typography>} action={<NewUserForm />} />
+      </Card>
       <Box>
         <UsersList />
       </Box>

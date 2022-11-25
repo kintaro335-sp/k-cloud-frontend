@@ -4,6 +4,8 @@ import { LoadingButton } from '@mui/lab';
 import { setPassword } from '../../../../../api/admin';
 import { useSelector } from '../../../../../redux/store';
 import { useSnackbar } from 'notistack';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 interface FormValues {
   password: string;
@@ -18,12 +20,19 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
   const { access_token } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
 
+  const validationSchema = yup.object().shape({
+    password: yup.string().min(8).required(),
+    confirmPassword: yup.string().min(8).required()
+  });
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { isSubmitting }
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    resolver: yupResolver(validationSchema)
+  });
 
   const values = watch();
 

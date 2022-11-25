@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Box, Grid } from '@mui/material';
+import { RouteBar } from '../components/files/routebar';
+import { Box, Grid, Card, CardContent } from '@mui/material';
 import FileElement from '../components/files/FileElement';
 import AddFolder from '../components/files/AddFolder';
 import AddFile from '../components/files/AddFile';
@@ -33,8 +34,12 @@ export default function Files() {
 
   return (
     <>
-      <Box>Tu Carpeta/{path}</Box>
-      <Box sx={{ width: '100vw', height: '85vh' }}>
+      <Card sx={{ margin: '1ex' }}>
+        <CardContent>
+          <RouteBar path={path} />
+        </CardContent>
+      </Card>
+      <Box sx={{ width: '100vw', height: '85%', marginTop: '2ex' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={3}>
             <AddFolder />

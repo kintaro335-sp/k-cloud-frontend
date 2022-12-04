@@ -1,8 +1,14 @@
 import axios from 'axios';
+import axiosObs from 'axios-observable';
 import { apiUrl } from '../config';
+import { FilePTempResponse } from '../@types/files';
+
+const connFilesObs = axiosObs.create({
+  baseURL: `${apiUrl}/files`
+});
 
 const connFiles = axios.create({
-  baseURL: apiUrl,
+  baseURL: `${apiUrl}/files`,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -28,12 +34,12 @@ export interface BlobFP {
 }
 
 export async function getListFiles(path: string, token: string): Promise<ListFile> {
-  const response = await connFiles.get(`/files/list/${path}?t=${token}`);
+  const response = await connFiles.get(`/list/${path}?t=${token}`);
   return response.data;
 }
 
 export async function createFolder(path: string, token: string): Promise<{ message: string }> {
-  const response = await connFiles.post(`/files/folder/${path}?t=${token}`, {});
+  const response = await connFiles.post(`/folder/${path}?t=${token}`, {});
   return response.data;
 }
 
@@ -45,7 +51,7 @@ export async function uploadFile(
 ): Promise<any> {
   const formData = new FormData();
   formData.append(`file`, file);
-  await connFiles.post(`/files/upload/${path}?t=${token}`, formData, {
+  await connFiles.post(`/upload/${path}?t=${token}`, formData, {
     onUploadProgress
   });
 }
@@ -53,12 +59,65 @@ export async function uploadFile(
 export async function deleteFile(path: string, token: string): Promise<{ message: string }> {
   return new Promise((resolve, reject) => {
     connFiles
-      .delete(`/files/${path}?t=${token}`)
+      .delete(`/${path}?t=${token}`)
       .then((response) => {
         resolve(response.data);
       })
       .catch((error) => {
         reject(error);
+      });
+  });
+}
+
+export async function initializeFile(path: string, token: string) {
+  return new Promise((resolve, reject) => {
+    connFiles
+      .post(`/initialize/${path}?t=${token}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export async function writeBlob(path: string, position: number, blob: string, token: string) {
+  return new Promise((resolve, reject) => {
+    connFiles
+      .post(`/write/${path}t=${token}`, { position, blob })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        reject(err);
+      });
+  });
+}
+
+export default async function statusFlie(path: string, token: string): Promise<FilePTempResponse> {
+  return new Promise((resolve, reject) => {
+    connFiles
+      .get(`status/${path}?t=${token}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export async function closeFile(path: string, token: string) {
+  return new Promise((resolve, reject) => {
+    connFiles
+      .post(`close/${path}?t=${token}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
       });
   });
 }

@@ -4,9 +4,9 @@ import { RouteBar } from '../components/files/routebar';
 import { Box, Grid, Card, CardContent } from '@mui/material';
 import FileElement from '../components/files/FileElement';
 import AddFolder from '../components/files/AddFolder';
-import AddFile from '../components/files/AddFile';
 import UpFolder from '../components/files/UpFolder';
 import { useSnackbar } from 'notistack';
+import DropFiles from '../components/files/DropFiles';
 
 // redux
 import { useDispatch, useSelector } from '../redux/store';
@@ -26,7 +26,6 @@ export default function Files() {
         enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
         return { list: [] };
       });
-      console.log(list);
       dispatch(setFiles(list));
     }
     getFiles();
@@ -36,16 +35,20 @@ export default function Files() {
     <>
       <Card sx={{ margin: '1ex' }}>
         <CardContent>
-          <RouteBar path={path} />
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <RouteBar path={path} />
+            </Grid>
+            <Grid item xs={12}>
+              <DropFiles />
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
       <Box sx={{ width: '100vw', height: '85%', marginTop: '2ex' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} lg={3}>
             <AddFolder />
-          </Grid>
-          <Grid item xs={12} md={4} lg={3}>
-            <AddFile />
           </Grid>
           {path !== '' && (
             <Grid item xs={12} md={4} lg={3}>

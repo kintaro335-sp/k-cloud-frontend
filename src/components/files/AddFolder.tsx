@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Card, CardContent, CardHeader, Box, IconButton, Menu, TextField } from '@mui/material';
+import { Card, CardContent, CardHeader, Box, IconButton, TextField, Dialog, DialogContent } from '@mui/material';
 import { Icon } from '@iconify/react';
 import folderAddIcon from '@iconify/icons-ant-design/folder-add-filled';
 import { useSnackbar } from 'notistack';
@@ -34,33 +34,35 @@ export default function AddFolder() {
           <IconButton onClick={clickOpen} ref={anchorRef}>
             <Icon icon={folderAddIcon} width="220px" height="220px" />
           </IconButton>
-          <Menu open={open} onClose={clickClose} anchorEl={anchorRef.current}>
-            <TextField
-              label="Nombre"
-              variant="outlined"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              onKeyDown={(e) => {
-                const KeyP = e.key;
-                if (KeyP === 'Enter') {
-                  if (name !== '' && !['/'].includes(name)) {
-                    createFolder(`${path}/${name}`, access_token).then((res) => {
-                      enqueueSnackbar(res.message, { variant: 'success' });
-                      getListFiles(path, access_token).then((response) => {
-                        dispatch(setFiles(response.list));
-                        clickClose();
-                        setName('');
+          <Dialog open={open} onClose={clickClose}>
+            <DialogContent>
+              <TextField
+                label="Nombre"
+                variant="outlined"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                  const KeyP = e.key;
+                  if (KeyP === 'Enter') {
+                    if (name !== '' && !['/'].includes(name)) {
+                      createFolder(`${path}/${name}`, access_token).then((res) => {
+                        enqueueSnackbar(res.message, { variant: 'success' });
+                        getListFiles(path, access_token).then((response) => {
+                          dispatch(setFiles(response.list));
+                          clickClose();
+                          setName('');
+                        });
                       });
-                    });
-                  } else {
-                    enqueueSnackbar('Nombre no valido', { variant: 'error' });
+                    } else {
+                      enqueueSnackbar('Nombre no valido', { variant: 'error' });
+                    }
                   }
-                }
-              }}
-            />
-          </Menu>
+                }}
+              />
+            </DialogContent>
+          </Dialog>
         </Box>
       </CardContent>
       <CardHeader title="Nueva Carpeta" />

@@ -47,14 +47,6 @@ export default function Files() {
       </Card>
       <Box sx={{ width: '100vw', height: '85%', marginTop: '2ex' }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4} lg={3}>
-            <AddFolder />
-          </Grid>
-          {path !== '' && (
-            <Grid item xs={12} md={4} lg={3}>
-              <UpFolder />
-            </Grid>
-          )}
           {files?.map((file: FileP, i) => (
             <Grid item key={file.name + i} xs={12} md={4} lg={3}>
               <FileElement {...file} />

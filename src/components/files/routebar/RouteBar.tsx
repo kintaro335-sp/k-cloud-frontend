@@ -6,11 +6,11 @@ export default function RouteBar({ path }: { path: string }) {
 
   return (
     <Box sx={{ display: 'flex', border: '3px solid #A1A1A1', borderRadius: '5px' }}>
-      <ButtonBar name="/" to="" />
+      <ButtonBar name="Cloud" to="" index={-1} />
       {pathArr.map((n, i) => {
         if (n === '') return;
         const len = pathArr.length;
-        return <ButtonBar name={n} to={pathArr.slice(0, 1 + i).join('/')} />;
+        return <ButtonBar name={n} to={pathArr.slice(0, 1 + i).join('/')} index={i} />;
       })}
     </Box>
   );

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Card, CardContent, CardHeader, Box, IconButton, TextField, Dialog, DialogContent } from '@mui/material';
+import { Button, TextField, Paper, Grid } from '@mui/material';
 import { Icon } from '@iconify/react';
 import folderAddIcon from '@iconify/icons-ant-design/folder-add-filled';
 import { useSnackbar } from 'notistack';
@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from '../../redux/store';
 export default function AddFolder() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const anchorRef = useRef<HTMLButtonElement>(null);
+  const anchorRef = useRef<HTMLButtonElement | null>(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { path, access_token } = useSelector((state) => state.session);
@@ -28,17 +28,23 @@ export default function AddFolder() {
   };
 
   return (
-    <Card>
-      <CardContent>
-        <Box sx={{ display: 'flex', aligItems: 'center', justifyContent: 'center', width: '100%' }}>
-          <IconButton onClick={clickOpen} ref={anchorRef}>
-            <Icon icon={folderAddIcon} width="220px" height="220px" />
-          </IconButton>
-          <Dialog open={open} onClose={clickClose}>
-            <DialogContent>
+    <>
+      <Button
+        onClick={clickOpen}
+        ref={anchorRef}
+        variant="contained"
+        startIcon={<Icon icon={folderAddIcon} width="25px" height="25px" />}
+      >
+        Agregar Carpeta
+      </Button>
+      {open && (
+        <Paper sx={{ position: 'absolute', zindex: 9999, bottom: '363px', padding: '8px' }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
               <TextField
                 label="Nombre"
                 variant="outlined"
+                fullWidth
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
@@ -53,6 +59,7 @@ export default function AddFolder() {
                           dispatch(setFiles(response.list));
                           clickClose();
                           setName('');
+                          setOpen(false);
                         });
                       });
                     } else {
@@ -61,11 +68,20 @@ export default function AddFolder() {
                   }
                 }}
               />
-            </DialogContent>
-          </Dialog>
-        </Box>
-      </CardContent>
-      <CardHeader title="Nueva Carpeta" />
-    </Card>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                Cancelar
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      )}
+    </>
   );
 }

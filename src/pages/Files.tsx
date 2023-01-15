@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
 import { RouteBar } from '../components/files/routebar';
-import { Box, Grid, Card, CardContent } from '@mui/material';
+import { Box, Grid, Stack, Card, CardContent } from '@mui/material';
 import FileElement from '../components/files/FileElement';
 import AddFolder from '../components/files/AddFolder';
-import UpFolder from '../components/files/UpFolder';
+import UploadSingleFile from '../components/files/UploadSingleFile';
 import { useSnackbar } from 'notistack';
 import DropFiles from '../components/files/DropFiles';
 
@@ -36,8 +35,14 @@ export default function Files() {
       <Card sx={{ margin: '1ex' }}>
         <CardContent>
           <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid item xs={9}>
               <RouteBar path={path} />
+            </Grid>
+            <Grid item xs={3}>
+              <Stack spacing={1} direction="row">
+                <AddFolder />
+                <UploadSingleFile />
+              </Stack>
             </Grid>
             <Grid item xs={12}>
               <DropFiles />

@@ -19,7 +19,7 @@ export default function ButtonBar({ name, to, index }: { name: string; to: strin
           <Icon icon={rightC} width="16px" height="16px" />
         </Box>
       )}
-      <Box sx={{ padding: '3px', fontWeight: 600, textAlign: 'center' }} onClick={sendToPath}>
+      <Box sx={{ padding: '3px', fontWeight: 600, textAlign: 'center', cursor: 'pointer' }} onClick={sendToPath}>
         {name}
       </Box>
     </Stack>

@@ -17,9 +17,10 @@ export default function FilesContext({ children }: { children: React.ReactElemen
   const { access_token } = useSelector((state) => state.session);
   const files = useRef<Record<string, FileToUpload | null>>({});
 
-  const initializeFile = async (path: string) => {
+  const initializeFileC = async (path: string) => {
     const file = files.current[path];
     if (file === null) return;
+    initializeFile(path, access_token);
   };
 
   const uploadFiles = () => {

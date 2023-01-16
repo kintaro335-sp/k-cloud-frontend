@@ -71,6 +71,7 @@ export default function AddFolder() {
             </Grid>
             <Grid item xs={12}>
               <Button
+                fullWidth
                 variant="contained"
                 onClick={() => {
                   setOpen(false);

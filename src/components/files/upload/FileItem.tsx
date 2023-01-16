@@ -8,7 +8,9 @@ interface FileItemProps {
 
 export default function FileItem({ path, fileP }: FileItemProps) {
   const { size, sended, file, blobSended } = fileP;
-  return <ListItem>
-    
-  </ListItem>;
+  return (
+    <ListItem>
+      <ListItemText primary={file.name} />
+    </ListItem>
+  );
 }

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, Box } from '@mui/material';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
+import Numeral from 'numeral';
 // api
 import { FileP } from '../../api/files';
 import { apiUrl } from '../../config';
@@ -28,7 +29,11 @@ function FileInfo({
             {file.name}
           </Box>
         }
-        subheader={file.type}
+        subheader={
+          <Box>
+            {file.type} {Numeral(file.size).format('0.0 b')}
+          </Box>
+        }
         action={<MenuFile url={url} file={file} urlComplete={urlComplete} />}
       />
     </Card>

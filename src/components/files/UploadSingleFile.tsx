@@ -31,7 +31,8 @@ export default function UploadFile() {
         type="file"
         ref={inputRef}
         onChange={(e) => {
-          console.log(e.target.files);
+          const files = e.target.files || [null];
+          addFile(path, files[0]);
         }}
         style={{ display: 'none' }}
       />

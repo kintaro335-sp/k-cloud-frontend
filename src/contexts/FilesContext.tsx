@@ -2,6 +2,7 @@ import { createContext, useRef, useMemo } from 'react';
 import { FileToUpload } from '../@types/files';
 import { useSelector } from '../redux/store';
 import { initializeFile, writeBlob, closeFile } from '../api/files';
+import { getBase64File, BLOB_SIZE, getNumberBlobs } from '../utils/files';
 
 export const filesC = createContext<{
   files: Record<string, FileToUpload | null>;
@@ -15,16 +16,47 @@ export const filesC = createContext<{
 
 export default function FilesContext({ children }: { children: React.ReactElement }) {
   const { access_token } = useSelector((state) => state.session);
+
   const files = useRef<Record<string, FileToUpload | null>>({});
 
   const initializeFileC = async (path: string) => {
     const file = files.current[path];
     if (file === null) return;
-    initializeFile(path, access_token);
+    //return initializeFile(path, access_token);
   };
 
-  const uploadFiles = () => {
+  const CloseFileC = async (path: string) => {
+    const file = files.current[path];
+    if (file === null) return;
+    return closeFile(path, access_token);
+  };
+
+  const writeBlobC = async (file: File, position: number, size: number) => {
+    const text = await getBase64File(file.slice(position, size));
+    if (text === undefined) return;
+    //const blob = await text.split(',')[1];
+  };
+
+  const uploadFiles = async () => {
     const filesL = Object.keys(files.current);
+
+    filesL.forEach((f) => {
+      const file = files.current[f];
+      if (file === null) return;
+      const FSize = file.file.size;
+      const numberBlob = getNumberBlobs(FSize);
+      [...new Array(numberBlob)].forEach((_, i) => {
+        const position = i === 0 ? i * BLOB_SIZE : i * BLOB_SIZE + 1;
+        const size = i === 0 ? position + BLOB_SIZE : position + BLOB_SIZE - 1;
+        writeBlobC(file.file, position, size).then(() => {
+          if (files.current[f] !== null) {
+            const bytesSended = size - position;
+            //@ts-ignore
+            files.current[f].sended += bytesSended;
+          }
+        });
+      });
+    });
   };
 
   const addFile = (path: string, file: File | null) => {
@@ -44,7 +76,7 @@ export default function FilesContext({ children }: { children: React.ReactElemen
       addFile,
       uploadFiles
     }),
-    [files.current, addFile]
+    [files, addFile]
   );
 
   return <filesC.Provider value={contextValue}>{children}</filesC.Provider>;

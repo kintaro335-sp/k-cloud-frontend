@@ -36,9 +36,11 @@ export default function Bar() {
       <AppBar position="fixed">
         <Container maxWidth="lg">
           <Toolbar disableGutters>
-            <IconButton onClick={clickOpen} sx={{ margin: '3px' }}>
-              <Icon icon={barsI} width="22px" height="22px" />
-            </IconButton>
+            {isAuthenticated && (
+              <IconButton onClick={clickOpen} sx={{ margin: '3px' }}>
+                <Icon icon={barsI} width="22px" height="22px" />
+              </IconButton>
+            )}
             <Typography
               variant="h6"
               sx={{ marginRight: '5px', color: 'white', textDecoration: 'none' }}

@@ -5,6 +5,7 @@ export interface SendedBlobs {
 
 export interface FileToUpload {
   file: File;
+  inicializado: boolean;
   size: number;
   sended: number;
   blobSended: SendedBlobs[];
@@ -17,6 +18,6 @@ export interface FilePTempResponse {
   size: number;
   received: number;
   saved: number;
-  bytesWritten:Array<BytesWritten>;
+  bytesWritten: Array<BytesWritten>;
   completed: boolean;
 }

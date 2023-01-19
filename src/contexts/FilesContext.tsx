@@ -30,6 +30,7 @@ export default function FilesContext({ children }: { children: React.ReactElemen
   const addFile = (path: string, file: File | null) => {
     if (file === null) return;
     files.current[`${path}/${file.name}`] = {
+      inicializado: false,
       sended: 0,
       size: file.size,
       file,

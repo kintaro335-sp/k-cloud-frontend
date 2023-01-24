@@ -32,9 +32,11 @@ export default function FilesContext({ children }: { children: React.ReactElemen
   };
 
   const writeBlobC = async (file: File, position: number, size: number) => {
-    const text = await getBase64File(file.slice(position, size));
+    const blobToWrite = file.slice(position, size);
+    const text = await getBase64File(blobToWrite);
     if (text === undefined) return;
     //const blob = await text.split(',')[1];
+    return blobToWrite.size;
   };
 
   const uploadFiles = async () => {
@@ -48,11 +50,10 @@ export default function FilesContext({ children }: { children: React.ReactElemen
       [...new Array(numberBlob)].forEach((_, i) => {
         const position = i === 0 ? i * BLOB_SIZE : i * BLOB_SIZE + 1;
         const size = i === 0 ? position + BLOB_SIZE : position + BLOB_SIZE - 1;
-        writeBlobC(file.file, position, size).then(() => {
+        writeBlobC(file.file, position, size).then((sizeWritten) => {
           if (files.current[f] !== null) {
-            const bytesSended = size - position;
             //@ts-ignore
-            files.current[f].sended += bytesSended;
+            files.current[f].sended += sizeWritten;
           }
         });
       });

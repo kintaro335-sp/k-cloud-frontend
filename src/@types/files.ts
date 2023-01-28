@@ -21,3 +21,8 @@ export interface FilePTempResponse {
   bytesWritten: Array<BytesWritten>;
   completed: boolean;
 }
+
+export interface NewFile {
+  path: string;
+  file: File | null;
+}

@@ -9,7 +9,6 @@ import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 
 import AuthProvider from './contexts/AuthContext';
-import FilesContext from './contexts/FilesContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -18,9 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <PersistGate persistor={persistor}>
           <BrowserRouter>
             <AuthProvider>
-              <FilesContext>
-                <App />
-              </FilesContext>
+              <App />
             </AuthProvider>
           </BrowserRouter>
         </PersistGate>

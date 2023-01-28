@@ -1,13 +1,11 @@
 import { useRef } from 'react';
 import { Button } from '@mui/material';
-import useFilesC from '../../hooks/useFiles';
 import { useSelector } from '../../redux/store';
 import { Icon } from '@iconify/react';
 import addFileC from '@iconify/icons-ant-design/file-add-filled';
 
 export default function UploadFile() {
   const { path } = useSelector((state) => state.session);
-  const { addFile } = useFilesC();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (
@@ -32,7 +30,7 @@ export default function UploadFile() {
         ref={inputRef}
         onChange={(e) => {
           const files = e.target.files || [null];
-          addFile(path, files[0]);
+          //addFile(path, files[0]);
         }}
         style={{ display: 'none' }}
       />

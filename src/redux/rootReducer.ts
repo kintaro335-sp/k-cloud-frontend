@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 // slices
 import sessionReducer from './slices/session';
 import adminReducer from './slices/admin';
+import fileUploaderReducer from './slices/fileUploader';
 
 const rootPersistConfig = {
   key: 'root',
@@ -21,7 +22,8 @@ const sessionPersistConfig = {
 
 const rootReducer = combineReducers({
   session: persistReducer(sessionPersistConfig, sessionReducer),
-  admin: adminReducer
+  admin: adminReducer,
+  files: fileUploaderReducer
 });
 
 export { rootPersistConfig, rootReducer };

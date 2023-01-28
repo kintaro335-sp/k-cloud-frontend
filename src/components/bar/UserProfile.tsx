@@ -41,6 +41,7 @@ export default function UserProfile() {
   const handleLogout = () => {
     clickClose();
     dispatch(setAccessToken(''));
+    navigate('/');
   };
 
   return (

@@ -33,3 +33,11 @@ const slice = createSlice({
 });
 
 export default slice.reducer;
+
+export function addFile(path: string, file: File | null) {
+  try {
+    dispatch(slice.actions.addFile({ path, file }));
+  } catch (err) {
+    console.error('file no added, try again');
+  }
+}

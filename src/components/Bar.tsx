@@ -10,7 +10,6 @@ import {
   Stack,
   Drawer,
   IconButton,
-  CircularProgress,
   Paper
 } from '@mui/material';
 import FileList from './files/upload/FileList';
@@ -18,9 +17,11 @@ import { UserProfile } from './bar';
 import useAuth from '../hooks/useAuth';
 import { Icon } from '@iconify/react';
 import barsI from '@iconify/icons-ant-design/bars-outlined';
+import { useSelector } from '../redux/store';
 
 export default function Bar() {
   const { isAuthenticated } = useAuth();
+  const { filesDir } = useSelector((state) => state.files);
   const [open, setOpen] = useState<boolean>(false);
 
   const clickOpen = () => {
@@ -38,7 +39,7 @@ export default function Bar() {
           <Toolbar disableGutters>
             {isAuthenticated && (
               <IconButton onClick={clickOpen} sx={{ margin: '3px' }}>
-                <Icon icon={barsI} width="22px" height="22px" />
+                {filesDir.length === 0 ? <Icon icon={barsI} width="22px" height="22px" /> : <>{filesDir.length}</>}
               </IconButton>
             )}
             <Typography

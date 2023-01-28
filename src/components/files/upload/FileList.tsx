@@ -10,8 +10,8 @@ export default function FilesList() {
   return (
     <List>
       {filesDir.map((dir, i) => {
-        if (files[dir] === null) return;
-        return <FileItem key={i} path={dir} fileP={files[dir]} />;
+        const FD = files[dir];
+        return <FileItem key={i} path={dir} fileP={FD} />;
       })}
     </List>
   );

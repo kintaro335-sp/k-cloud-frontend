@@ -4,6 +4,8 @@ import { useSelector } from '../../redux/store';
 import { Icon } from '@iconify/react';
 import addFileC from '@iconify/icons-ant-design/file-add-filled';
 
+import { addFile } from '../../redux/slices/fileUploader';
+
 export default function UploadFile() {
   const { path } = useSelector((state) => state.session);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -30,7 +32,7 @@ export default function UploadFile() {
         ref={inputRef}
         onChange={(e) => {
           const files = e.target.files || [null];
-          //addFile(path, files[0]);
+          addFile(path, files[0]);
         }}
         style={{ display: 'none' }}
       />

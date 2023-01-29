@@ -1,9 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import { useSelector } from '../../redux/store';
 import { addFile } from '../../redux/slices/fileUploader';
+import useFileU from '../../hooks/useFileU';
 
 export default function DropFiles() {
   const { path } = useSelector((state) => state.session);
+  const { uploadFile } = useFileU();
 
   return (
     <Box
@@ -21,7 +23,7 @@ export default function DropFiles() {
         e.preventDefault();
         const files = e.dataTransfer.files;
         [...new Array(files.length).map((_, i) => i)].forEach((_e, i) => {
-          addFile(path, files[i]);
+          uploadFile(path, files[i]);
         });
       }}
       onDragEnter={(e) => {

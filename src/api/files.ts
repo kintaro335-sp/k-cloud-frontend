@@ -69,10 +69,10 @@ export async function deleteFile(path: string, token: string): Promise<{ message
   });
 }
 
-export async function initializeFile(path: string, token: string) {
+export async function initializeFileAPI(path: string, size: number, token: string) {
   return new Promise((resolve, reject) => {
     connFiles
-      .post(`/initialize/${path}?t=${token}`)
+      .post(`/initialize/${path}?t=${token}`, { size })
       .then((response) => {
         resolve(response.data);
       })
@@ -82,7 +82,7 @@ export async function initializeFile(path: string, token: string) {
   });
 }
 
-export async function writeBlob(path: string, position: number, blob: string, token: string) {
+export async function writeBlobAPI(path: string, position: number, blob: string, token: string) {
   return new Promise((resolve, reject) => {
     connFiles
       .post(`/write/${path}t=${token}`, { position, blob })
@@ -96,7 +96,7 @@ export async function writeBlob(path: string, position: number, blob: string, to
   });
 }
 
-export default async function statusFlie(path: string, token: string): Promise<FilePTempResponse> {
+export default async function statusFlieAPI(path: string, token: string): Promise<FilePTempResponse> {
   return new Promise((resolve, reject) => {
     connFiles
       .get(`status/${path}?t=${token}`)
@@ -109,7 +109,7 @@ export default async function statusFlie(path: string, token: string): Promise<F
   });
 }
 
-export async function closeFile(path: string, token: string) {
+export async function closeFileAPI(path: string, token: string) {
   return new Promise((resolve, reject) => {
     connFiles
       .post(`close/${path}?t=${token}`)

@@ -20,6 +20,6 @@ const useSelector: TypedUseSelectorHook<RootState> = useReduxSelector;
 
 const useDispatch = () => useReduxDispatch<AppDispatch>();
 
-const { dispatch } = store;
+const { dispatch, getState } = store;
 
-export { store, dispatch, persistor, useSelector, useDispatch };
+export { getState, store, dispatch, persistor, useSelector, useDispatch };

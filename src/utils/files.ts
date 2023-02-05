@@ -1,4 +1,5 @@
-export const BLOB_SIZE = 10485760;
+import { encode } from 'base-64';
+export const BLOB_SIZE = 4096 * 2;
 
 /**
  * obtener el base64 de un archivo
@@ -7,10 +8,18 @@ export const BLOB_SIZE = 10485760;
  */
 export async function getBase64File(file: Blob): Promise<string | undefined> {
   const reader = new FileReader();
-  reader.readAsDataURL(file);
+  reader.readAsArrayBuffer(file);
   return new Promise((resolve, reject) => {
     reader.onload = (e) => {
-      resolve(e.target?.result?.toString());
+      const rawBuffer = e.target?.result;
+      if (rawBuffer instanceof ArrayBuffer) {
+        //@ts-ignore
+        const decoder = new TextDecoder();
+        const text =  decoder.decode(rawBuffer);
+        const finalText = encodeURI(text)
+        const base64 = encode(finalText);
+        resolve(base64);
+      }
     };
   });
 }

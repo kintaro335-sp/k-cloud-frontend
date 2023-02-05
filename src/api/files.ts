@@ -85,7 +85,7 @@ export async function initializeFileAPI(path: string, size: number, token: strin
 export async function writeBlobAPI(path: string, position: number, blob: string, token: string) {
   return new Promise((resolve, reject) => {
     connFiles
-      .post(`/write/${path}t=${token}`, { position, blob })
+      .post(`/writebase64/${path}?t=${token}`, { position, blob })
       .then((res) => {
         resolve(res.data);
       })

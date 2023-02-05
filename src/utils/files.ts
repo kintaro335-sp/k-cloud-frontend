@@ -1,5 +1,5 @@
 import { encode } from 'base-64';
-export const BLOB_SIZE = 4096 * 2;
+export const BLOB_SIZE = 1048576;
 
 /**
  * obtener el base64 de un archivo
@@ -15,8 +15,8 @@ export async function getBase64File(file: Blob): Promise<string | undefined> {
       if (rawBuffer instanceof ArrayBuffer) {
         //@ts-ignore
         const decoder = new TextDecoder();
-        const text =  decoder.decode(rawBuffer);
-        const finalText = encodeURI(text)
+        const text = decoder.decode(rawBuffer);
+        const finalText = encodeURI(text);
         const base64 = encode(finalText);
         resolve(base64);
       }

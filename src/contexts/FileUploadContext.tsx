@@ -1,8 +1,8 @@
 import React, { createContext, useEffect } from 'react';
 import { useSelector, getState } from '../redux/store';
 import { addFile, onWriteBlob, setInitializedFile } from '../redux/slices/fileUploader';
-import { initializeFileAPI, writeBlobAPI, closeFileAPI } from '../api/files';
-import { getBestSize, getNumberBlobs, BLOB_SIZE, getBase64File } from '../utils/files';
+import { initializeFileAPI, uploadBlobAPI, closeFileAPI } from '../api/files';
+import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { isAxiosError } from 'axios';
 
 export const FileUploadContext = createContext({ uploadFile: (path: string, file: File | null) => {} });
@@ -38,18 +38,15 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === null) return;
     if (fileM === undefined) return;
     const blob = fileM.file.slice(position, position + size);
-    const blobBase64 = await getBase64File(blob);
-    if (typeof blobBase64 === 'string') {
-      await writeBlobAPI(path, position, blobBase64, access_token)
-        .catch((err) => {
-          if (isAxiosError(err)) {
-            console.error(err);
-          }
-        })
-        .then(() => {
-          onWriteBlob(path, position, blob.size);
-        });
-    }
+    await uploadBlobAPI(path, position, blob, access_token)
+      .catch((err) => {
+        if (isAxiosError(err)) {
+          console.error(err);
+        }
+      })
+      .then(() => {
+        onWriteBlob(path, position, blob.size);
+      });
   };
 
   const sendBlobs = async (path: string): Promise<void> => {
@@ -61,7 +58,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     for (let i = 0; i <= blobs; i++) {
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
-      sendBlob(path, positionfrom, positionto-positionfrom);
+      await sendBlob(path, positionfrom, positionto - positionfrom);
     }
     return new Promise((res) => {
       res();

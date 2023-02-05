@@ -8,10 +8,7 @@ const connFilesObs = axiosObs.create({
 });
 
 const connFiles = axios.create({
-  baseURL: `${apiUrl}/files`,
-  headers: {
-    'Content-Type': 'application/json'
-  }
+  baseURL: `${apiUrl}/files`
 });
 
 type FileType = 'file' | 'folder';
@@ -86,6 +83,23 @@ export async function writeBlobAPI(path: string, position: number, blob: string,
   return new Promise((resolve, reject) => {
     connFiles
       .post(`/writebase64/${path}?t=${token}`, { position, blob })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        reject(err);
+      });
+  });
+}
+
+export async function uploadBlobAPI(path: string, position: number, blob: Blob, token: string) {
+  return new Promise((resolve, reject) => {
+    const f = new File([blob], `blob-${position}`, { type: '' });
+    const formdata = new FormData();
+    formdata.append('file', f);
+    connFiles
+      .post(`/write/${path}?pos=${position}&t=${token}`, formdata)
       .then((res) => {
         resolve(res.data);
       })

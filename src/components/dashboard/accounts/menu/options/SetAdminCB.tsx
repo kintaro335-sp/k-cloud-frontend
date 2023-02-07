@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState } from 'react';
 import { FormControlLabel, Checkbox } from '@mui/material';
 import { setAdmin } from '../../../../../api/admin';
 import { useSelector } from '../../../../../redux/store';
@@ -12,15 +12,15 @@ interface SetAdminCBProps {
 export default function SetAdminCB({ userid, admin }: SetAdminCBProps) {
   const { enqueueSnackbar } = useSnackbar();
   const { access_token } = useSelector((state) => state.session);
-  const isAdmin = useRef(admin);
+  const [isAdmin, setIsAdmin] = useState(admin);
 
   return (
     <FormControlLabel
-      checked={isAdmin.current}
+      checked={isAdmin}
       onChange={async (_e, checked) => {
         try {
           const response = await setAdmin(access_token, userid, checked);
-          isAdmin.current = checked;
+          setIsAdmin(checked);
           enqueueSnackbar(response.message, { variant: 'success' });
         } catch (err) {
           console.error(err);

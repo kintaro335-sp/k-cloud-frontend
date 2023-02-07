@@ -7,12 +7,7 @@ import useAuth from './hooks/useAuth';
 
 function App() {
   const { init } = useAuth();
-  return (
-    <>
-      <Bar />
-      <Suspense fallback={<Loading />}>{init ? <Routes /> : <Loading />}</Suspense>
-    </>
-  );
+  return <Bar children={<Suspense fallback={<Loading />}>{init ? <Routes /> : <Loading />}</Suspense>} />;
 }
 
 export default App;

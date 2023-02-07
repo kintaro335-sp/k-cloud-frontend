@@ -1,4 +1,8 @@
-# K-Cloud-Frontend (Client)
+# K-Cloud-Frontend (Client) from K-Cloud
+
+## Why
+
+I DO NOT WANT TO USE NEXT CLOUD
 
 ## Setup
 

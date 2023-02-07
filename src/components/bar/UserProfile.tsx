@@ -5,7 +5,7 @@ import { Avatar, IconButton, Menu, MenuItem } from '@mui/material';
 import useAuth from '../../hooks/useAuth';
 
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
+import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
 
 export default function UserProfile() {
@@ -50,10 +50,10 @@ export default function UserProfile() {
         <Avatar />
       </IconButton>
       <Menu open={open} onClose={clickClose} anchorEl={anchorRef.current}>
-        <MenuItem onClick={handleGotoFiles}>Files</MenuItem>
+        <MenuItem onClick={handleGotoFiles}>Tus Archivos</MenuItem>
         {isAdmin && <MenuItem onClick={handleGoAdministration}>Administración</MenuItem>}
-        <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleChangePassword}>Cambiar Contraseña</MenuItem>
+        <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
       </Menu>
     </>
   );

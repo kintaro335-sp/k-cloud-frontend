@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Button, TextField, Paper, Grid } from '@mui/material';
+import { Button, TextField, Paper, Grid, Stack } from '@mui/material';
 import { Icon } from '@iconify/react';
 import folderAddIcon from '@iconify/icons-ant-design/folder-add-filled';
 import { useSnackbar } from 'notistack';
@@ -38,7 +38,7 @@ export default function AddFolder() {
         Agregar Carpeta
       </Button>
       {open && (
-        <Paper sx={{ position: 'absolute', zindex: 9999, bottom: '363px', padding: '8px' }}>
+        <Paper sx={{ position: 'fixed', zindex: 9999, top: '133px', padding: '8px' }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -70,15 +70,38 @@ export default function AddFolder() {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant="contained"
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                Cancelar
-              </Button>
+              <Stack spacing={1} direction="row">
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  Cancelar
+                </Button>{' '}
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => {
+                    if (name !== '' && !['/'].includes(name)) {
+                      createFolder(`${path}/${name}`, access_token).then((res) => {
+                        enqueueSnackbar(res.message, { variant: 'success' });
+                        getListFiles(path, access_token).then((response) => {
+                          dispatch(setFiles(response.list));
+                          clickClose();
+                          setName('');
+                          setOpen(false);
+                        });
+                      });
+                    } else {
+                      enqueueSnackbar('Nombre no valido', { variant: 'error' });
+                    }
+                  }}
+                >
+                  Crear
+                </Button>
+              </Stack>
             </Grid>
           </Grid>
         </Paper>

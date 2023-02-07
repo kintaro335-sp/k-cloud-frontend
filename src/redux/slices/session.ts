@@ -6,7 +6,7 @@ export interface SessionState {
   files: FileP[];
 }
 
-const initialState = {
+const initialState: SessionState = {
   access_token: '',
   path: '',
   files: []

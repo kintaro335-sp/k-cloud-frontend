@@ -18,7 +18,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     async function verifyAuthToken() {
-      if (access_token) {
+      if (access_token !== '') {
         verifyAuth(access_token)
           .then((u) => {
             setIsAdmin(u.isadmin);
@@ -30,8 +30,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             setInit(true);
           });
       } else {
-        setInit(true);
+        setIsAuthenticated(false);
+        setIsAdmin(false);
       }
+      setInit(true);
     }
     verifyAuthToken();
   }, [access_token]);

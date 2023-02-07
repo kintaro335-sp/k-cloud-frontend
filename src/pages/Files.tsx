@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from '../redux/store';
 import { setFiles } from '../redux/slices/session';
 // api
 import { getListFiles, FileP } from '../api/files';
+import { isAxiosError } from 'axios';
 
 export default function Files() {
   const { enqueueSnackbar } = useSnackbar();
@@ -20,9 +21,13 @@ export default function Files() {
 
   useEffect(() => {
     async function getFiles() {
-      const { list } = await getListFiles(path, access_token).catch(() => {
+      const { list } = await getListFiles(path, access_token).catch((err) => {
+        if (isAxiosError(err)) {
+          enqueueSnackbar(err.message, { variant: 'error' });
+        } else {
+          enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
+        }
         dispatch(setFiles([]));
-        enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
         return { list: [] };
       });
       dispatch(setFiles(list));
@@ -40,8 +45,8 @@ export default function Files() {
             </Grid>
             <Grid item xs={3}>
               <Stack spacing={1} direction="row">
-                <AddFolder />
                 <UploadSingleFile />
+                <AddFolder />
               </Stack>
             </Grid>
             <Grid item xs={12}>
@@ -52,8 +57,8 @@ export default function Files() {
       </Card>
       <Box sx={{ width: '100vw', height: '85%', marginTop: '2ex' }}>
         <Grid container spacing={2}>
-          {files?.map((file: FileP, i) => (
-            <Grid item key={file.name + i} xs={12} md={4} lg={3}>
+          {files.map((file: FileP, i) => (
+            <Grid item key={file.name + i} xs={6} md={3} lg={2}>
               <FileElement {...file} />
             </Grid>
           ))}

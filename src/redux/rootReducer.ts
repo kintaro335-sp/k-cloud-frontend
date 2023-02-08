@@ -3,12 +3,14 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 // slices
 import sessionReducer from './slices/session';
+import adminReducer from './slices/admin';
+import fileUploaderReducer from './slices/fileUploader';
 
 const rootPersistConfig = {
   key: 'root',
   storage,
   keyPrefix: 'redux-',
-  whitelist: []
+  whitelist: ['session']
 };
 
 const sessionPersistConfig = {
@@ -19,7 +21,9 @@ const sessionPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  session: persistReducer(sessionPersistConfig, sessionReducer)
+  session: persistReducer(sessionPersistConfig, sessionReducer),
+  admin: adminReducer,
+  files: fileUploaderReducer
 });
 
 export { rootPersistConfig, rootReducer };

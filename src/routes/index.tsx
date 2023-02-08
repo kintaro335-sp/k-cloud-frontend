@@ -1,31 +1,57 @@
-import { useRoutes } from 'react-router-dom';
-import { LandingPage } from '../pages';
+import { useRoutes, Navigate } from 'react-router-dom';
+import { LandingPage, LoginPage, RegisterPage, Page404, FilesPage, ChangePasswordPage } from '../pages';
+import { Accounts, Stats, AdminMenu } from '../pages/dashboard';
+import Authguard from '../guards/Authguard';
 
 export default function Routes() {
   return useRoutes([
     {
       path: '/',
-      element: <LandingPage />,
-    },
-    {
-      path: '/about',
-      element: <div>About</div>
+      element: <LandingPage />
     },
     {
       path: '/login',
-      element: <div>Login</div>
+      element: <LoginPage />
     },
     {
-      path: '/signup',
-      element: <div>Signup</div>
+      path: '/passwd',
+      element: <ChangePasswordPage />
+    },
+    {
+      path: '/register',
+      element: (
+        <Authguard redirect>
+          <RegisterPage />
+        </Authguard>
+      )
     },
     {
       path: '/files',
-      element: <div>Files</div>
+      element: (
+        <Authguard redirect redirectTo="/login">
+          <FilesPage />
+        </Authguard>
+      )
     },
     {
-      path: '/files/*',
-      element: <div>Files</div>
+      path: '/admin',
+      element: <AdminMenu />
+    },
+    {
+      path: '/admin/accounts',
+      element: (
+        <Authguard admin redirect redirectTo="/login">
+          <Accounts />
+        </Authguard>
+      )
+    },
+    {
+      path: '*',
+      element: <Navigate to="/404" replace />
+    },
+    {
+      path: '/404',
+      element: <Page404 />
     }
   ]);
 }

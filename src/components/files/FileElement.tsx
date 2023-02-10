@@ -25,13 +25,13 @@ function FileInfo({
       <CardContent>{children}</CardContent>
       <CardHeader
         title={
-          <Box sx={{ width: '220px', whiteSpace: 'noWrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+          <Box sx={{ whiteSpace: 'noWrap', textOverflow: 'ellipsis', overflowWrap: 'anywhere', fontSize: '1.6ex' }}>
             {file.name}
           </Box>
         }
         subheader={
           <Box>
-            {file.type} {Numeral(file.size).format('0.0 b')}
+          {file.type} {file.type === 'file' && Numeral(file.size).format('0.0 b')}
           </Box>
         }
         action={<MenuFile url={url} file={file} urlComplete={urlComplete} />}

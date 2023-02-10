@@ -52,10 +52,10 @@ export default function Bar({ children }: BarProps) {
       </AppBar>
       <Box sx={{ height: '64px' }} />
       <Grid container spacing={1}>
-        <Grid item xs={2}>
+        <Grid item xs={2} sx={{ display: isAuthenticated ? 'block' : 'none' }}>
           <FileList />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={isAuthenticated ? 10 : 12}>
           {children}
         </Grid>
       </Grid>

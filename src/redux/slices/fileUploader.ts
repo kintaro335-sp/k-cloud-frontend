@@ -28,7 +28,9 @@ const slice = createSlice({
         size: file.size,
         blobSended: [],
         sended: 0,
-        inicializado: false
+        inicializado: false,
+        totalBlobs: 0,
+        blobsSended: 0
       };
       if (!state.filesDir.includes(fileDir)) state.filesDir.push(fileDir);
     },
@@ -53,6 +55,18 @@ const slice = createSlice({
       if (fileM === null) return;
       if (fileM === undefined) return;
       fileM.uploading = true;
+    },
+    setTotalBlobs(state, action) {
+      const { path, total } = action.payload as { path: string; total: number };
+      const fileM = state.files[path];
+      if (fileM === null) return;
+      if (fileM === undefined) return;
+    },
+    setBlobsSended(state, action) {
+      const { path, sendedB } = action.payload as { path: string; sendedB: number };
+      const fileM = state.files[path];
+      if (fileM === null) return;
+      if (fileM === undefined) return;
     }
   }
 });
@@ -88,5 +102,21 @@ export function setUploadingFile(path: string) {
     dispatch(slice.actions.uploadingFile(path));
   } catch (err) {
     console.error('file no added, try again');
+  }
+}
+
+export function setTotalBlobs(path: string, total: number) {
+  try {
+    dispatch(slice.actions.setTotalBlobs({ path, total }));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setBlobsSended(path: string, sendedB: number) {
+  try {
+    dispatch(slice.actions.setBlobsSended({ path, sendedB }));
+  } catch (err) {
+    console.error(err);
   }
 }

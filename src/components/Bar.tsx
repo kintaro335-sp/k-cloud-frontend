@@ -1,12 +1,23 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AppBar, Container, Toolbar, Typography, Box, Button, Stack, Drawer, IconButton, Paper } from '@mui/material';
+import {
+  AppBar,
+  Container,
+  Toolbar,
+  Typography,
+  Box,
+  Button,
+  Stack,
+  Drawer,
+  IconButton,
+  Paper,
+  Grid
+} from '@mui/material';
 import FileList from './files/upload/FileList';
 import { UserProfile } from './bar';
 import useAuth from '../hooks/useAuth';
-import { Icon } from '@iconify/react';
-import barsI from '@iconify/icons-ant-design/bars-outlined';
-import { useSelector } from '../redux/store';
+// import { Icon } from '@iconify/react';
+// import barsI from '@iconify/icons-ant-design/bars-outlined';
 
 interface BarProps {
   children: React.ReactNode;
@@ -14,7 +25,6 @@ interface BarProps {
 
 export default function Bar({ children }: BarProps) {
   const { isAuthenticated } = useAuth();
-  const { filesDir } = useSelector((state) => state.files);
 
   return (
     <>
@@ -41,7 +51,14 @@ export default function Bar({ children }: BarProps) {
         </Container>
       </AppBar>
       <Box sx={{ height: '64px' }} />
-      {children}
+      <Grid container spacing={1}>
+        <Grid item xs={2}>
+          <FileList />
+        </Grid>
+        <Grid item xs={10}>
+          {children}
+        </Grid>
+      </Grid>
     </>
   );
 }

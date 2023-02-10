@@ -10,15 +10,11 @@ interface FileItemProps {
 export default function FileItem({ path, fileP }: FileItemProps) {
   if (fileP === null) return <></>;
   const { size, sended, file, blobSended } = fileP;
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    setProgress((size / sended) * 100);
-  }, [sended, size]);
 
   return (
     <ListItem>
       <ListItemIcon>
-        <CircularProgress variant="determinate" value={progress} />
+        <CircularProgress variant="determinate" value={(sended / size) * 100} />
       </ListItemIcon>
       <ListItemText primary={file.name} secondary={`en:${path}`} />
     </ListItem>

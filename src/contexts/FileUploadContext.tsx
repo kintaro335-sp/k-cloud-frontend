@@ -1,6 +1,6 @@
 import React, { createContext, useEffect } from 'react';
 import { useSelector, getState } from '../redux/store';
-import { addFile, onWriteBlob, setInitializedFile } from '../redux/slices/fileUploader';
+import { addFile, onWriteBlob, setInitializedFile, setTotalBlobs, setBlobsSended } from '../redux/slices/fileUploader';
 import { initializeFileAPI, uploadBlobAPI, closeFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { isAxiosError } from 'axios';
@@ -55,10 +55,12 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === null) return;
     if (fileM === undefined) return;
     const blobs = getNumberBlobs(fileM.size);
+    setTotalBlobs(path, blobs);
     for (let i = 0; i <= blobs; i++) {
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
       await sendBlob(path, positionfrom, positionto - positionfrom);
+      setBlobsSended(path, i);
     }
     return new Promise((res) => {
       res();

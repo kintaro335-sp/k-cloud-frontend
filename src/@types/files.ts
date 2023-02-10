@@ -10,6 +10,8 @@ export interface FileToUpload {
   size: number;
   sended: number;
   blobSended: SendedBlobs[];
+  totalBlobs: number;
+  blobsSended: number;
 }
 
 type BytesWritten = { from: number; to: number };

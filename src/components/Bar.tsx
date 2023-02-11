@@ -1,18 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  AppBar,
-  Container,
-  Toolbar,
-  Typography,
-  Box,
-  Button,
-  Stack,
-  Drawer,
-  IconButton,
-  Paper,
-  Grid
-} from '@mui/material';
+import { Link, useLocation } from 'react-router-dom';
+import { AppBar, Container, Toolbar, Typography, Box, Button, Stack, Grid } from '@mui/material';
 import FileList from './files/upload/FileList';
 import { UserProfile } from './bar';
 import useAuth from '../hooks/useAuth';
@@ -25,6 +12,9 @@ interface BarProps {
 
 export default function Bar({ children }: BarProps) {
   const { isAuthenticated } = useAuth();
+  const { pathname } = useLocation();
+  const pagesShowList = ['/files'];
+  const showMenuL = isAuthenticated && pagesShowList.includes(pathname);
 
   return (
     <>
@@ -52,10 +42,10 @@ export default function Bar({ children }: BarProps) {
       </AppBar>
       <Box sx={{ height: '64px' }} />
       <Grid container spacing={1}>
-        <Grid item xs={2} sx={{ display: isAuthenticated ? 'block' : 'none' }}>
+        <Grid item xs={2} sx={{ display: showMenuL ? 'block' : 'none' }}>
           <FileList />
         </Grid>
-        <Grid item xs={isAuthenticated ? 10 : 12}>
+        <Grid item xs={showMenuL ? 10 : 12}>
           {children}
         </Grid>
       </Grid>

@@ -1,6 +1,13 @@
 import React, { createContext, useEffect } from 'react';
 import { useSelector, getState } from '../redux/store';
-import { addFile, onWriteBlob, setInitializedFile, setTotalBlobs, setBlobsSended } from '../redux/slices/fileUploader';
+import {
+  addFile,
+  onWriteBlob,
+  setInitializedFile,
+  setTotalBlobs,
+  setBlobsSended,
+  removeFileUploading
+} from '../redux/slices/fileUploader';
 import { initializeFileAPI, uploadBlobAPI, closeFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { isAxiosError } from 'axios';
@@ -67,10 +74,16 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     });
   };
 
-  const uploadFileStart = async (path: string) => {
-    await initializeFile(path).then(() => {
-      sendBlobs(path);
+  const closeFile = async (path: string) => {
+    await closeFileAPI(path, access_token).then(() => {
+      removeFileUploading(path);
     });
+  };
+
+  const uploadFileStart = async (path: string) => {
+    await initializeFile(path);
+    await sendBlobs(path);
+    await closeFile(path);
   };
 
   useEffect(() => {

@@ -67,6 +67,11 @@ const slice = createSlice({
       const fileM = state.files[path];
       if (fileM === null) return;
       if (fileM === undefined) return;
+    },
+    removeFileUploading(state, action) {
+      const path = action.payload as string;
+      state.filesDir = state.filesDir.filter((f) => f !== path);
+      state.files[path] = null;
     }
   }
 });
@@ -118,5 +123,13 @@ export function setBlobsSended(path: string, sendedB: number) {
     dispatch(slice.actions.setBlobsSended({ path, sendedB }));
   } catch (err) {
     console.error(err);
+  }
+}
+
+export function removeFileUploading(path: string) {
+  try {
+    dispatch(slice.actions.removeFileUploading(path));
+  } catch (err) {
+    console.log(err);
   }
 }

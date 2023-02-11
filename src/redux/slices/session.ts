@@ -1,15 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { dispatch } from '../store';
 import { FileP } from '../../api/files';
 export interface SessionState {
   access_token: string;
   path: string;
   files: FileP[];
+  fileInterval: number | null;
 }
 
 const initialState: SessionState = {
   access_token: '',
   path: '',
-  files: []
+  files: [],
+  fileInterval: null
 };
 
 const slice = createSlice({
@@ -24,6 +27,16 @@ const slice = createSlice({
     },
     setFiles: (state, action) => {
       state.files = action.payload;
+    },
+    setIntervalId(state, action) {
+      const number = action.payload as number;
+      state.fileInterval = number;
+    },
+    clearIntervalFile(state) {
+      if (state.fileInterval !== null) {
+        clearInterval(state.fileInterval);
+        state.fileInterval = null;
+      }
     }
   }
 });
@@ -31,3 +44,19 @@ const slice = createSlice({
 export const { setAccessToken, setPath, setFiles } = slice.actions;
 
 export default slice.reducer;
+
+export function onSetInterval(id: number) {
+  try {
+    dispatch(slice.actions.setIntervalId(id));
+  } catch (err) {
+    console.error;
+  }
+}
+
+export function cancelInterval() {
+  try {
+    dispatch(slice.actions.clearIntervalFile());
+  } catch (err) {
+    console.error(err);
+  }
+}

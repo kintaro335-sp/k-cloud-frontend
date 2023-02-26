@@ -9,7 +9,7 @@ import DropFiles from '../components/files/DropFiles';
 
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { setFiles, onSetInterval, cancelInterval } from '../redux/slices/session';
+import { setFiles, onSetInterval, cancelFilesInterval } from '../redux/slices/session';
 // api
 import { getListFiles, FileP } from '../api/files';
 import { isAxiosError } from 'axios';
@@ -20,7 +20,7 @@ export default function Files() {
   const { access_token, path, files } = useSelector((state) => state.session);
 
   useEffect(() => {
-    cancelInterval();
+    cancelFilesInterval();
     async function getFiles() {
       const { list } = await getListFiles(path, access_token).catch((err) => {
         if (isAxiosError(err)) {

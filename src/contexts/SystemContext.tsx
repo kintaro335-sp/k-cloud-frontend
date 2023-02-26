@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { cancelInterval } from '../redux/slices/session';
+import { cancelFilesInterval } from '../redux/slices/session';
+import { clearIntervalUser } from '../redux/slices/admin';
 
 interface SystemcontextProps {
   children: React.ReactNode;
@@ -11,7 +12,10 @@ export default function Systemcontext({ children }: SystemcontextProps) {
 
   useEffect(() => {
     if (pathname !== '/files') {
-      cancelInterval();
+      cancelFilesInterval();
+    }
+    if (pathname !== '/admin/accounts') {
+      clearIntervalUser();
     }
   }, [pathname]);
 

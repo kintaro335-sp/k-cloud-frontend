@@ -3,18 +3,22 @@ import { Typography, Box, Card, CardHeader } from '@mui/material';
 import { UsersList, NewUserForm } from '../../components/dashboard/accounts';
 import { getAccounts } from '../../api/admin';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
-import { setUsers } from '../../redux/slices/admin';
+import {  useSelector } from '../../redux/store';
+import { setUsers, clearIntervalUser, setIntervalUser } from '../../redux/slices/admin';
 
 export default function Accounts() {
-  const dispatch = useDispatch();
   const { access_token } = useSelector((state) => state.session);
 
   useEffect(() => {
-    getAccounts(access_token).then((result) => {
-      dispatch(setUsers(result));
-    });
-  });
+    clearIntervalUser();
+    async function getAccountsEffect() {
+      getAccounts(access_token).then((result) => {
+        setUsers(result)
+      });
+    }
+    getAccountsEffect();
+    setIntervalUser(setInterval(getAccountsEffect, 1000))
+  }, []);
 
   return (
     <>

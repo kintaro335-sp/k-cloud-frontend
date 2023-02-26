@@ -5,5 +5,6 @@ export interface User {
 }
 
 export interface AdminState {
+  userInterval: number | null;
   users: User[];
 }

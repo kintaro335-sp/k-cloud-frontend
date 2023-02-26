@@ -53,7 +53,7 @@ export function onSetInterval(id: number) {
   }
 }
 
-export function cancelInterval() {
+export function cancelFilesInterval() {
   try {
     dispatch(slice.actions.clearIntervalFile());
   } catch (err) {

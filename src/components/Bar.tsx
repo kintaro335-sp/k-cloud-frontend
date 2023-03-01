@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { AppBar, Container, Toolbar, Typography, Box, Button, Stack, Grid } from '@mui/material';
-import FileList from './files/upload/FileList';
-import { UserProfile } from './bar';
+import { UserProfile, LateralMenu } from './bar';
 import useAuth from '../hooks/useAuth';
 // import { Icon } from '@iconify/react';
 // import barsI from '@iconify/icons-ant-design/bars-outlined';
@@ -43,7 +42,7 @@ export default function Bar({ children }: BarProps) {
       <Box sx={{ height: '64px' }} />
       <Grid container spacing={1}>
         <Grid item xs={2} sx={{ display: showMenuL ? 'block' : 'none' }}>
-          <FileList />
+          <LateralMenu />
         </Grid>
         <Grid item xs={showMenuL ? 10 : 12}>
           {children}

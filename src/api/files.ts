@@ -1,7 +1,7 @@
 import axios from 'axios';
 import axiosObs from 'axios-observable';
 import { apiUrl } from '../config';
-import { FilePTempResponse } from '../@types/files';
+import { FileI, FilePTempResponse, Folder } from '../@types/files';
 
 const connFilesObs = axiosObs.create({
   baseURL: `${apiUrl}/files`
@@ -129,6 +129,19 @@ export async function closeFileAPI(path: string, token: string) {
       .post(`close/${path}?t=${token}`)
       .then((res) => {
         resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export async function getTreeAPI(path: string, token: string): Promise<Array<Folder | FileI>> {
+  return new Promise((resolve, reject) => {
+    connFiles
+      .get(`tree/${path}?t=${token}`)
+      .then((res) => {
+        resolve(res.data.content);
       })
       .catch((err) => {
         reject(err);

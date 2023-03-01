@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { dispatch } from '../store';
 import { FileP } from '../../api/files';
+import { Folder, FileI } from '../../@types/files';
+
 export interface SessionState {
   access_token: string;
   path: string;
   files: FileP[];
+  tree: Array<Folder | FileI>;
   fileInterval: number | null;
 }
 
@@ -12,6 +15,7 @@ const initialState: SessionState = {
   access_token: '',
   path: '',
   files: [],
+  tree: [],
   fileInterval: null
 };
 
@@ -28,6 +32,10 @@ const slice = createSlice({
     setFiles: (state, action) => {
       state.files = action.payload;
     },
+    setTree(state, action) {
+      const treeL = action.payload as Array<Folder | FileI>;
+      state.tree = treeL;
+    },
     setIntervalId(state, action) {
       const number = action.payload as number;
       state.fileInterval = number;
@@ -41,7 +49,7 @@ const slice = createSlice({
   }
 });
 
-export const { setAccessToken, setPath, setFiles } = slice.actions;
+export const { setAccessToken, setPath, setFiles, setTree } = slice.actions;
 
 export default slice.reducer;
 

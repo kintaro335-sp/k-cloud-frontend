@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { List, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { List, Box } from '@mui/material';
 import FileItem from './FileItem';
 import { useSelector } from '../../../redux/store';
 
@@ -9,6 +7,7 @@ export default function FilesList() {
 
   return (
     <List>
+
       {filesDir.map((dir, i) => {
         const FD = files[dir];
         return <FileItem key={i} path={dir} fileP={FD} />;

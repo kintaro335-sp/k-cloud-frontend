@@ -9,9 +9,9 @@ import DropFiles from '../components/files/DropFiles';
 
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { setFiles, onSetInterval, cancelFilesInterval } from '../redux/slices/session';
+import { setFiles, setTree, onSetInterval, cancelFilesInterval } from '../redux/slices/session';
 // api
-import { getListFiles, FileP } from '../api/files';
+import { getListFiles, FileP, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
 
 export default function Files() {
@@ -32,6 +32,15 @@ export default function Files() {
         return { list: [] };
       });
       dispatch(setFiles(list));
+      const tree = await getTreeAPI('', access_token).catch((err) => {
+        if (isAxiosError(err)) {
+          enqueueSnackbar(err.response?.data.message, { variant: 'error' });
+        } else {
+          enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
+        }
+        return [];
+      });
+      dispatch(setTree(tree));
     }
     getFiles();
     onSetInterval(

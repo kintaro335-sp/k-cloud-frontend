@@ -15,6 +15,7 @@ export interface FileToUpload {
 }
 
 type BytesWritten = { from: number; to: number };
+type FileType = 'folder' | 'file';
 
 export interface FilePTempResponse {
   name: string;
@@ -34,4 +35,18 @@ export interface BlobToWrite {
   path: string;
   position: number;
   size: number;
+}
+
+export interface FileI {
+  name: string;
+  type: FileType;
+  size: number;
+  extension: string;
+  mime_type: string;
+}
+
+export interface Folder {
+  type: 'Folder';
+  name: string;
+  content: Array<Folder | FileI>;
 }

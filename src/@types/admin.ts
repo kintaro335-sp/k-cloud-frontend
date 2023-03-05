@@ -8,3 +8,8 @@ export interface AdminState {
   userInterval: number | null;
   users: User[];
 }
+
+export interface SpaceUsed {
+  total: number;
+  used: number;
+}

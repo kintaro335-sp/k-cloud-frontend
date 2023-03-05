@@ -70,7 +70,7 @@ export default function Files() {
           </Grid>
         </CardContent>
       </Card>
-      <Box sx={{ width: '100vw', height: '85%', marginTop: '2ex' }}>
+      <Box sx={{ width: '100%', height: '68%', marginTop: '2ex', overflowY: 'scroll' }}>
         <Grid container spacing={2}>
           {files.map((file: FileP, i) => (
             <Grid item key={file.name + i} xs={6} md={3} lg={2}>

@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Box } from '@mui/material';
+import { Card, CardContent, CardHeader, Box, Tooltip, Typography } from '@mui/material';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
 import Numeral from 'numeral';
@@ -25,13 +25,23 @@ function FileInfo({
       <CardContent>{children}</CardContent>
       <CardHeader
         title={
-          <Box sx={{ whiteSpace: 'noWrap', textOverflow: 'ellipsis', overflowWrap: 'anywhere', fontSize: '1.6ex' }}>
-            {file.name}
-          </Box>
+          <Tooltip title={<Typography>{file.name}</Typography>}>
+            <Box
+              sx={{
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                fontSize: '1.6ex',
+                width: '150px',
+                overflow: 'hidden'
+              }}
+            >
+              {file.name}
+            </Box>
+          </Tooltip>
         }
         subheader={
           <Box>
-          {file.type} {file.type === 'file' && Numeral(file.size).format('0.0 b')}
+            {file.type} {file.type === 'file' && Numeral(file.size).format('0.0 b')}
           </Box>
         }
         action={<MenuFile url={url} file={file} urlComplete={urlComplete} />}

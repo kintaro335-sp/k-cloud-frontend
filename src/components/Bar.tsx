@@ -2,8 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { AppBar, Container, Toolbar, Typography, Box, Button, Stack, Grid } from '@mui/material';
 import { UserProfile, LateralMenu } from './bar';
 import useAuth from '../hooks/useAuth';
-// import { Icon } from '@iconify/react';
-// import barsI from '@iconify/icons-ant-design/bars-outlined';
 
 interface BarProps {
   children: React.ReactNode;
@@ -40,11 +38,11 @@ export default function Bar({ children }: BarProps) {
         </Container>
       </AppBar>
       <Box sx={{ height: '64px' }} />
-      <Grid container spacing={1}>
-        <Grid item xs={2} sx={{ display: showMenuL ? 'block' : 'none' }}>
+      <Grid container spacing={1} sx={{ height: '90vh' }}>
+        <Grid item xs={2} sx={{ display: showMenuL ? 'block' : 'none', height: '100%' }}>
           <LateralMenu />
         </Grid>
-        <Grid item xs={showMenuL ? 10 : 12}>
+        <Grid item xs={showMenuL ? 10 : 12} sx={{ height: '100%' }}>
           {children}
         </Grid>
       </Grid>

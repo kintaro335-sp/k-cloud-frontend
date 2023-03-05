@@ -1,28 +1,43 @@
 import axios from 'axios';
 import { apiUrl } from '../config';
-import { User } from '../@types/admin';
+import { User, SpaceUsed } from '../@types/admin';
 import { MessageResponse } from '../@types/auth';
 
 const conn = axios.create({
-  baseURL: `${apiUrl}/admin/users`
+  baseURL: `${apiUrl}/admin`
 });
 
 export async function getAccounts(token: string): Promise<User[]> {
-  const result = await conn.get(`/list?t=${token}`);
+  const result = await conn.get(`users/list?t=${token}`);
   return result.data;
 }
 
 export async function setPassword(token: string, userid: string, newPassword: string): Promise<MessageResponse> {
-  const result = await conn.post(`/password/${userid}?t=${token}`, { password: newPassword });
+  const result = await conn.post(`users/password/${userid}?t=${token}`, { password: newPassword });
   return result.data;
 }
 
 export async function setAdmin(token: string, userid: string, admin: boolean): Promise<MessageResponse> {
-  const result = await conn.post(`/admin/${userid}?t=${token}`, { admin });
+  const result = await conn.post(`users/admin/${userid}?t=${token}`, { admin });
   return result.data;
 }
 
 export async function createAccount(token: string, username: string, password: string): Promise<MessageResponse> {
-  const result = await conn.post(`/create?t=${token}`, { username, password, admin: false });
+  const result = await conn.post(`users/create?t=${token}`, { username, password, admin: false });
+  return result.data;
+}
+
+export async function getusedSpace(token: string, update: boolean): Promise<SpaceUsed> {
+  if (update) {
+    const result = await conn.get(`used-space/update?t=${token}`);
+    return result.data;
+  } else {
+    const result = await conn.get(`used-space?t=${token}`);
+    return result.data;
+  }
+}
+
+export async function setDedicatedSpace(token: string, type: string, quantity: number) {
+  const result = await conn.post(`set-dedicated-space?t=${token}`, { unitTipe: type, quantity });
   return result.data;
 }

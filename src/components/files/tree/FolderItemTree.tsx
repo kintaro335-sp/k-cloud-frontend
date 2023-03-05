@@ -4,6 +4,9 @@ import { Folder } from '../../../@types/files';
 // redux
 import { useDispatch } from '../../../redux/store';
 import { setPath } from '../../../redux/slices/session';
+// icon
+import { Icon } from '@iconify/react';
+import FolderIcon from '@iconify/icons-material-symbols/folder';
 
 interface FolderItemTreeProps {
   folder: Folder;
@@ -17,6 +20,7 @@ export default function FolderItemTree({ folder, index, level, path }: FolderIte
   const dispatch = useDispatch();
   return (
     <TreeItem
+      icon={content.length === 0 && <Icon icon={FolderIcon} />}
       nodeId={`${name}-${index}-${level}`}
       label={
         <Typography
@@ -36,7 +40,7 @@ export default function FolderItemTree({ folder, index, level, path }: FolderIte
       {content.map((elem, i) => {
         if (!elem) return;
         if (elem.type === 'Folder') {
-          return <FolderItemTree folder={elem} index={i} level={level + 1} path={`${name}`}/>;
+          return <FolderItemTree folder={elem} index={i} level={level + 1} path={`${name}`} />;
         }
       })}
     </TreeItem>

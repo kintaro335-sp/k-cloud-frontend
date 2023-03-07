@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, TextField, Grid, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { useSnackbar } from 'notistack';
 // form
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,6 +15,7 @@ import { setDedicatedSpace, getDedicatedSpaceConfig, getusedSpace } from '../../
 
 export default function DedicatedSpaceForm() {
   const { access_token } = useSelector((state) => state.session);
+  const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = yup
     .object()
@@ -30,12 +32,15 @@ export default function DedicatedSpaceForm() {
     resolver: yupResolver(validationSchema)
   });
 
-  const onHandleSubmit: SubmitHandler<SpaceConfig> = (data) => {};
+  const onHandleSubmit: SubmitHandler<SpaceConfig> = async (data) => {
+    const result = await setDedicatedSpace(access_token, data.unitType, data.dedicatedSpace);
+  };
 
-  const unitTypeOptions = ['MB', 'GB'];
+  const unitTypeOptions: ['MB', 'GB'] = ['MB', 'GB'];
 
   const getSpaceInfo = useCallback(async () => {
     const result = await getDedicatedSpaceConfig(access_token);
+    enqueueSnackbar('Espacio asignado', { variant: 'success' });
     setValue('dedicatedSpace', result.dedicatedSpace);
     setValue('unitType', result.unitType);
   }, [access_token]);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { apiUrl } from '../config';
-import { User, SpaceUsed } from '../@types/admin';
+import { User, SpaceUsed, SpaceConfig } from '../@types/admin';
 import { MessageResponse } from '../@types/auth';
 
 const conn = axios.create({
@@ -37,7 +37,12 @@ export async function getusedSpace(token: string, update: boolean): Promise<Spac
   }
 }
 
-export async function setDedicatedSpace(token: string, type: string, quantity: number) {
-  const result = await conn.post(`set-dedicated-space?t=${token}`, { unitTipe: type, quantity });
+export async function setDedicatedSpace(token: string, type: string, quantity: number): Promise<MessageResponse> {
+  const result = await conn.post(`dedicated-space?t=${token}`, { unitTipe: type, quantity });
+  return result.data;
+}
+
+export async function getDedicatedSpaceConfig(token: string): Promise<SpaceConfig> {
+  const result = await conn.get(`dedicated-space?t=${token}`);
   return result.data;
 }

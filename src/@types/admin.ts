@@ -1,3 +1,10 @@
+export type UnitByte = 'MB' | 'GB';
+
+export interface SpaceConfig {
+  dedicatedSpace: number;
+  unitType: UnitByte;
+}
+
 export interface User {
   id: string;
   username: string;

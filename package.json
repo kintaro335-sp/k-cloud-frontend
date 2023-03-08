@@ -17,6 +17,7 @@
     "@iconify/react": "^3.2.2",
     "@mui/lab": "^5.0.0-alpha.94",
     "@mui/material": "^5.10.0",
+    "@nivo/pie": "^0.80.0",
     "@reduxjs/toolkit": "^1.8.4",
     "axios": "^1.2.0",
     "axios-observable": "^2.0.0",

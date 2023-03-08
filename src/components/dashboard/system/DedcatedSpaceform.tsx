@@ -7,11 +7,11 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import { SpaceConfig } from '../../../@types/admin';
+import { SpaceConfig, UnitByte } from '../../../@types/admin';
 // redux
 import { useSelector } from '../../../redux/store';
 // api
-import { setDedicatedSpace, getDedicatedSpaceConfig, getusedSpace } from '../../../api/admin';
+import { setDedicatedSpace, getDedicatedSpaceConfig } from '../../../api/admin';
 
 export default function DedicatedSpaceForm() {
   const { access_token } = useSelector((state) => state.session);
@@ -24,16 +24,19 @@ export default function DedicatedSpaceForm() {
   const {
     register,
     handleSubmit,
-    reset,
     setValue,
+    watch,
     formState: { errors, isSubmitting }
   } = useForm<SpaceConfig>({
     defaultValues: { dedicatedSpace: 1024, unitType: 'MB' },
     resolver: yupResolver(validationSchema)
   });
 
+  const { unitType } = watch();
+
   const onHandleSubmit: SubmitHandler<SpaceConfig> = async (data) => {
     const result = await setDedicatedSpace(access_token, data.unitType, data.dedicatedSpace);
+    enqueueSnackbar(result.message, { variant: 'success' });
   };
 
   const unitTypeOptions: ['MB', 'GB'] = ['MB', 'GB'];
@@ -59,7 +62,15 @@ export default function DedicatedSpaceForm() {
               <TextField label="Cantidad" fullWidth {...register('dedicatedSpace')} type="number" />
             </Grid>
             <Grid item xs={3}>
-              <TextField label="Tipo" fullWidth select {...register('unitType')}>
+              <TextField
+                label="Tipo"
+                fullWidth
+                select
+                value={unitType}
+                onChange={(e) => {
+                  setValue('unitType', e.target.value as UnitByte);
+                }}
+              >
                 {unitTypeOptions.map((t) => (
                   <MenuItem key={t} value={t}>
                     {t}

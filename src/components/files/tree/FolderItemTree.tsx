@@ -40,7 +40,15 @@ export default function FolderItemTree({ folder, index, level, path }: FolderIte
       {content.map((elem, i) => {
         if (!elem) return;
         if (elem.type === 'Folder') {
-          return <FolderItemTree folder={elem} index={i} level={level + 1} path={`${name}`} />;
+          return (
+            <FolderItemTree
+              key={`${elem.name}-${i}-${level + 1}`}
+              folder={elem}
+              index={i}
+              level={level + 1}
+              path={`${name}`}
+            />
+          );
         }
       })}
     </TreeItem>

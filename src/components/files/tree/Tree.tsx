@@ -16,7 +16,7 @@ export default function Tree() {
         {tree.map((elem, i) => {
           if (!elem) return;
           if (elem.type === 'Folder') {
-            return <FolderItemTree folder={elem} index={i} level={0} />;
+            return <FolderItemTree key={`${elem.name}-${i}-${0}`} folder={elem} index={i} level={0} />;
           }
         })}
       </TreeView>

@@ -13,8 +13,8 @@ export default function UsedSpacePie() {
         <Box sx={{ width: '100%', height: '500px' }}>
           <ResponsivePie
             data={[
-              { id: 'free', label: 'Free', value: totalSpace - usedSpace, color: 'hsl(0, 100%, 46%)' },
-              { id: 'used', label: 'Used', value: usedSpace, color: 'hsl(0, 0%, 56%)' }
+              { id: 'free', label: 'Free', value: totalSpace - usedSpace, color: 'hsl(30, 1%, 50%)' },
+              { id: 'used', label: 'Used', value: usedSpace, color: 'hsl(0, 100%, 46%)' }
             ]}
             margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
             valueFormat={(value) => Numeral(value).format('0.0 b')}
@@ -28,7 +28,7 @@ export default function UsedSpacePie() {
                 id: 'dots',
                 type: 'patternDots',
                 background: 'inherit',
-                color: 'rgba(255, 0, 0, 0.7)',
+                color: 'rgba(255, 0, 0, 1)',
                 size: 4,
                 padding: 1,
                 stagger: true
@@ -37,7 +37,7 @@ export default function UsedSpacePie() {
                 id: 'lines',
                 type: 'patternLines',
                 background: 'inherit',
-                color: 'rgba(255, 255, 255, 0.3)',
+                color: 'rgba(150, 150, 150, 1)',
                 rotation: -45,
                 lineWidth: 6,
                 spacing: 10
@@ -58,14 +58,11 @@ export default function UsedSpacePie() {
               }
             ]}
             arcLinkLabelsSkipAngle={10}
-            arcLinkLabelsTextColor="#333333"
-            arcLinkLabelsThickness={2}
+            arcLinkLabelsTextColor="#000"
+            arcLinkLabelsThickness={3}
             arcLinkLabelsColor={{ from: 'color' }}
             arcLabelsSkipAngle={10}
-            arcLabelsTextColor={{
-              from: 'color',
-              modifiers: [['darker', 2]]
-            }}
+            arcLabelsTextColor="black"
             legends={[
               {
                 anchor: 'bottom',
@@ -76,7 +73,7 @@ export default function UsedSpacePie() {
                 itemsSpacing: 0,
                 itemWidth: 100,
                 itemHeight: 18,
-                itemTextColor: '#999',
+                itemTextColor: '#111',
                 itemDirection: 'left-to-right',
                 itemOpacity: 1,
                 symbolSize: 18,

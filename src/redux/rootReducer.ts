@@ -6,6 +6,7 @@ import sessionReducer from './slices/session';
 import adminReducer from './slices/admin';
 import fileUploaderReducer from './slices/fileUploader';
 import statsReducer from './slices/stats';
+import sharedfilesReducer from './slices/sharedfiles';
 
 const rootPersistConfig = {
   key: 'root',
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
   session: persistReducer(sessionPersistConfig, sessionReducer),
   admin: adminReducer,
   files: fileUploaderReducer,
-  stats: statsReducer
+  stats: statsReducer,
+  sharedfiles: sharedfilesReducer
 });
 
 export { rootPersistConfig, rootReducer };

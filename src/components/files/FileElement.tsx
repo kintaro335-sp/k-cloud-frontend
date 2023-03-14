@@ -26,16 +26,18 @@ function FileInfo({
       <CardHeader
         title={
           <Tooltip title={<Typography>{file.name}</Typography>}>
-            <Box
-              sx={{
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                fontSize: '1.6ex',
-                width: '150px',
-                overflow: 'hidden'
-              }}
-            >
-              {file.name}
+            <Box sx={{ width: '9ex' }}>
+              <Box
+                sx={{
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  fontSize: '1.6ex',
+                  width: '100%',
+                  overflow: 'hidden'
+                }}
+              >
+                {file.name}
+              </Box>
             </Box>
           </Tooltip>
         }

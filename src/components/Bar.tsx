@@ -26,11 +26,20 @@ export default function Bar({ children }: BarProps) {
             >
               Cloud
             </Typography>
-            <Stack>
+            <Stack spacing={2} direction="row">
               {!isAuthenticated && (
-                <Button component={Link} to="/login" variant="contained" sx={{ float: 'right' }}>
-                  Login
-                </Button>
+                <>
+                  {pathname !== '/login' && (
+                    <Button component={Link} to="/login" variant="contained" sx={{ float: 'right' }}>
+                      Login
+                    </Button>
+                  )}
+                  {pathname !== '/shared-files' && (
+                    <Button component={Link} to="/shared-files" variant="contained" sx={{ float: 'right' }}>
+                      Shared Files
+                    </Button>
+                  )}
+                </>
               )}
               {isAuthenticated && <UserProfile />}
             </Stack>

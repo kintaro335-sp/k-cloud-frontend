@@ -15,7 +15,7 @@ export interface FileToUpload {
 }
 
 type BytesWritten = { from: number; to: number };
-type FileType = 'folder' | 'file';
+export type FileType = 'folder' | 'file';
 
 export interface FilePTempResponse {
   name: string;

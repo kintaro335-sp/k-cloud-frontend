@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { IconButton, Menu, MenuItem } from '@mui/material';
+import { TokensMenu } from './tokens';
 import { useSnackbar } from 'notistack';
 // icons
 import { Icon } from '@iconify/react';
@@ -38,6 +39,7 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileP; url:
         <MenuItem component="a" href={urlComplete} download={file.name.split('.')[0]}>
           <Icon icon={donloadIcon} width="25px" height="25px" /> Descargar
         </MenuItem>
+        <TokensMenu url={url} />
         <MenuItem
           onClick={() => {
             deleteFile(url, access_token).then((res) => {

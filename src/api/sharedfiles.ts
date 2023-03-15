@@ -37,6 +37,11 @@ export async function getContentToken(id: string): Promise<FileI[]> {
   return response.data;
 }
 
+export async function getTokensByPath(path: string, token: string): Promise<TokenElement[]> {
+  const response = await sfconn.get(`tokens/path/${path}?t=${token}`);
+  return response.data;
+}
+
 export async function deleteTokensByPath(path: string, token: string): Promise<{ message: string }> {
   const response = await sfconn.delete(`tokens/path/${path}?t=${token}`);
   return response.data;

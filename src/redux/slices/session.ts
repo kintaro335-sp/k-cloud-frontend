@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { dispatch } from '../store';
 import { FileP } from '../../api/files';
 import { Folder, FileI } from '../../@types/files';
+import { TokenElement } from '../../@types/sharedfiles';
 
 export interface SessionState {
   access_token: string;
@@ -9,6 +10,8 @@ export interface SessionState {
   files: FileP[];
   tree: Array<Folder | FileI>;
   fileInterval: number | null;
+  tokenInterval: number | null;
+  tokens: TokenElement[];
 }
 
 const initialState: SessionState = {
@@ -16,7 +19,9 @@ const initialState: SessionState = {
   path: '',
   files: [],
   tree: [],
-  fileInterval: null
+  fileInterval: null,
+  tokenInterval: null,
+  tokens: []
 };
 
 const slice = createSlice({
@@ -45,11 +50,24 @@ const slice = createSlice({
         clearInterval(state.fileInterval);
         state.fileInterval = null;
       }
+    },
+    setIntervalIdToken(state, action) {
+      const number = action.payload as number;
+      state.tokenInterval = number;
+    },
+    clearIntervalToken(state) {
+      if (state.tokenInterval !== null) {
+        clearInterval(state.tokenInterval);
+        state.fileInterval = null;
+      }
+    },
+    setTokens(state, action) {
+      state.tokens = action.payload as TokenElement[];
     }
   }
 });
 
-export const { setAccessToken, setPath, setFiles, setTree } = slice.actions;
+export const { setAccessToken, setPath, setFiles, setTree, setTokens } = slice.actions;
 
 export default slice.reducer;
 
@@ -64,6 +82,21 @@ export function onSetInterval(id: number) {
 export function cancelFilesInterval() {
   try {
     dispatch(slice.actions.clearIntervalFile());
+  } catch (err) {
+    console.error(err);
+  }
+}
+export function onSetTokenInterval(id: number) {
+  try {
+    dispatch(slice.actions.setIntervalIdToken(id));
+  } catch (err) {
+    console.error;
+  }
+}
+
+export function cancelTokenInterval() {
+  try {
+    dispatch(slice.actions.clearIntervalToken());
   } catch (err) {
     console.error(err);
   }

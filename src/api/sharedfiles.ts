@@ -4,7 +4,7 @@ import { FileI } from '../@types/files';
 import { apiUrl } from '../config';
 
 const sfconn = axios.create({
-  baseURL: `${apiUrl}/shared-files`
+  baseURL: `${apiUrl}/shared-file`
 });
 
 export async function shareFile(
@@ -23,7 +23,7 @@ export async function getTokenInfo(id: string, token: string): Promise<SFInfoRes
 }
 
 export async function deleteToken(id: string, token: string): Promise<{ message: string }> {
-  const response = await sfconn.delete(`${id}?t=${token}`);
+  const response = await sfconn.delete(`/${id}?t=${token}`);
   return response.data;
 }
 

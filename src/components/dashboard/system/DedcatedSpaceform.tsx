@@ -43,7 +43,6 @@ export default function DedicatedSpaceForm() {
 
   const getSpaceInfo = useCallback(async () => {
     const result = await getDedicatedSpaceConfig(access_token);
-    enqueueSnackbar('Espacio asignado', { variant: 'success' });
     setValue('dedicatedSpace', result.dedicatedSpace);
     setValue('unitType', result.unitType);
   }, [access_token]);

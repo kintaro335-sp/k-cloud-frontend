@@ -17,6 +17,7 @@ export interface FileP {
   name: string;
   type: FileType;
   size: string;
+  tokens: number;
   extension: string;
   mime_type: string;
 }

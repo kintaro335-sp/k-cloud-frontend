@@ -34,14 +34,14 @@ export default function Bar({ children }: BarProps) {
                       Login
                     </Button>
                   )}
-                  {pathname !== '/shared-files' && (
-                    <Button component={Link} to="/shared-files" variant="contained" sx={{ float: 'right' }}>
-                      Shared Files
-                    </Button>
-                  )}
                 </>
               )}
               {isAuthenticated && <UserProfile />}
+              {pathname !== '/shared-files' && (
+                <Button component={Link} to="/shared-files" variant="contained" sx={{ float: 'right' }}>
+                  Shared Files
+                </Button>
+              )}
             </Stack>
           </Toolbar>
         </Container>

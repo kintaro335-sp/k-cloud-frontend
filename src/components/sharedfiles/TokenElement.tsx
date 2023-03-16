@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Typography, Box } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography, Box, Tooltip } from '@mui/material';
 import { TokenElement } from '../../@types/sharedfiles';
 import TokenIcon from './TokenIcon';
 
@@ -12,11 +12,30 @@ export default function TokenItem({ token }: TokenElementProps) {
   return (
     <Card>
       <CardContent>
-        <Box sx={{ diaplay: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
           <TokenIcon type={type} />
         </Box>
       </CardContent>
-      <CardHeader title={<Typography>{name}</Typography>} subheader={type} />
+      <CardHeader
+        title={
+          <Tooltip title={<Typography>{name}</Typography>}>
+            <Box sx={{ width: '20ex' }}>
+              <Box
+                sx={{
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  fontSize: '1.6ex',
+                  width: '100%',
+                  overflow: 'hidden'
+                }}
+              >
+                {name}
+              </Box>
+            </Box>
+          </Tooltip>
+        }
+        subheader={<Box>{type}</Box>}
+      />
     </Card>
   );
 }

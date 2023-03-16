@@ -1,15 +1,17 @@
 import { Stack, Box } from '@mui/material';
-// redux
-import { useDispatch } from '../../../redux/store';
-import { setPath } from '../../../redux/slices/session';
 import { Icon } from '@iconify/react';
 import rightC from '@iconify/icons-ant-design/caret-right-fill';
 
-export default function ButtonBar({ name, to, index }: { name: string; to: string; index: number }) {
-  const dispatch = useDispatch();
+interface ButtonBarProps {
+  name: string;
+  to: string;
+  index: number;
+  onChangePath: (newPath: string) => void;
+}
 
+export default function ButtonBar({ name, to, index, onChangePath }: ButtonBarProps) {
   const sendToPath = () => {
-    dispatch(setPath(to));
+    onChangePath(to);
   };
 
   return (

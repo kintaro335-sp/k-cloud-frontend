@@ -2,6 +2,7 @@ import { Stack, IconButton } from '@mui/material';
 // icons
 import { Icon } from '@iconify/react';
 import deleteIcon from '@iconify/icons-ant-design/delete-fill';
+import { useSnackbar } from 'notistack';
 // redux
 import { useSelector } from '../../../redux/store';
 // api
@@ -13,9 +14,13 @@ interface TokenActionsProps {
 
 export default function TokenActions({ id }: TokenActionsProps) {
   const { access_token } = useSelector((state) => state.session);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = async () => {
-    await deleteToken(id, access_token);
+    if (window.confirm(`desea eliminar ${id}?`)) {
+      await deleteToken(id, access_token);
+      enqueueSnackbar('eliminado', { variant: 'success' });
+    }
   };
 
   return (

@@ -27,10 +27,10 @@ export default function TokensMenu({ url }: TokensMenuProps) {
   return (
     <>
       <MenuItem onClick={clickOpen}>Tokens</MenuItem>
-      <Dialog open={open} onClose={clickClose}>
+      <Dialog open={open} onClose={clickClose} maxWidth="lg">
         <AppBar position="relative">
           <Toolbar>
-            <Typography>Tokens de {url}</Typography>
+            <Typography variant="h5">Tokens de {url}</Typography>
           </Toolbar>
         </AppBar>
         <DialogContent>

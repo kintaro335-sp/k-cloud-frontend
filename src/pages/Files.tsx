@@ -9,7 +9,7 @@ import DropFiles from '../components/files/DropFiles';
 
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { setFiles, setTree, onSetInterval, cancelFilesInterval } from '../redux/slices/session';
+import { setFiles, setTree, onSetInterval, cancelFilesInterval, setPath } from '../redux/slices/session';
 // api
 import { getListFiles, FileP, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
@@ -56,7 +56,12 @@ export default function Files() {
         <CardContent>
           <Grid container spacing={1}>
             <Grid item xs={9}>
-              <RouteBar path={path} />
+              <RouteBar
+                path={path}
+                onChangePath={(newPath) => {
+                  dispatch(setPath(newPath));
+                }}
+              />
             </Grid>
             <Grid item xs={3}>
               <Stack spacing={1} direction="row">

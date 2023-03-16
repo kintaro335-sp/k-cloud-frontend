@@ -12,7 +12,7 @@ export default function TokenRow({ token }: TokenRowProps) {
     <TableRow>
       <TableCell>{id}</TableCell>
       <TableCell>{expire}</TableCell>
-      <TableCell>{expires}</TableCell>
+      <TableCell>{expire ? moment(expires).format('DD-MM-YYYY hh:mm a') : '-'}</TableCell>
       <TableCell>
         <TokenActions id={id} />
       </TableCell>

@@ -43,7 +43,7 @@ function FileInfo({
         }
         subheader={
           <Box>
-            {file.type} {file.type === 'file' && Numeral(file.size).format('0.0 b')}
+            {file.type} T:{file.tokens} {file.type === 'file' && Numeral(file.size).format('0.0 b')}
           </Box>
         }
         action={<MenuFile url={url} file={file} urlComplete={urlComplete} />}
@@ -52,7 +52,7 @@ function FileInfo({
   );
 }
 
-export default function FileElement({ name, size, type, mime_type, extension }: FileP) {
+export default function FileElement({ name, size, type, mime_type, extension, tokens }: FileP) {
   const { path, access_token } = useSelector((state) => state.session);
   const diagonal = path ? '/' : '';
 
@@ -62,27 +62,27 @@ export default function FileElement({ name, size, type, mime_type, extension }: 
   if (type === 'file') {
     if (mime_type.includes('image')) {
       return (
-        <FileInfo file={{ name, size, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
           <ImgFile url={urlComplete} />
         </FileInfo>
       );
     }
     if (mime_type.includes('video')) {
       return (
-        <FileInfo file={{ name, size, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
           <VideoFile url={urlComplete} />
         </FileInfo>
       );
     }
     return (
-      <FileInfo file={{ name, size, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+      <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
         <OtherFile url={urlComplete} />
       </FileInfo>
     );
   }
 
   return (
-    <FileInfo file={{ name, size, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+    <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
       <Folder url={url} />
     </FileInfo>
   );

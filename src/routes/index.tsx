@@ -1,5 +1,14 @@
 import { useRoutes, Navigate } from 'react-router-dom';
-import { LandingPage, LoginPage, RegisterPage, Page404, FilesPage, ChangePasswordPage, SharedFiles } from '../pages';
+import {
+  LandingPage,
+  LoginPage,
+  RegisterPage,
+  Page404,
+  FilesPage,
+  ChangePasswordPage,
+  SharedFiles,
+  SharedFile
+} from '../pages';
 import { Accounts, Stats, AdminMenu, SystemSettings } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
 
@@ -64,6 +73,10 @@ export default function Routes() {
     {
       path: '/shared-files',
       element: <SharedFiles />
+    },
+    {
+      path: '/shared-files/id/:id',
+      element: <SharedFile />
     },
     {
       path: '*',

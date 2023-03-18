@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Typography, Box, Tooltip } from '@mui/material';
 import { TokenElement } from '../../@types/sharedfiles';
 import TokenIcon from './TokenIcon';
@@ -19,7 +20,7 @@ export default function TokenItem({ token }: TokenElementProps) {
       <CardHeader
         title={
           <Tooltip title={<Typography>{name}</Typography>}>
-            <Box sx={{ width: '20ex' }}>
+            <Box sx={{ width: '20ex' }} component={Link} to={`/shared-files/id/${id}`}>
               <Box
                 sx={{
                   whiteSpace: 'nowrap',

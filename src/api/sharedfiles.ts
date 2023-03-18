@@ -17,8 +17,8 @@ export async function shareFile(
   return response.data;
 }
 
-export async function getTokenInfo(id: string, token: string): Promise<SFInfoResponse> {
-  const response = await sfconn.get(`info/${id}?t=${token}`);
+export async function getTokenInfo(id: string): Promise<SFInfoResponse> {
+  const response = await sfconn.get(`info/${id}`);
   return response.data;
 }
 

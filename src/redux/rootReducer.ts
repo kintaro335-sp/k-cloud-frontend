@@ -8,6 +8,7 @@ import fileUploaderReducer from './slices/fileUploader';
 import statsReducer from './slices/stats';
 import sharedfilesReducer from './slices/sharedfiles';
 import tokenexplorerReducer from './slices/tokenexplorer';
+import sharedfileReducer from './slices/sharedfile';
 
 const rootPersistConfig = {
   key: 'root',
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   files: fileUploaderReducer,
   stats: statsReducer,
   sharedfiles: sharedfilesReducer,
+  sharedfile: sharedfileReducer,
   tokenexplorer: tokenexplorerReducer
 });
 

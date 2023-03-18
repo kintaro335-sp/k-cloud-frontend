@@ -7,5 +7,6 @@ export const FilesPage = lazy(() => import('./Files'));
 export const ChangePasswordPage = lazy(() => import('./ChangePassword'));
 export const Page404 = lazy(() => import('./Page404'));
 export const SharedFiles = lazy(() => import('./Sharedfiles'));
+export const SharedFile = lazy(() => import('./SharedFile'));
 
 export { default as Loading } from './Loading';

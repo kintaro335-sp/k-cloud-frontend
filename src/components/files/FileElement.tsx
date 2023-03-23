@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography } from '@mui/material';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
+import DownloadButton from './DownloadButton';
 import Numeral from 'numeral';
 import { FileI } from '../../@types/files';
 // api
@@ -12,17 +13,15 @@ import { useSelector, useDispatch } from '../../redux/store';
 import { setPath as setPathSession } from '../../redux/slices/session';
 import { setPath as setPathSF } from '../../redux/slices/sharedfile';
 
-function FileInfo({
-  file,
-  children,
-  url,
-  urlComplete
-}: {
+interface FileInfoProps {
   file: FileI;
   children: JSX.Element;
   url: string;
   urlComplete: string;
-}) {
+  sf?: boolean;
+}
+
+function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
   return (
     <Card>
       <CardContent>{children}</CardContent>
@@ -46,10 +45,16 @@ function FileInfo({
         }
         subheader={
           <Box>
-            {file.type} T:{file.tokens} {file.type === 'file' && Numeral(file.size).format('0.0 b')}
+            {file.type} {!sf && <>T:{file.tokens}</>} {file.type === 'file' && Numeral(file.size).format('0.0 b')}
           </Box>
         }
-        action={<MenuFile url={url} file={file} urlComplete={urlComplete} />}
+        action={
+          sf ? (
+            file.type === 'file' && <DownloadButton url={urlComplete} />
+          ) : (
+            <MenuFile url={url} file={file} urlComplete={urlComplete} />
+          )
+        }
       />
     </Card>
   );
@@ -86,27 +91,27 @@ export default function FileElement({ file, sf = false }: FileElementProps) {
   if (type === 'file') {
     if (mime_type.includes('image')) {
       return (
-        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
           <ImgFile url={urlComplete} />
         </FileInfo>
       );
     }
     if (mime_type.includes('video')) {
       return (
-        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
           <VideoFile url={urlComplete} />
         </FileInfo>
       );
     }
     return (
-      <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+      <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
         <OtherFile url={urlComplete} />
       </FileInfo>
     );
   }
 
   return (
-    <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+    <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
       <Folder click={onClickFolder} />
     </FileInfo>
   );

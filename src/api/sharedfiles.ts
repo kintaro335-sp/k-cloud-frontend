@@ -27,12 +27,12 @@ export async function deleteToken(id: string, token: string): Promise<{ message:
   return response.data;
 }
 
-export async function getContentTokenPath(id: string, path: string): Promise<FileI[]> {
+export async function getContentTokenPath(id: string, path: string): Promise<{ list: FileI[] }> {
   const response = await sfconn.get(`content/${id}/${path}`);
   return response.data;
 }
 
-export async function getContentToken(id: string): Promise<FileI[]> {
+export async function getContentToken(id: string): Promise<{ list: FileI[] }> {
   const response = await sfconn.get(`content/${id}`);
   return response.data;
 }

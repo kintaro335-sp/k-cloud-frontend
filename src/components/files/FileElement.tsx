@@ -1,13 +1,16 @@
+import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography } from '@mui/material';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
 import Numeral from 'numeral';
+import { FileI } from '../../@types/files';
 // api
-import { FileP } from '../../api/files';
 import { apiUrl } from '../../config';
 
 // redux
-import { useSelector } from '../../redux/store';
+import { useSelector, useDispatch } from '../../redux/store';
+import { setPath as setPathSession } from '../../redux/slices/session';
+import { setPath as setPathSF } from '../../redux/slices/sharedfile';
 
 function FileInfo({
   file,
@@ -15,7 +18,7 @@ function FileInfo({
   url,
   urlComplete
 }: {
-  file: FileP;
+  file: FileI;
   children: JSX.Element;
   url: string;
   urlComplete: string;
@@ -52,12 +55,33 @@ function FileInfo({
   );
 }
 
-export default function FileElement({ name, size, type, mime_type, extension, tokens }: FileP) {
-  const { path, access_token } = useSelector((state) => state.session);
-  const diagonal = path ? '/' : '';
+interface FileElementProps {
+  file: FileI;
+  sf?: boolean;
+}
 
-  const url = `${path}${diagonal}${name}`;
-  const urlComplete = `${apiUrl}/files/list/${path}${diagonal}${name}?t=${access_token}`;
+export default function FileElement({ file, sf = false }: FileElementProps) {
+  const { name, size, type, mime_type, extension, tokens } = file;
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const session = useSelector((state) => state.session);
+  const sharedfile = useSelector((state) => state.sharedfile);
+  const pathSelected = sf ? sharedfile.path : session.path;
+
+  const diagonal = pathSelected ? '/' : '';
+
+  const url = sf ? `${sharedfile.path}${diagonal}${name}` : `${session.path}${diagonal}${name}`;
+  const urlComplete = sf
+    ? `${apiUrl}/shared-file/content/${id}/${sharedfile.path}${diagonal}${name}`
+    : `${apiUrl}/files/list/${session.path}${diagonal}${name}?t=${session.access_token}`;
+
+  const onClickFolder = () => {
+    if (sf) {
+      setPathSF(url);
+    } else {
+      dispatch(setPathSession(url));
+    }
+  };
 
   if (type === 'file') {
     if (mime_type.includes('image')) {
@@ -83,7 +107,7 @@ export default function FileElement({ name, size, type, mime_type, extension, to
 
   return (
     <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
-      <Folder url={url} />
+      <Folder click={onClickFolder} />
     </FileInfo>
   );
 }

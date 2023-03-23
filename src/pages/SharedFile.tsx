@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 // mui
-import { Box } from '@mui/material';
+import { Box, Card, CardContent } from '@mui/material';
 import { FileInfo, FolderExplorer } from '../components/sharedfile';
 // redux
 import { useSelector } from '../redux/store';
@@ -10,6 +10,14 @@ import { setInfo } from '../redux/slices/sharedfile';
 import { getTokenInfo } from '../api/sharedfiles';
 import { isAxiosError } from 'axios';
 import Loading from './Loading';
+
+function ContainerSF({ children }: { children: JSX.Element }) {
+  return (
+    <Card>
+      <CardContent>{children}</CardContent>
+    </Card>
+  );
+}
 
 export default function SharedFile() {
   const { id } = useParams();
@@ -38,5 +46,17 @@ export default function SharedFile() {
     return <Loading />;
   }
 
-  return <></>;
+  if (info.type === 'file') {
+    return (
+      <ContainerSF>
+        <FileInfo />
+      </ContainerSF>
+    );
+  }
+
+  return (
+    <ContainerSF>
+      <FolderExplorer />
+    </ContainerSF>
+  );
 }

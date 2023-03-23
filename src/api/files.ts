@@ -11,19 +11,9 @@ const connFiles = axios.create({
   baseURL: `${apiUrl}/files`
 });
 
-type FileType = 'file' | 'folder';
-
-export interface FileP {
-  name: string;
-  type: FileType;
-  size: string;
-  tokens: number;
-  extension: string;
-  mime_type: string;
-}
 
 export interface ListFile {
-  list: FileP[];
+  list: FileI[];
 }
 
 export interface BlobFP {

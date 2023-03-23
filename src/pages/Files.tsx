@@ -11,8 +11,9 @@ import DropFiles from '../components/files/DropFiles';
 import { useDispatch, useSelector } from '../redux/store';
 import { setFiles, setTree, onSetInterval, cancelFilesInterval, setPath } from '../redux/slices/session';
 // api
-import { getListFiles, FileP, getTreeAPI } from '../api/files';
+import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
+import { FileI } from '../@types/files'
 
 export default function Files() {
   const { enqueueSnackbar } = useSnackbar();
@@ -77,9 +78,9 @@ export default function Files() {
       </Card>
       <Box sx={{ width: '100%', height: '68%', marginTop: '2ex', overflowY: 'scroll' }}>
         <Grid container spacing={2}>
-          {files.map((file: FileP, i) => (
+          {files.map((file: FileI, i) => (
             <Grid item key={file.name + i} xs={6} md={3} lg={2}>
-              <FileElement {...file} />
+              <FileElement file={file} />
             </Grid>
           ))}
         </Grid>

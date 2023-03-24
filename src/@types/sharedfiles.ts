@@ -11,6 +11,7 @@ export interface TokenElement {
 export interface SFInfoResponse {
   type: FileType;
   name: string;
+  mime_type: string;
   expire: boolean;
   expires: number;
 }

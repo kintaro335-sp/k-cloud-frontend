@@ -4,7 +4,18 @@ import react from '@vitejs/plugin-react';
 function renderchinks(deps): Record<string, string> {
   const chunks = {};
   Object.keys(deps).forEach((key) => {
-    if (['react', 'react-dom', 'react-router-dom', '@iconify/icons-ant-design', 'base-64', 'lodash'].includes(key))
+    if (
+      [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        '@iconify/icons-ant-design',
+        '@iconify/icons-carbon',
+        '@iconify/icons-material-symbols',
+        'base-64',
+        'lodash'
+      ].includes(key)
+    )
       return;
     chunks[key] = [key];
   });
@@ -25,7 +36,20 @@ const iconsPack1 = [
   '@iconify/icons-ant-design/down-circle-outline'
 ];
 
-const iconsPack2 = ['@iconify/icons-ant-design/ellipsis', '@iconify/icons-ant-design/user'];
+const iconsPack2 = [
+  '@iconify/icons-ant-design/ellipsis',
+  '@iconify/icons-carbon/tree-view',
+  '@iconify/icons-material-symbols/upload-file',
+  '@iconify/icons-material-symbols/add',
+  '@iconify/icons-material-symbols/folder',
+  '@iconify/icons-material-symbols/folder-open'
+];
+
+const iconsPack3 = [
+  '@iconify/icons-ant-design/user',
+  '@iconify/icons-ant-design/pie-chart-fill',
+  '@iconify/icons-material-symbols/settings'
+];
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -38,6 +62,7 @@ export default defineConfig({
           base: ['react', 'react-dom', 'react-router-dom'],
           'icons/Pack1': iconsPack1,
           'icons/Pack2': iconsPack2,
+          'icons/Pack3': iconsPack3,
           utils: ['base-64', 'lodash'],
           ...renderchinks(require('./package.json').dependencies)
         }

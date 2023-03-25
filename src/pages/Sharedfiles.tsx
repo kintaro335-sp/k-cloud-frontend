@@ -9,8 +9,9 @@ import {
   clearIntervalPages,
   clearIntervalTokens,
   setIntervalIdPages,
-  setIntervalIdTokens,
+  setIntervalIdTokens
 } from '../redux/slices/sharedfiles';
+import { setInfo } from '../redux/slices/sharedfile';
 // api
 import { getTokensList, getPagesTokens } from '../api/sharedfiles';
 // import { isAxiosError } from 'axios';
@@ -39,6 +40,10 @@ export default function ShareFiles() {
     // @ts-ignore
     setIntervalIdTokens(setInterval(TokensEffect, 5000));
   }, [page]);
+
+  useEffect(() => {
+    setInfo(null);
+  }, []);
 
   return (
     <Box>

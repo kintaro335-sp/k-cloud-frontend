@@ -41,7 +41,7 @@ export function setPath(newPath: string) {
   }
 }
 
-export function setInfo(newInfo: SFInfoResponse) {
+export function setInfo(newInfo: SFInfoResponse | null) {
   try {
     dispatch(slice.actions.setInfo(newInfo));
   } catch (err) {

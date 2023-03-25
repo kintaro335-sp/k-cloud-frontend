@@ -75,9 +75,10 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   };
 
   const closeFile = async (path: string) => {
-    await closeFileAPI(path, access_token).then(() => {
-      removeFileUploading(path);
-    });
+    try {
+      await closeFileAPI(path, access_token);
+    } catch (err) {}
+    removeFileUploading(path);
   };
 
   const uploadFileStart = async (path: string) => {

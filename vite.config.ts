@@ -48,7 +48,8 @@ const iconsPack2 = [
 const iconsPack3 = [
   '@iconify/icons-ant-design/user',
   '@iconify/icons-ant-design/pie-chart-fill',
-  '@iconify/icons-material-symbols/settings'
+  '@iconify/icons-material-symbols/settings',
+  '@iconify/icons-material-symbols/content-copy'
 ];
 
 // https://vitejs.dev/config/

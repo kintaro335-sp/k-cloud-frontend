@@ -1,4 +1,5 @@
 import { Stack, IconButton } from '@mui/material';
+import { CopyClipboard } from '../../atoms';
 // icons
 import { Icon } from '@iconify/react';
 import deleteIcon from '@iconify/icons-ant-design/delete-fill';
@@ -23,11 +24,14 @@ export default function TokenActions({ id }: TokenActionsProps) {
     }
   };
 
+  const urlToken = `${window.origin}/shared-files/id/${id}`;
+
   return (
-    <Stack>
+    <Stack direction="row">
       <IconButton onClick={handleDelete}>
         <Icon icon={deleteIcon} width="33px" height="33px" />
       </IconButton>
+      <CopyClipboard url={urlToken} />
     </Stack>
   );
 }

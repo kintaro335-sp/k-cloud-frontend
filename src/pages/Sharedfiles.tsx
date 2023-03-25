@@ -25,6 +25,7 @@ export default function ShareFiles() {
       setPages(pages);
     }
     PagesEffect();
+    // @ts-ignore
     setIntervalIdPages(setInterval(PagesEffect, 10000));
   }, []);
 
@@ -35,6 +36,7 @@ export default function ShareFiles() {
       setTokens(resp);
     }
     TokensEffect();
+    // @ts-ignore
     setIntervalIdTokens(setInterval(TokensEffect, 5000));
   }, [page]);
 

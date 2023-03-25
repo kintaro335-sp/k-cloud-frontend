@@ -44,7 +44,8 @@ export default function Files() {
       dispatch(setTree(tree));
     }
     getFiles();
-    onSetInterval(
+  
+    onSetInterval(// @ts-ignore
       setInterval(() => {
         getFiles();
       }, 1000)

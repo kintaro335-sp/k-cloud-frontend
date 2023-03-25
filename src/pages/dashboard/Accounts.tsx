@@ -20,6 +20,7 @@ export default function Accounts() {
       });
     }
     getAccountsEffect();
+    // @ts-ignore
     setIntervalUser(setInterval(getAccountsEffect, 1000));
   }, []);
 

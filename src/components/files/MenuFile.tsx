@@ -13,9 +13,10 @@ import { useSelector, useDispatch } from '../../redux/store';
 import { setFiles } from '../../redux/slices/session';
 
 // api
-import { deleteFile, getListFiles, FileP } from '../../api/files';
+import { deleteFile, getListFiles } from '../../api/files';
+import { FileI } from '../../@types/files';
 
-export default function MenuFile({ file, url, urlComplete }: { file: FileP; url: string; urlComplete: string }) {
+export default function MenuFile({ file, url, urlComplete }: { file: FileI; url: string; urlComplete: string }) {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const { access_token, path } = useSelector((state) => state.session);

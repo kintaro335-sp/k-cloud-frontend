@@ -1,13 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { dispatch } from '../store';
-import { FileP } from '../../api/files';
 import { Folder, FileI } from '../../@types/files';
 import { TokenElement } from '../../@types/sharedfiles';
 
 export interface SessionState {
   access_token: string;
   path: string;
-  files: FileP[];
+  files: FileI[];
   tree: Array<Folder | FileI>;
   fileInterval: number | null;
   tokenInterval: number | null;

@@ -34,6 +34,7 @@ export default function TokensTable({ url }: TokensTableProps) {
       dispatch(setTokens(tokensRes));
     }
     getTokensEffect();
+    // @ts-ignore
     onSetTokenInterval(setInterval(getTokensEffect, 5000));
   }, [access_token]);
 

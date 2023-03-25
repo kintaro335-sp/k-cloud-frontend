@@ -9,7 +9,6 @@ import { useSelector } from '../../redux/store';
 import { setPath, setContent } from '../../redux/slices/sharedfile';
 // api
 import { getContentToken, getContentTokenPath } from '../../api/sharedfiles';
-import { BackButton } from '../atoms';
 
 export default function FolderExplorer() {
   const { id } = useParams();
@@ -31,23 +30,26 @@ export default function FolderExplorer() {
 
   return (
     <Box>
-      <Stack spacing={2} direction='row'>
-        <RouteBar
-          title={info?.name}
-          path={path}
-          onChangePath={(newPath) => {
-            setPath(newPath);
-          }}
-        />
-      </Stack>
-
-      <Grid container spacing={2}>
-        {content.map((file, i) => (
-          <Grid key={`${file.name}-${i}`} item xs={6} md={3} lg={2}>
-            <FileElement file={file} sf />
-          </Grid>
-        ))}
-      </Grid>
+      <Box sx={{ margin: '5px' }}>
+        <Stack spacing={2} direction="row">
+          <RouteBar
+            title={info?.name}
+            path={path}
+            onChangePath={(newPath) => {
+              setPath(newPath);
+            }}
+          />
+        </Stack>
+      </Box>
+      <Box sx={{ height: '80vh', overflowY: 'scroll' }}>
+        <Grid container spacing={2}>
+          {content.map((file, i) => (
+            <Grid key={`${file.name}-${i}`} item xs={6} md={3} lg={2}>
+              <FileElement file={file} sf />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Box>
   );
 }

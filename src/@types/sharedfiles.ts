@@ -12,6 +12,7 @@ export interface SFInfoResponse {
   type: FileType;
   name: string;
   mime_type: string;
+  size: number;
   expire: boolean;
   expires: number;
 }

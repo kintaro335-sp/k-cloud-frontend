@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react';
 import moreIcon from '@iconify/icons-ant-design/more-outlined';
 import deleteIcon from '@iconify/icons-ant-design/delete-outlined';
 import donloadIcon from '@iconify/icons-ant-design/down-circle-outline';
+import shareIcon from '@iconify/icons-material-symbols/share';
 
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
@@ -14,6 +15,7 @@ import { setFiles } from '../../redux/slices/session';
 
 // api
 import { deleteFile, getListFiles } from '../../api/files';
+import { shareFile } from '../../api/sharedfiles';
 import { FileI } from '../../@types/files';
 
 export default function MenuFile({ file, url, urlComplete }: { file: FileI; url: string; urlComplete: string }) {
@@ -39,6 +41,16 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
       <Menu open={open} anchorEl={anchorRef.current} onClose={clickClose}>
         <MenuItem component="a" href={urlComplete} download={file.name.split('.')[0]}>
           <Icon icon={donloadIcon} width="25px" height="25px" /> Descargar
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            shareFile(url, false, Date.now(), access_token).then(() => {
+              enqueueSnackbar('compartido', { variant: 'success' });
+            });
+            clickClose();
+          }}
+        >
+          <Icon icon={shareIcon} width="25px" height="25px" /> Compartir
         </MenuItem>
         <TokensMenu url={url} />
         <MenuItem

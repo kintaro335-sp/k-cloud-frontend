@@ -50,7 +50,8 @@ const iconsPack3 = [
   '@iconify/icons-ant-design/pie-chart-fill',
   '@iconify/icons-material-symbols/settings',
   '@iconify/icons-material-symbols/content-copy',
-  '@iconify/icons-material-symbols/format-list-bulleted'
+  '@iconify/icons-material-symbols/format-list-bulleted',
+  '@iconify/icons-material-symbols/share'
 ];
 
 // https://vitejs.dev/config/

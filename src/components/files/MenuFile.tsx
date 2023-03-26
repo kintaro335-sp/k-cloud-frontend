@@ -55,16 +55,18 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
         <TokensMenu url={url} />
         <MenuItem
           onClick={() => {
-            deleteFile(url, access_token).then((res) => {
-              enqueueSnackbar(res.message, { variant: 'success' });
-              getListFiles(path, access_token)
-                .then((response) => {
-                  dispatch(setFiles(response.list));
-                })
-                .catch((err) => {
-                  enqueueSnackbar(err.message, { variant: 'error' });
-                });
-            });
+            if (window.confirm(`desea eliminar ${file.name}?`)) {
+              deleteFile(url, access_token).then((res) => {
+                enqueueSnackbar(res.message, { variant: 'success' });
+                getListFiles(path, access_token)
+                  .then((response) => {
+                    dispatch(setFiles(response.list));
+                  })
+                  .catch((err) => {
+                    enqueueSnackbar(err.message, { variant: 'error' });
+                  });
+              });
+            }
           }}
         >
           <Icon icon={deleteIcon} width="25px" height="25px" />

@@ -13,7 +13,7 @@ import { setFiles, setTree, onSetInterval, cancelFilesInterval, setPath } from '
 // api
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
-import { FileI } from '../@types/files'
+import { FileI } from '../@types/files';
 
 export default function Files() {
   const { enqueueSnackbar } = useSnackbar();
@@ -25,7 +25,7 @@ export default function Files() {
     async function getFiles() {
       const { list } = await getListFiles(path, access_token).catch((err) => {
         if (isAxiosError(err)) {
-          enqueueSnackbar(err.response?.data.message, { variant: 'error' });
+          enqueueSnackbar('Network error', { variant: 'error' });
         } else {
           enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
         }
@@ -44,8 +44,9 @@ export default function Files() {
       dispatch(setTree(tree));
     }
     getFiles();
-  
-    onSetInterval(// @ts-ignore
+
+    onSetInterval(
+      // @ts-ignore
       setInterval(() => {
         getFiles();
       }, 1000)

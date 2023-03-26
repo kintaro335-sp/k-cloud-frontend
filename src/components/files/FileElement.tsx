@@ -50,7 +50,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         }
         action={
           sf ? (
-            file.type === 'file' && <DownloadButton url={urlComplete} />
+            file.type === 'file' && <DownloadButton url={`${urlComplete}?d=1`} />
           ) : (
             <MenuFile url={url} file={file} urlComplete={urlComplete} />
           )

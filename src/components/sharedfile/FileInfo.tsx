@@ -21,7 +21,7 @@ export default function FileInfo() {
 
   if (info === null) return <></>;
 
-  const urlDownload = `${apiUrl}/shared-file/content/${id}`;
+  const urlDownload = `${apiUrl}/shared-file/content/${id}?d=1`;
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

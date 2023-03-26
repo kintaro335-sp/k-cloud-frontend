@@ -1,14 +1,21 @@
 import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, Typography, Box, Tooltip } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography, Box, Tooltip, Stack } from '@mui/material';
 import { TokenElement } from '../../@types/sharedfiles';
 import TokenIcon from './TokenIcon';
+import { CopyClipboard } from '../atoms';
+// config
+import { apiUrl } from '../../config';
 
 interface TokenElementProps {
   token: TokenElement;
 }
 
 export default function TokenItem({ token }: TokenElementProps) {
-  const { id, name, type, expire, expires } = token;
+  const { id, name, type } = token;
+
+  const urlRaw = `${apiUrl}/shared-file/content/${id}`;
+  const urlRawDownload = `${urlRaw}?d=1`;
+  const urlNormal = `${window.origin}/shared-files/id/${id}`;
 
   return (
     <Card>
@@ -36,6 +43,11 @@ export default function TokenItem({ token }: TokenElementProps) {
           </Tooltip>
         }
         subheader={<Box>{type}</Box>}
+        action={
+          <Stack direction="row">
+            <CopyClipboard url={type === 'file' ? urlRaw : urlNormal} />
+          </Stack>
+        }
       />
     </Card>
   );

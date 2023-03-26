@@ -16,7 +16,15 @@ export default function RouteBar({ title = 'Cloud', path, onChangePath }: RouteB
       {pathArr.map((n, i) => {
         if (n === '') return;
         const len = pathArr.length;
-        return <ButtonBar name={n} to={pathArr.slice(0, 1 + i).join('/')} index={i} onChangePath={onChangePath} />;
+        return (
+          <ButtonBar
+            key={`${n}-${i}`}
+            name={n}
+            to={pathArr.slice(0, 1 + i).join('/')}
+            index={i}
+            onChangePath={onChangePath}
+          />
+        );
       })}
     </Box>
   );

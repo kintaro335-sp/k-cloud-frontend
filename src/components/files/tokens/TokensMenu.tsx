@@ -5,6 +5,8 @@ import TokensTable from './TokensTable';
 // redux
 import { useDispatch } from '../../../redux/store';
 import { cancelTokenInterval, setTokens } from '../../../redux/slices/session';
+import { Icon } from '@iconify/react';
+import tokensIcon from '@iconify/icons-material-symbols/format-list-bulleted';
 
 interface TokensMenuProps {
   url: string;
@@ -26,7 +28,9 @@ export default function TokensMenu({ url }: TokensMenuProps) {
 
   return (
     <>
-      <MenuItem onClick={clickOpen}>Tokens</MenuItem>
+      <MenuItem onClick={clickOpen}>
+        <Icon icon={tokensIcon} width="20px" height="20px" /> Tokens
+      </MenuItem>
       <Dialog open={open} onClose={clickClose} maxWidth="lg">
         <AppBar position="relative">
           <Toolbar>

@@ -7,13 +7,18 @@ import {
   FilesPage,
   ChangePasswordPage,
   SharedFiles,
-  SharedFile
+  SharedFile,
+  SetupUser
 } from '../pages';
 import { Accounts, Stats, AdminMenu, SystemSettings } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
 
 export default function Routes() {
   return useRoutes([
+    {
+      path: '/setup',
+      element: <SetupUser />
+    },
     {
       path: '/',
       element: <LandingPage />

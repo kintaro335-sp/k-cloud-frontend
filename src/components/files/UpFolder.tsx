@@ -5,11 +5,11 @@ import uṕIcon from '@iconify/icons-ant-design/ellipsis';
 
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { SessionState, setPath } from '../../redux/slices/session';
+import { setPath } from '../../redux/slices/session';
 
 export default function UpFolder() {
   const dispatch = useDispatch();
-  const { path } = useSelector((state: { session: SessionState }) => state.session);
+  const { path } = useSelector((state) => state.session);
 
   const click = () => {
     const newPath = path.split('/').slice(0, -1).join('/');

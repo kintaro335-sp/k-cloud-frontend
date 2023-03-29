@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { apiUrl } from '../config';
+import { AuthResponse, MessageResponse, UserPayload } from '../@types/auth';
 
 const connAuth = axios.create({
   baseURL: `${apiUrl}/auth`,
@@ -8,15 +9,7 @@ const connAuth = axios.create({
   }
 });
 
-interface AuthResponse {
-  access_token: string;
-}
-
-interface MessageResponse {
-  message: string;
-}
-
-export async function verifyAuth(token: string): Promise<AuthResponse> {
+export async function verifyAuth(token: string): Promise<UserPayload> {
   const response = await connAuth.get(`?t=${token}`);
   return response.data;
 }

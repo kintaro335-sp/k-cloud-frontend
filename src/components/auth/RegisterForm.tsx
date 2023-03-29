@@ -9,6 +9,7 @@ import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
 // api
 import { registerApi } from '../../api/auth';
+import { createFirstUser } from '../../api/setup';
 // hooks
 import useAuth from '../../hooks/useAuth';
 
@@ -18,7 +19,12 @@ type FormValues = {
   confirmPassword: string;
 };
 
-export default function RegisterForm({ ...props }: CardProps) {
+interface RegisterFormProps {
+  cardProps?: CardProps;
+  setup?: boolean;
+}
+
+export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
   const { isAuthenticated } = useAuth();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -29,9 +35,13 @@ export default function RegisterForm({ ...props }: CardProps) {
     try {
       const { username, password, confirmPassword } = data;
       if (password === confirmPassword) {
-        const { access_token } = await registerApi(username, password);
-        enqueueSnackbar('Register success', { variant: 'success' });
-        dispatch(setAccessToken(access_token));
+        if (setup) {
+          await createFirstUser(username, password);
+        } else {
+          const { access_token } = await registerApi(username, password);
+          enqueueSnackbar('Register success', { variant: 'success' });
+          dispatch(setAccessToken(access_token));
+        }
       } else {
         enqueueSnackbar('Passwords do not match', { variant: 'error' });
       }
@@ -43,8 +53,8 @@ export default function RegisterForm({ ...props }: CardProps) {
     }
   };
   return (
-    <Card {...props}>
-      {isAuthenticated && <Navigate to="/files" />}
+    <Card {...cardProps}>
+      {isAuthenticated && !setup && <Navigate to="/files" />}
 
       <CardContent>
         <Typography variant="h6" gutterBottom>

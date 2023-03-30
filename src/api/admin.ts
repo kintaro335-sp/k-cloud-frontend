@@ -23,7 +23,7 @@ export async function setAdmin(token: string, userid: string, admin: boolean): P
 }
 
 export async function createAccount(token: string, username: string, password: string): Promise<MessageResponse> {
-  const result = await conn.post(`users/create?t=${token}`, { username, password, admin: false });
+  const result = await conn.post(`users/create?t=${token}`, { username, password });
   return result.data;
 }
 

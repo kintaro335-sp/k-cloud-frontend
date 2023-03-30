@@ -25,6 +25,9 @@ export default function Files() {
     async function getFiles() {
       const { list } = await getListFiles(path, access_token).catch((err) => {
         if (isAxiosError(err)) {
+          if(err.code === '404'){
+            dispatch(setPath(''))
+          }
           enqueueSnackbar('Network error', { variant: 'error' });
         } else {
           enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });

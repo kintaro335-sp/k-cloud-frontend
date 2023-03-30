@@ -29,7 +29,7 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
     register,
     handleSubmit,
     watch,
-    formState: { isSubmitting }
+    formState: { isSubmitting, errors, touchedFields }
   } = useForm<FormValues>({
     resolver: yupResolver(validationSchema)
   });
@@ -55,10 +55,24 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <TextField label="Contraseña" type="password" {...register('password')} fullWidth />
+              <TextField
+                label="Contraseña"
+                type="password"
+                {...register('password')}
+                fullWidth
+                error={Boolean(errors.password?.message) && Boolean(touchedFields.password)}
+                helperText={Boolean(touchedFields.password) && errors.password?.message}
+              />
             </Grid>
             <Grid item xs={12}>
-              <TextField label="Confirmar Contraseña" type="password" {...register('confirmPassword')} fullWidth />
+              <TextField
+                label="Confirmar Contraseña"
+                type="password"
+                {...register('confirmPassword')}
+                fullWidth
+                error={Boolean(errors.confirmPassword?.message) && Boolean(touchedFields.confirmPassword)}
+                helperText={Boolean(touchedFields.confirmPassword) && errors.confirmPassword?.message}
+              />
             </Grid>
             <Grid item xs={12}>
               <LoadingButton

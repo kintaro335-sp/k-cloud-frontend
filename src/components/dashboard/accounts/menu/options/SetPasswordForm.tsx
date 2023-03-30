@@ -63,6 +63,7 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
             <Grid item xs={12}>
               <LoadingButton
                 variant="contained"
+                type="submit"
                 loading={isSubmitting}
                 disabled={
                   values.password !== values.confirmPassword ||

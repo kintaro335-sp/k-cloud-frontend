@@ -12,6 +12,17 @@ export interface FilePTempResponse {
   blobsNum: number;
 }
 
+export interface FileToUpload {
+  file: File;
+  inicializado: boolean;
+  uploading: boolean;
+  size: number;
+  sended: number;
+  blobSended: SendedBlobs[];
+  totalBlobs: number;
+  blobsSended: number;
+}
+
 type BytesWritten = { from: number; to: number };
 export type FileType = 'folder' | 'file';
 

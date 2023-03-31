@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { Card, CardContent, CardHeader, Box, Tooltip, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack } from '@mui/material';
+import { CopyClipboard } from '../atoms';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
 import DownloadButton from './DownloadButton';
@@ -50,7 +51,13 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         }
         action={
           sf ? (
-            file.type === 'file' && <DownloadButton url={`${urlComplete}?d=1`} name={file.name} />
+            file.type === 'file' && (
+              <Stack direction="row" spacing={2}>
+                <DownloadButton url={`${urlComplete}?d=1`} name={file.name} />
+                <CopyClipboard url={urlComplete} title="Compiar Enlace Directo" />
+                <CopyClipboard url={`${urlComplete}?d=1`} title="Compiar Enlace de Descarga" />
+              </Stack>
+            )
           ) : (
             <MenuFile url={url} file={file} urlComplete={urlComplete} />
           )

@@ -3,15 +3,13 @@ export interface SendedBlobs {
   to: number;
 }
 
-export interface FileToUpload {
-  file: File;
-  inicializado: boolean;
-  uploading: boolean;
+export interface FilePTempResponse {
+  name: string;
   size: number;
-  sended: number;
-  blobSended: SendedBlobs[];
-  totalBlobs: number;
-  blobsSended: number;
+  received: number;
+  saved: number;
+  completed: boolean;
+  blobsNum: number;
 }
 
 type BytesWritten = { from: number; to: number };

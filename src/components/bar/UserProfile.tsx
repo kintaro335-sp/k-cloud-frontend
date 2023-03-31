@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, IconButton, Menu, MenuItem } from '@mui/material';
+import { Avatar, IconButton, Menu, MenuItem, Typography, Stack, Box } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
 
@@ -13,7 +13,7 @@ export default function UserProfile() {
   const navigate = useNavigate();
   const anchorRef = useRef<HTMLButtonElement>(null);
   const dispatch = useDispatch();
-  const { isAdmin } = useAuth();
+  const { isAdmin, username } = useAuth();
 
   const clickOpen = () => {
     setOpen(true);
@@ -46,9 +46,15 @@ export default function UserProfile() {
 
   return (
     <>
-      <IconButton onClick={clickOpen} ref={anchorRef}>
-        <Avatar />
-      </IconButton>
+      <Stack direction="row" spacing={2}>
+        <IconButton onClick={clickOpen} ref={anchorRef}>
+          <Avatar />
+        </IconButton>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Typography variant="h6">{username}</Typography>
+        </Box>
+      </Stack>
+
       <Menu open={open} onClose={clickClose} anchorEl={anchorRef.current}>
         <MenuItem onClick={handleGotoFiles}>Tus Archivos</MenuItem>
         {isAdmin && <MenuItem onClick={handleGoAdministration}>Administración</MenuItem>}

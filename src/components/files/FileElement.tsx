@@ -55,7 +55,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
               <Stack direction="row" spacing={2}>
                 <DownloadButton url={`${urlComplete}?d=1`} name={file.name} />
                 <CopyClipboard url={urlComplete} title="Compiar Enlace Directo" />
-                <CopyClipboard url={urlComplete} title="Compiar Enlace de Descarga" />
+                <CopyClipboard url={`${urlComplete}?d=1`} title="Compiar Enlace de Descarga" />
               </Stack>
             )
           ) : (

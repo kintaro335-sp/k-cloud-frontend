@@ -8,8 +8,9 @@ import {
   setBlobsSended,
   removeFileUploading
 } from '../redux/slices/fileUploader';
-import { initializeFileAPI, uploadBlobAPI, closeFileAPI } from '../api/files';
+import { initializeFileAPI, uploadBlobAPI, closeFileAPI, statusFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
+import { timeOutIf } from '../utils/promises';
 import { isAxiosError } from 'axios';
 
 export const FileUploadContext = createContext({ uploadFile: (path: string, file: File | null) => {} });
@@ -39,21 +40,25 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     return;
   };
 
-  const sendBlob = async (path: string, position: number, size: number) => {
+  const sendBlob = async (path: string, position: number, size: number):Promise<void> => {
     const files = getFilesState();
     const fileM = files.files[path];
     if (fileM === null) return;
     if (fileM === undefined) return;
     const blob = fileM.file.slice(position, position + size);
-    await uploadBlobAPI(path, position, blob, access_token)
-      .catch((err) => {
-        if (isAxiosError(err)) {
-          console.error(err);
-        }
-      })
-      .then(() => {
-        onWriteBlob(path, position, blob.size);
-      });
+    return new Promise((resolve) => {
+      uploadBlobAPI(path, position, blob, access_token)
+        .catch((err) => {
+          if (isAxiosError(err)) {
+            console.error(err);
+          }
+          resolve()
+        })
+        .then(() => {
+          onWriteBlob(path, position, blob.size);
+          resolve()
+        });
+    });
   };
 
   const sendBlobs = async (path: string): Promise<void> => {
@@ -64,10 +69,19 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     const blobs = getNumberBlobs(fileM.size);
     setTotalBlobs(path, blobs);
     for (let i = 0; i <= blobs; i++) {
+      let pass = false;
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
-      await sendBlob(path, positionfrom, positionto - positionfrom);
+      const n = await sendBlob(path, positionfrom, positionto - positionfrom);
       setBlobsSended(path, i);
+      const backendStatus = await statusFileAPI(path, access_token);
+      pass = backendStatus.blobsNum <= 3;
+      while (!pass) {
+        const backendStatus = await statusFileAPI(path, access_token);
+        const applyTimeout = backendStatus.blobsNum === 0;
+        await timeOutIf(5000, () => applyTimeout);
+        pass = applyTimeout;
+      }
     }
     return new Promise((res) => {
       res();
@@ -76,7 +90,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
 
   const closeFile = async (path: string) => {
     try {
-      await closeFileAPI(path, access_token);
+      // await closeFileAPI(path, access_token);
     } catch (err) {}
     removeFileUploading(path);
   };

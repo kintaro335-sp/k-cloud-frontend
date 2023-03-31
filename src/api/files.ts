@@ -101,7 +101,7 @@ export async function uploadBlobAPI(path: string, position: number, blob: Blob, 
   });
 }
 
-export default async function statusFlieAPI(path: string, token: string): Promise<FilePTempResponse> {
+export async function statusFileAPI(path: string, token: string): Promise<FilePTempResponse> {
   return new Promise((resolve, reject) => {
     connFiles
       .get(`status/${path}?t=${token}`)

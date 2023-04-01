@@ -52,7 +52,7 @@ export default function Files() {
       // @ts-ignore
       setInterval(() => {
         getFiles();
-      }, 1000)
+      }, 2000)
     );
   }, [access_token, path]);
 

@@ -26,21 +26,26 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
 
   const getFilesState = () => getState().files;
 
-  const initializeFile = async (path: string) => {
+  const initializeFile = async (path: string): Promise<boolean> => {
     const files = getFilesState();
     const fileM = files.files[path];
-    if (fileM === null) return;
-    if (fileM === undefined) return;
-    await initializeFileAPI(path, fileM.size, access_token).catch((err) => {
-      if (isAxiosError(err)) {
-        console.error(err);
-      }
+    if (fileM === null) return false;
+    if (fileM === undefined) return false;
+    return new Promise((resolve) => {
+      initializeFileAPI(path, fileM.size, access_token)
+        .then(() => {
+          resolve(true);
+        })
+        .catch((err) => {
+          if (isAxiosError(err)) {
+            resolve(false);
+          }
+        });
+      setInitializedFile(path);
     });
-    setInitializedFile(path);
-    return;
   };
 
-  const sendBlob = async (path: string, position: number, size: number):Promise<void> => {
+  const sendBlob = async (path: string, position: number, size: number): Promise<void> => {
     const files = getFilesState();
     const fileM = files.files[path];
     if (fileM === null) return;
@@ -52,11 +57,11 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
           if (isAxiosError(err)) {
             console.error(err);
           }
-          resolve()
+          resolve();
         })
         .then(() => {
           onWriteBlob(path, position, blob.size);
-          resolve()
+          resolve();
         });
     });
   };
@@ -96,9 +101,13 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   };
 
   const uploadFileStart = async (path: string) => {
-    await initializeFile(path);
-    await sendBlobs(path);
-    await closeFile(path);
+    const startWrite = await initializeFile(path);
+    if (startWrite) {
+      await sendBlobs(path);
+      await closeFile(path);
+    } else {
+      closeFile(path);
+    }
   };
 
   useEffect(() => {

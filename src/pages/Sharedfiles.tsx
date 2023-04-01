@@ -41,10 +41,6 @@ export default function ShareFiles() {
     setIntervalIdTokens(setInterval(TokensEffect, 5000));
   }, [page]);
 
-  useEffect(() => {
-    setInfo(null);
-  }, []);
-
   return (
     <Box>
       <Grid container spacing={3}>

@@ -33,7 +33,7 @@ export default function SharedFile() {
         })
         .catch((err) => {
           if (isAxiosError(err)) {
-            if (err.code === '404') {
+            if (err.response?.status === 404) {
               navigate('/404');
             }
           }

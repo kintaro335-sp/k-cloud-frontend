@@ -20,12 +20,12 @@ export default function AdminMenu() {
       link: '/admin/accounts'
     },
     {
-      title: 'estadisticas',
+      title: 'Estadisticas',
       icon: <Icon icon={statsIcon} width="100%" height="100%" />,
       link: '/admin/stats'
     },
     {
-      title: 'systema',
+      title: 'Sistema',
       icon: <Icon icon={settingsIcon} width="100%" height="100%" />,
       link: '/admin/system'
     }

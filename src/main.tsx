@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import FileUploadC from './contexts/FileUploadContext';
 import AuthProvider from './contexts/AuthContext';
 import Systemcontext from './contexts/SystemContext';
+import ThemeP from './theme/ThemeP';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -20,7 +21,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <AuthProvider>
               <FileUploadC>
                 <Systemcontext>
-                  <App />
+                  <ThemeP>
+                    <App />
+                  </ThemeP>
                 </Systemcontext>
               </FileUploadC>
             </AuthProvider>

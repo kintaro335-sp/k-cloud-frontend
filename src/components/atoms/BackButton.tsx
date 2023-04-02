@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 // mui
+import { useTheme } from '@mui/material/styles'
 import { IconButton, Tooltip } from '@mui/material';
 // icon
 import { Icon } from '@iconify/react';
@@ -11,6 +12,7 @@ interface BackButtonProps {
 
 export default function BackButton({ to }: BackButtonProps) {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleClick = () => {
     navigate(to);
@@ -19,7 +21,7 @@ export default function BackButton({ to }: BackButtonProps) {
   return (
     <Tooltip title="Volver">
       <IconButton onClick={handleClick}>
-        <Icon icon={backIcon} width="25px" height="25px" />
+        <Icon icon={backIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
       </IconButton>
     </Tooltip>
   );

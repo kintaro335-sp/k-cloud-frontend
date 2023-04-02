@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { RouteBar } from '../components/files/routebar';
 import { Box, Grid, Stack, Card, CardContent, Button } from '@mui/material';
 import FileElement from '../components/files/FileElement';
@@ -53,9 +53,11 @@ export default function Files() {
       // @ts-ignore
       setInterval(() => {
         getFiles();
-      }, 2000)
+      }, 5000)
     );
   }, [access_token, path]);
+
+  const filesMemo = useMemo(() => files, [files])
 
   return (
     <>
@@ -84,7 +86,7 @@ export default function Files() {
       </Card>
       <Box sx={{ width: '100%', height: '68%', marginTop: '2ex', overflowY: 'scroll' }}>
         <Grid container spacing={2}>
-          {files.slice(1, showQ).map((file: FileI, i) => (
+          {filesMemo.slice(1, showQ).map((file: FileI, i) => (
             <Grid item key={file.name + i} xs={6} md={3} lg={2}>
               <FileElement file={file} />
             </Grid>

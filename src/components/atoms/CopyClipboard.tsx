@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material/styles';
 import { IconButton, Tooltip } from '@mui/material';
 // icon
 import { Icon } from '@iconify/react';
@@ -11,6 +12,7 @@ interface CopyClipboardProps {
 }
 
 export default function CopyClipboard({ url, title }: CopyClipboardProps) {
+  const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 
   const onClickCopy = () => {
@@ -22,7 +24,7 @@ export default function CopyClipboard({ url, title }: CopyClipboardProps) {
   return (
     <Tooltip title={title || 'Copiar al Portapapeles'}>
       <IconButton onClick={onClickCopy}>
-        <Icon icon={CopyclipIcon} width="20px" height="20px" />
+        <Icon icon={CopyclipIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
       </IconButton>
     </Tooltip>
   );

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { TokensMenu } from './tokens';
 import { useSnackbar } from 'notistack';
@@ -24,6 +25,7 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
   const { access_token, path } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
   const anchorRef = useRef<HTMLButtonElement>(null);
+  const theme = useTheme();
 
   const clickOpen = () => {
     setOpen(true);
@@ -36,7 +38,7 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
   return (
     <>
       <IconButton onClick={clickOpen} ref={anchorRef}>
-        <Icon icon={moreIcon} width="25px" height="25px" />
+        <Icon icon={moreIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
       </IconButton>
       <Menu open={open} anchorEl={anchorRef.current} onClose={clickClose}>
         <MenuItem component="a" href={`${urlComplete}&d=1`} download={file.name.split('.')[0]}>

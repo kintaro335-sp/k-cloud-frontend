@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { RouteBar } from '../components/files/routebar';
-import { Box, Grid, Stack, Card, CardContent } from '@mui/material';
+import { Box, Grid, Stack, Card, CardContent, Button } from '@mui/material';
 import FileElement from '../components/files/FileElement';
 import AddFolder from '../components/files/AddFolder';
 import UploadSingleFile from '../components/files/UploadSingleFile';
@@ -19,6 +19,11 @@ export default function Files() {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { access_token, path, files } = useSelector((state) => state.session);
+  const [showQ, setShowQ] = useState<number>(24);
+
+  const handleShowMore = () => {
+    setShowQ((prev) => prev + 12);
+  };
 
   useEffect(() => {
     cancelFilesInterval();
@@ -27,8 +32,8 @@ export default function Files() {
         if (isAxiosError(err)) {
           if (err.response?.status === 404) {
             dispatch(setPath(''));
+            enqueueSnackbar('No Encontrado', { variant: 'error' });
           }
-          enqueueSnackbar('Network error', { variant: 'error' });
         } else {
           enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
         }
@@ -37,24 +42,22 @@ export default function Files() {
       });
       dispatch(setFiles(list));
       const tree = await getTreeAPI('', access_token).catch((err) => {
-        if (isAxiosError(err)) {
-          enqueueSnackbar(err.response?.data.message, { variant: 'error' });
-        } else {
-          enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
-        }
+        console.error(err);
         return [];
       });
       dispatch(setTree(tree));
     }
     getFiles();
-
+    setShowQ(24);
     onSetInterval(
       // @ts-ignore
       setInterval(() => {
         getFiles();
-      }, 2000)
+      }, 5000)
     );
   }, [access_token, path]);
+
+  const filesMemo = useMemo(() => files, [files])
 
   return (
     <>
@@ -83,11 +86,18 @@ export default function Files() {
       </Card>
       <Box sx={{ width: '100%', height: '68%', marginTop: '2ex', overflowY: 'scroll' }}>
         <Grid container spacing={2}>
-          {files.map((file: FileI, i) => (
+          {filesMemo.slice(1, showQ).map((file: FileI, i) => (
             <Grid item key={file.name + i} xs={6} md={3} lg={2}>
               <FileElement file={file} />
             </Grid>
           ))}
+          {files.length > showQ && (
+            <Grid item xs={12}>
+              <Button variant="contained" fullWidth onClick={handleShowMore}>
+                Mostar mas
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Box>
     </>

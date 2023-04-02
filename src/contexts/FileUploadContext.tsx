@@ -6,7 +6,8 @@ import {
   setInitializedFile,
   setTotalBlobs,
   setBlobsSended,
-  removeFileUploading
+  removeFileUploading,
+  removeCompletedFiles
 } from '../redux/slices/fileUploader';
 import { initializeFileAPI, uploadBlobAPI, closeFileAPI, statusFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
@@ -106,7 +107,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       await sendBlobs(path);
       await closeFile(path);
     } else {
-      closeFile(path);
+      await closeFile(path);
     }
   };
 

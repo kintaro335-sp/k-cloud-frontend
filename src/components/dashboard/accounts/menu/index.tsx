@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { IconButton, Dialog, DialogContent, Grid, Typography } from '@mui/material';
 // components
 import { SetPasswordForm, SetAdminCB } from './options';
@@ -11,6 +12,7 @@ import { User } from '../../../../@types/admin';
 export default function MenuUser({ user }: { user: User }) {
   const { id, username, admin } = user;
   const [open, setOpen] = useState<boolean>(false);
+  const theme = useTheme();
 
   const clickOpen = () => {
     setOpen(true);
@@ -23,7 +25,7 @@ export default function MenuUser({ user }: { user: User }) {
   return (
     <>
       <IconButton onClick={clickOpen}>
-        <Icon icon={moreIcon} />
+        <Icon icon={moreIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
       </IconButton>
       <Dialog open={open} onClose={clickClose} maxWidth="md">
         <DialogContent>

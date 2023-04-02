@@ -17,7 +17,7 @@ export default function UsedSpacePie() {
               { id: 'used', label: 'Used', value: usedSpace, color: 'hsl(0, 100%, 46%)' }
             ]}
             margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-            valueFormat={(value) => Numeral(value).format('0.0 b')}
+            valueFormat={(value) => Numeral(value).format('0.0 ib')}
             innerRadius={0.5}
             padAngle={0.7}
             cornerRadius={3}
@@ -58,8 +58,8 @@ export default function UsedSpacePie() {
               }
             ]}
             arcLinkLabelsSkipAngle={10}
-            arcLinkLabelsTextColor="#000"
-            arcLinkLabelsThickness={3}
+            arcLinkLabelsTextColor="#AAA"
+            arcLinkLabelsThickness={6}
             arcLinkLabelsColor={{ from: 'color' }}
             arcLabelsSkipAngle={10}
             arcLabelsTextColor="black"
@@ -73,7 +73,7 @@ export default function UsedSpacePie() {
                 itemsSpacing: 0,
                 itemWidth: 100,
                 itemHeight: 18,
-                itemTextColor: '#111',
+                itemTextColor: '#999',
                 itemDirection: 'left-to-right',
                 itemOpacity: 1,
                 symbolSize: 18,
@@ -82,7 +82,7 @@ export default function UsedSpacePie() {
                   {
                     on: 'hover',
                     style: {
-                      itemTextColor: '#000'
+                      itemTextColor: '#EEE'
                     }
                   }
                 ]

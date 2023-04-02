@@ -72,6 +72,16 @@ const slice = createSlice({
       const path = action.payload as string;
       state.filesDir = state.filesDir.filter((f) => f !== path);
       state.files[path] = null;
+    },
+    deleteCompletedFiles(state) {
+      state.filesDir.forEach((dir) => {
+        const fileT = state.files[dir];
+        if (fileT === null || fileT === undefined) return;
+        if (fileT.sended >= fileT.size) {
+          state.files[dir] = null;
+          state.filesDir = state.filesDir.filter((d) => d !== dir);
+        }
+      });
     }
   }
 });
@@ -131,5 +141,13 @@ export function removeFileUploading(path: string) {
     dispatch(slice.actions.removeFileUploading(path));
   } catch (err) {
     console.log(err);
+  }
+}
+
+export function removeCompletedFiles() {
+  try {
+    dispatch(slice.actions.deleteCompletedFiles());
+  } catch (err) {
+    console.error(err);
   }
 }

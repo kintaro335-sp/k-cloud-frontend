@@ -27,8 +27,8 @@ export default function Files() {
         if (isAxiosError(err)) {
           if (err.response?.status === 404) {
             dispatch(setPath(''));
+            enqueueSnackbar('No Encontrado', { variant: 'error' });
           }
-          enqueueSnackbar('Network error', { variant: 'error' });
         } else {
           enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
         }
@@ -37,11 +37,7 @@ export default function Files() {
       });
       dispatch(setFiles(list));
       const tree = await getTreeAPI('', access_token).catch((err) => {
-        if (isAxiosError(err)) {
-          enqueueSnackbar(err.response?.data.message, { variant: 'error' });
-        } else {
-          enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
-        }
+        console.error(err);
         return [];
       });
       dispatch(setTree(tree));

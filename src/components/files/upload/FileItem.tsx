@@ -1,4 +1,4 @@
-import { CircularProgress, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { CircularProgress, ListItem, ListItemIcon, ListItemText, Box, Stack, LinearProgress } from '@mui/material';
 import { FileToUpload } from '../../../@types/files';
 
 interface FileItemProps {
@@ -8,14 +8,27 @@ interface FileItemProps {
 
 export default function FileItem({ path, fileP }: FileItemProps) {
   if (fileP === null) return <></>;
-  const { size, sended, file } = fileP;
+  const { size, sended, totalBlobs, blobsSended, file, blobProgress } = fileP;
 
   return (
     <ListItem>
       <ListItemIcon>
         <CircularProgress variant="determinate" value={(sended / size) * 100} />
       </ListItemIcon>
-      <ListItemText primary={file.name} secondary={`en:${path}`} />
+      <ListItemText
+        primary={
+          <Stack spacing={1}>
+            <Box>{file.name}</Box>
+            <Box>
+              {blobsSended}/{totalBlobs}
+            </Box>
+            <Box>
+              <LinearProgress variant='determinate' value={blobProgress} />
+            </Box>
+          </Stack>
+        }
+        secondary={`en:${path}`}
+      />
     </ListItem>
   );
 }

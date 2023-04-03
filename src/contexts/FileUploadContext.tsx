@@ -7,7 +7,8 @@ import {
   setTotalBlobs,
   setBlobsSended,
   removeFileUploading,
-  removeCompletedFiles
+  removeCompletedFiles,
+  setBlobProgress
 } from '../redux/slices/fileUploader';
 import { initializeFileAPI, uploadBlobAPI, closeFileAPI, statusFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
@@ -53,7 +54,9 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === undefined) return;
     const blob = fileM.file.slice(position, position + size);
     return new Promise((resolve) => {
-      uploadBlobAPI(path, position, blob, access_token)
+      uploadBlobAPI(path, position, blob, access_token, (p) => {
+        setBlobProgress(path, p);
+      })
         .catch((err) => {
           if (isAxiosError(err)) {
             console.error(err);
@@ -79,7 +82,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
       const n = await sendBlob(path, positionfrom, positionto - positionfrom);
-      setBlobsSended(path, i);
+      setBlobsSended(path, i + 1);
       const backendStatus = await statusFileAPI(path, access_token);
       pass = backendStatus.blobsNum <= 3;
       while (!pass) {

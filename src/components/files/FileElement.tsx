@@ -96,7 +96,7 @@ export default function FileElement({ file, sf = false }: FileElementProps) {
   };
 
   if (type === 'file') {
-    if (mime_type.includes('image')) {
+    if (mime_type.includes('/image')) {
       return (
         <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
           <ImgFile url={urlComplete} />

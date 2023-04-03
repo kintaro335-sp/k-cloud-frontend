@@ -11,7 +11,6 @@ const connFiles = axios.create({
   baseURL: `${apiUrl}/files`
 });
 
-
 export interface ListFile {
   list: FileI[];
 }
@@ -84,13 +83,26 @@ export async function writeBlobAPI(path: string, position: number, blob: string,
   });
 }
 
-export async function uploadBlobAPI(path: string, position: number, blob: Blob, token: string) {
+export async function uploadBlobAPI(
+  path: string,
+  position: number,
+  blob: Blob,
+  token: string,
+  cb?: (newProgress: number) => void
+) {
   return new Promise((resolve, reject) => {
     const f = new File([blob], `blob-${position}`, { type: '' });
     const formdata = new FormData();
     formdata.append('file', f);
     connFiles
-      .post(`/write/${path}?pos=${position}&t=${token}`, formdata)
+      .post(`/write/${path}?pos=${position}&t=${token}`, formdata, {
+        onUploadProgress: (progressEvent) => {
+          if (typeof cb === 'function') {
+            if (progressEvent.progress === undefined) return;
+            cb(progressEvent.progress * 100);
+          }
+        }
+      })
       .then((res) => {
         resolve(res.data);
       })

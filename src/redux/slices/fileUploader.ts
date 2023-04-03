@@ -30,7 +30,8 @@ const slice = createSlice({
         sended: 0,
         inicializado: false,
         totalBlobs: 0,
-        blobsSended: 0
+        blobsSended: 0,
+        blobProgress: 0
       };
       if (!state.filesDir.includes(fileDir)) state.filesDir.push(fileDir);
     },
@@ -61,12 +62,14 @@ const slice = createSlice({
       const fileM = state.files[path];
       if (fileM === null) return;
       if (fileM === undefined) return;
+      fileM.totalBlobs = total;
     },
     setBlobsSended(state, action) {
       const { path, sendedB } = action.payload as { path: string; sendedB: number };
       const fileM = state.files[path];
       if (fileM === null) return;
       if (fileM === undefined) return;
+      fileM.blobsSended = sendedB;
     },
     removeFileUploading(state, action) {
       const path = action.payload as string;
@@ -77,11 +80,17 @@ const slice = createSlice({
       state.filesDir.forEach((dir) => {
         const fileT = state.files[dir];
         if (fileT === null || fileT === undefined) return;
-        if (fileT.sended >= fileT.size) {
+        if (fileT.sended >= fileT.size && fileT.uploading === false) {
           state.files[dir] = null;
           state.filesDir = state.filesDir.filter((d) => d !== dir);
         }
       });
+    },
+    setBlobProgress(state, action) {
+      const { path, progress } = action.payload as { path: string; progress: number };
+      const fileM = state.files[path];
+      if (fileM === null || fileM === undefined) return;
+      fileM.blobProgress = progress;
     }
   }
 });
@@ -147,6 +156,14 @@ export function removeFileUploading(path: string) {
 export function removeCompletedFiles() {
   try {
     dispatch(slice.actions.deleteCompletedFiles());
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setBlobProgress(path: string, progress: number) {
+  try {
+    dispatch(slice.actions.setBlobProgress({ path, progress }));
   } catch (err) {
     console.error(err);
   }

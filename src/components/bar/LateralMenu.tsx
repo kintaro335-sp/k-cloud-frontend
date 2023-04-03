@@ -42,7 +42,7 @@ export default function LateralMenu() {
         ))}
       </Tabs>
       <CardContent>
-        <Box sx={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
+        <Box sx={{ height: '100%', overflowY: 'scroll', overflowX: 'hidden' }}>
           {tabs.map((tabE, i) => {
             if (tab === i) {
               return tabE.component;

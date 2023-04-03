@@ -4,7 +4,6 @@ import { useSelector } from '../../redux/store';
 import { Icon } from '@iconify/react';
 import addFileC from '@iconify/icons-ant-design/file-add-filled';
 import useFileU from '../../hooks/useFileU';
-import { addFile } from '../../redux/slices/fileUploader';
 
 export default function UploadFile() {
   const { path } = useSelector((state) => state.session);
@@ -15,16 +14,10 @@ export default function UploadFile() {
     <>
       <Button
         variant="contained"
-        startIcon={
-          <Icon
-            icon={addFileC}
-            width="25px"
-            height="25px"
-            onClick={() => {
-              inputRef.current?.click();
-            }}
-          />
-        }
+        startIcon={<Icon icon={addFileC} width="25px" height="25px" />}
+        onClick={() => {
+          inputRef.current?.click();
+        }}
       >
         Subir Archivo
       </Button>

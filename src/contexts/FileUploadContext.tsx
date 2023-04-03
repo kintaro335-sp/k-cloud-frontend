@@ -77,7 +77,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === undefined) return;
     const blobs = getNumberBlobs(fileM.size);
     setTotalBlobs(path, blobs);
-    for (let i = 0; i <= blobs; i++) {
+    for (let i = 0; i < blobs; i++) {
       let pass = false;
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);

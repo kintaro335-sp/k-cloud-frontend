@@ -8,13 +8,10 @@ interface FileItemProps {
 
 export default function FileItem({ path, fileP }: FileItemProps) {
   if (fileP === null) return <></>;
-  const { size, sended, totalBlobs, blobsSended, file, blobProgress } = fileP;
+  const { size, sended, totalBlobs, blobsSended, file, blobProgress, written } = fileP;
 
   return (
     <ListItem>
-      <ListItemIcon>
-        <CircularProgress variant="determinate" value={(sended / size) * 100} />
-      </ListItemIcon>
       <ListItemText
         primary={
           <Stack spacing={1}>
@@ -23,7 +20,13 @@ export default function FileItem({ path, fileP }: FileItemProps) {
               {blobsSended}/{totalBlobs}
             </Box>
             <Box>
-              <LinearProgress variant='determinate' value={blobProgress} />
+              <LinearProgress variant="determinate" value={(written / size) * 100} />
+            </Box>
+            <Box>
+              <LinearProgress variant="determinate" value={(sended / size) * 100} />
+            </Box>
+            <Box>
+              <LinearProgress variant="determinate" value={blobProgress} />
             </Box>
           </Stack>
         }

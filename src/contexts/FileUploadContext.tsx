@@ -8,7 +8,8 @@ import {
   setBlobsSended,
   removeFileUploading,
   removeCompletedFiles,
-  setBlobProgress
+  setBlobProgress,
+  setWrittenProgress
 } from '../redux/slices/fileUploader';
 import { initializeFileAPI, uploadBlobAPI, closeFileAPI, statusFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
@@ -84,11 +85,13 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       const n = await sendBlob(path, positionfrom, positionto - positionfrom);
       setBlobsSended(path, i + 1);
       const backendStatus = await statusFileAPI(path, access_token);
+      setWrittenProgress(path, backendStatus.saved);
       pass = backendStatus.blobsNum <= 3;
       while (!pass) {
         const backendStatus = await statusFileAPI(path, access_token);
+        setWrittenProgress(path, backendStatus.saved);
         const applyTimeout = backendStatus.blobsNum === 0;
-        await timeOutIf(5000, () => applyTimeout);
+        await timeOutIf(1000, () => !applyTimeout);
         pass = applyTimeout;
       }
     }
@@ -99,17 +102,17 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
 
   const closeFile = async (path: string) => {
     try {
-      // await closeFileAPI(path, access_token);
-    } catch (err) {}
-    removeFileUploading(path);
+      removeFileUploading(path);
+    } catch (err) {
+      console.error(err);
+    }
+    return;
   };
 
   const uploadFileStart = async (path: string) => {
     const startWrite = await initializeFile(path);
     if (startWrite) {
       await sendBlobs(path);
-      await closeFile(path);
-    } else {
       await closeFile(path);
     }
   };

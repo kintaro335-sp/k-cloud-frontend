@@ -7,7 +7,9 @@ import {
   setTotalBlobs,
   setBlobsSended,
   removeFileUploading,
-  removeCompletedFiles
+  removeCompletedFiles,
+  setBlobProgress,
+  setWrittenProgress
 } from '../redux/slices/fileUploader';
 import { initializeFileAPI, uploadBlobAPI, closeFileAPI, statusFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
@@ -53,7 +55,9 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === undefined) return;
     const blob = fileM.file.slice(position, position + size);
     return new Promise((resolve) => {
-      uploadBlobAPI(path, position, blob, access_token)
+      uploadBlobAPI(path, position, blob, access_token, (p) => {
+        setBlobProgress(path, p);
+      })
         .catch((err) => {
           if (isAxiosError(err)) {
             console.error(err);
@@ -74,18 +78,20 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === undefined) return;
     const blobs = getNumberBlobs(fileM.size);
     setTotalBlobs(path, blobs);
-    for (let i = 0; i <= blobs; i++) {
+    for (let i = 0; i < blobs; i++) {
       let pass = false;
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
       const n = await sendBlob(path, positionfrom, positionto - positionfrom);
-      setBlobsSended(path, i);
+      setBlobsSended(path, i + 1);
       const backendStatus = await statusFileAPI(path, access_token);
+      setWrittenProgress(path, backendStatus.saved);
       pass = backendStatus.blobsNum <= 3;
       while (!pass) {
         const backendStatus = await statusFileAPI(path, access_token);
+        setWrittenProgress(path, backendStatus.saved);
         const applyTimeout = backendStatus.blobsNum === 0;
-        await timeOutIf(5000, () => applyTimeout);
+        await timeOutIf(1000, () => !applyTimeout);
         pass = applyTimeout;
       }
     }
@@ -96,17 +102,17 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
 
   const closeFile = async (path: string) => {
     try {
-      // await closeFileAPI(path, access_token);
-    } catch (err) {}
-    removeFileUploading(path);
+      removeFileUploading(path);
+    } catch (err) {
+      console.error(err);
+    }
+    return;
   };
 
   const uploadFileStart = async (path: string) => {
     const startWrite = await initializeFile(path);
     if (startWrite) {
       await sendBlobs(path);
-      await closeFile(path);
-    } else {
       await closeFile(path);
     }
   };

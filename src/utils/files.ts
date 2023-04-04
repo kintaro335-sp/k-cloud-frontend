@@ -1,5 +1,5 @@
 import { encode } from 'base-64';
-export const BLOB_SIZE = 1048576 * 40;
+export const BLOB_SIZE = 1048576 * 60;
 
 /**
  * obtener el base64 de un archivo

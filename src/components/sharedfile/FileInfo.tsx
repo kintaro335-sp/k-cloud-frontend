@@ -5,7 +5,7 @@ import { ImagePreview, CommonFile } from './filepreview';
 import { apiUrl } from '../../config';
 // redux
 import { useSelector } from '../../redux/store';
-import Numeral from 'numeral';
+import { bytesFormat } from '../../utils/files';
 
 function FilePreview({ mime, url }: { mime: string; url: string }) {
   if (mime.includes('image')) {
@@ -31,7 +31,7 @@ export default function FileInfo() {
         </CardContent>
         <CardHeader
           title={<>{info?.name}</>}
-          subheader={<>{info.type === 'file' && Numeral(info.size).format('0.0 b')}</>}
+          subheader={<>{info.type === 'file' && bytesFormat(info.size)}</>}
         />
         <Stack sx={{ margin: '20px' }} direction="row">
           <Button LinkComponent="a" href={urlDownload} download={info.name} variant="contained">

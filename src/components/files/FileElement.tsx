@@ -4,7 +4,7 @@ import { CopyClipboard } from '../atoms';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
 import DownloadButton from './DownloadButton';
-import Numeral from 'numeral';
+import { bytesFormat } from '../../utils/files';
 import { FileI } from '../../@types/files';
 // api
 import { apiUrl } from '../../config';
@@ -46,7 +46,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         }
         subheader={
           <Box>
-            {file.type} {!sf && <>T:{file.tokens}</>} {file.type === 'file' && Numeral(file.size).format('0.0 ib')}
+            {file.type} {!sf && <>T:{file.tokens}</>} {file.type === 'file' && bytesFormat(file.size)}
           </Box>
         }
         action={

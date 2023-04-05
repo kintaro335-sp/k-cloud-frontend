@@ -1,5 +1,6 @@
-import { CircularProgress, ListItem, ListItemIcon, ListItemText, Box, Stack, LinearProgress } from '@mui/material';
+import { ListItem, ListItemText, Box, Stack, LinearProgress, Typography } from '@mui/material';
 import { FileToUpload } from '../../../@types/files';
+import { BLOB_SIZE, bytesFormat } from '../../../utils/files';
 
 interface FileItemProps {
   path: string;
@@ -20,13 +21,15 @@ export default function FileItem({ path, fileP }: FileItemProps) {
               {blobsSended}/{totalBlobs}
             </Box>
             <Box>
+              <Typography variant="body1">{bytesFormat(written)}/{bytesFormat(size)}</Typography>
               <LinearProgress variant="determinate" value={(written / size) * 100} />
             </Box>
             <Box>
+              <Typography variant="body1">{bytesFormat(sended + Math.floor(BLOB_SIZE * blobProgress))}</Typography>
               <LinearProgress variant="determinate" value={(sended / size) * 100} />
             </Box>
             <Box>
-              <LinearProgress variant="determinate" value={blobProgress} />
+              <LinearProgress variant="determinate" value={blobProgress * 100} />
             </Box>
           </Stack>
         }

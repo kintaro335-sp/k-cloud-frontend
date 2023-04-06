@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { AppBar, Container, Toolbar, Typography, Box, Button, Stack, Grid, useMediaQuery } from '@mui/material';
-import { UserProfile, LateralMenu } from './bar';
+import { UserProfile, LateralMenu, Uploads } from './bar';
 import useAuth from '../hooks/useAuth';
 
 interface BarProps {
@@ -13,8 +13,9 @@ export default function Bar({ children }: BarProps) {
   const { pathname } = useLocation();
   const pagesShowList = ['/files'];
   const showMenuL = isAuthenticated && pagesShowList.includes(pathname);
-  const theme = useTheme()
-  const bk = useMediaQuery(theme.breakpoints.up('md'))
+  const theme = useTheme();
+  const bk = useMediaQuery(theme.breakpoints.up('md'));
+  const mobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <>
@@ -45,6 +46,7 @@ export default function Bar({ children }: BarProps) {
                   Shared Files
                 </Button>
               )}
+              {mobile && isAuthenticated && <Uploads />}
             </Stack>
           </Toolbar>
         </Container>

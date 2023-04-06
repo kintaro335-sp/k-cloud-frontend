@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack } from '
 import { CopyClipboard } from '../atoms';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
-import DownloadButton from './DownloadButton';
+import { DownloadButton } from '../atoms/';
 import { bytesFormat } from '../../utils/files';
 import { FileI } from '../../@types/files';
 // api

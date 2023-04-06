@@ -1,9 +1,11 @@
-import {} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 export default function LandingPage() {
   return (
-    <div>
-      <h1>Landing Page</h1>
-    </div>
+    <Box>
+      <Typography variant="h3" sx={{ color: 'text.secondary', textAlign: 'center' }}>
+        K Cloud
+      </Typography>
+    </Box>
   );
 }

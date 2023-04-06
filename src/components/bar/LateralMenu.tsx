@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, Tabs, Tab, CircularProgress, Box, Stack } from '@mui/material';
 import FileList from '../files/upload/FileList';
 import { Tree } from '../files/tree';
@@ -20,7 +20,7 @@ export default function LateralMenu() {
   const { filesDir, files } = useSelector((state) => state.files);
   const [tab, setTab] = useState(0);
 
-  const averageProgressF = () => {
+  const averageProgressF = useCallback(() => {
     if (filesDir.length !== 0) {
       let total = 0;
       let progress = 0;
@@ -32,10 +32,10 @@ export default function LateralMenu() {
       });
       const totalAvg = progress / total;
       const totalAvgD = totalAvg === Infinity ? 0 : totalAvg;
-      return totalAvgD;
+      return totalAvgD * 100;
     }
     return 100;
-  };
+  }, [filesDir, files]);
   const averageProgress = averageProgressF();
   const tabs = [
     { title: <Icon icon={fileI} width={30} height={30} />, component: <Tree key="tree" /> },

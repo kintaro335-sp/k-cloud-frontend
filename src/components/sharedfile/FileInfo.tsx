@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { Box, Card, CardHeader, CardContent, Button, Stack } from '@mui/material';
+import { Box, Card, CardHeader, CardContent, Button, Stack, Typography } from '@mui/material';
 import { ImagePreview, CommonFile } from './filepreview';
 // config
 import { apiUrl } from '../../config';
 // redux
 import { useSelector } from '../../redux/store';
 import { bytesFormat } from '../../utils/files';
+import moment from 'moment';
 
 function FilePreview({ mime, url }: { mime: string; url: string }) {
   if (mime.includes('image')) {
@@ -30,8 +31,12 @@ export default function FileInfo() {
         <CardContent>
           <FilePreview mime={info?.mime_type} url={urlDownload} />
         </CardContent>
-        <CardHeader title={<>{info?.name}</>} subheader={<>{info.type === 'file' && bytesFormat(info.size)}</>} />
-        <Stack sx={{ margin: '20px' }}>
+        <CardHeader title={<>{info?.name}</>} subheader={<Stack>
+          <Typography>{info.type === 'file' && bytesFormat(info.size)}</Typography>
+          <Typography>Creado: {moment(info.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
+          {info.expire && <Typography>Expira: {moment(info.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>}
+          </Stack>} />
+        <Stack sx={{ margin: '20px' }} spacing={2}>
           <Button LinkComponent="a" href={urlDirect} variant="contained" target='_blank'>
             Link Directo
           </Button>

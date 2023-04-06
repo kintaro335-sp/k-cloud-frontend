@@ -87,7 +87,7 @@ export default function Files() {
       <Box sx={{ width: '100%', height: '68%', marginTop: '2ex', overflowY: 'scroll' }}>
         <Grid container spacing={2}>
           {filesMemo.slice(0, showQ).map((file: FileI, i) => (
-            <Grid item key={file.name + i} xs={6} md={3} lg={2}>
+            <Grid item key={file.name + i} xs={6} md={4} lg={3}>
               <FileElement file={file} />
             </Grid>
           ))}

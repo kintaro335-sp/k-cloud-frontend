@@ -13,6 +13,7 @@ export interface SFInfoResponse {
   name: string;
   mime_type: string;
   size: number;
+  createdAt: number;
   expire: boolean;
   expires: number;
 }

@@ -26,21 +26,23 @@ export default function TokenItem({ token }: TokenElementProps) {
       </CardContent>
       <CardHeader
         title={
-          <Tooltip title={<Typography>{name}</Typography>}>
-            <Box sx={{ width: '20ex' }} component={Link} to={`/shared-files/id/${id}`}>
-              <Box
-                sx={{
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  fontSize: '1.6ex',
-                  width: '100%',
-                  overflow: 'hidden'
-                }}
-              >
-                {name}
+          <Box component={Link} to={`/shared-files/id/${id}`} sx={{ color: 'secondary.main' }}>
+            <Tooltip title={<Typography>{name}</Typography>}>
+              <Box sx={{ width: { xs: '14ex', md: '16ex', lg: '17ex' } }}>
+                <Box
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    fontSize: '1.6ex',
+                    width: '100%',
+                    overflow: 'hidden'
+                  }}
+                >
+                  {name}
+                </Box>
               </Box>
-            </Box>
-          </Tooltip>
+            </Tooltip>
+          </Box>
         }
         subheader={<Box>{type}</Box>}
         action={

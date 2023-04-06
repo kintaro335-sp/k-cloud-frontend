@@ -27,17 +27,22 @@ export default function FileInfo() {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Card sx={{ width: '30%' }}>
+      <Card sx={{ width: { xs: '70%', md: '50%', lg: '30%' } }}>
         <CardContent>
           <FilePreview mime={info?.mime_type} url={urlDownload} />
         </CardContent>
-        <CardHeader title={<>{info?.name}</>} subheader={<Stack>
-          <Typography>{info.type === 'file' && bytesFormat(info.size)}</Typography>
-          <Typography>Creado: {moment(info.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
-          {info.expire && <Typography>Expira: {moment(info.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>}
-          </Stack>} />
+        <CardHeader
+          title={<>{info?.name}</>}
+          subheader={
+            <Stack>
+              <Typography>{info.type === 'file' && bytesFormat(info.size)}</Typography>
+              <Typography>Creado: {moment(info.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
+              {info.expire && <Typography>Expira: {moment(info.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>}
+            </Stack>
+          }
+        />
         <Stack sx={{ margin: '20px' }} spacing={2}>
-          <Button LinkComponent="a" href={urlDirect} variant="contained" target='_blank'>
+          <Button LinkComponent="a" href={urlDirect} variant="contained" target="_blank">
             Link Directo
           </Button>
           <Button LinkComponent="a" href={urlDownload} download={info.name} variant="contained">

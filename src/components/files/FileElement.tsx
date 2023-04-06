@@ -28,8 +28,8 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
       <CardContent>{children}</CardContent>
       <CardHeader
         title={
-          <Tooltip title={<Typography>{file.name}</Typography>}>
-            <Box sx={{ width: '9ex' }}>
+          <Tooltip title={<Typography variant="body2">{file.name}</Typography>}>
+            <Box sx={{ width: { xs: '12ex', md: '17ex', lg: '20ex' } }}>
               <Box
                 sx={{
                   whiteSpace: 'nowrap',

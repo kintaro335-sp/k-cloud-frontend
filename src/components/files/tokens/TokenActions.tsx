@@ -1,4 +1,5 @@
 import { Stack, IconButton } from '@mui/material';
+import { useTheme } from '@mui/material/styles'
 import { CopyClipboard } from '../../atoms';
 // icons
 import { Icon } from '@iconify/react';
@@ -16,6 +17,7 @@ interface TokenActionsProps {
 export default function TokenActions({ id }: TokenActionsProps) {
   const { access_token } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
+  const theme = useTheme()
 
   const handleDelete = async () => {
     if (window.confirm(`desea eliminar ${id}?`)) {
@@ -29,7 +31,7 @@ export default function TokenActions({ id }: TokenActionsProps) {
   return (
     <Stack direction="row">
       <IconButton onClick={handleDelete}>
-        <Icon icon={deleteIcon} width="33px" height="33px" />
+        <Icon icon={deleteIcon} width="33px" height="33px" color={theme.palette.text.primary} />
       </IconButton>
       <CopyClipboard url={urlToken} />
     </Stack>

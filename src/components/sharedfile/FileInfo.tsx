@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { Box, Card, CardHeader, CardContent, Button, Stack, Typography } from '@mui/material';
-import { ImagePreview, CommonFile } from './filepreview';
+import { ImagePreview, CommonFile, VideoPreview } from './filepreview';
 // config
 import { apiUrl } from '../../config';
 // redux
@@ -9,8 +9,12 @@ import { bytesFormat } from '../../utils/files';
 import moment from 'moment';
 
 function FilePreview({ mime, url }: { mime: string; url: string }) {
-  if (mime.includes('image')) {
+  if (mime.includes('/image')) {
     return <ImagePreview url={url} />;
+  }
+
+  if (mime.includes('video')) {
+    return <VideoPreview url={url} />;
   }
 
   return <CommonFile />;
@@ -29,7 +33,7 @@ export default function FileInfo() {
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Card sx={{ width: { xs: '70%', md: '50%', lg: '30%' } }}>
         <CardContent>
-          <FilePreview mime={info?.mime_type} url={urlDownload} />
+          <FilePreview mime={info?.mime_type} url={urlDirect} />
         </CardContent>
         <CardHeader
           title={<>{info?.name}</>}

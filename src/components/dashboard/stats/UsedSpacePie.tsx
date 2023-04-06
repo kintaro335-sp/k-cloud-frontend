@@ -2,7 +2,7 @@ import { Card, CardHeader, CardContent, Box } from '@mui/material';
 import { ResponsivePie } from '@nivo/pie';
 // redux
 import { useSelector } from '../../../redux/store';
-import Numeral from 'numeral';
+import { bytesFormat} from '../../../utils/files'
 
 export default function UsedSpacePie() {
   const { totalSpace, usedSpace } = useSelector((state) => state.stats);
@@ -17,7 +17,7 @@ export default function UsedSpacePie() {
               { id: 'used', label: 'Used', value: usedSpace, color: 'hsl(0, 100%, 46%)' }
             ]}
             margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-            valueFormat={(value) => Numeral(value).format('0.0 ib')}
+            valueFormat={(value) => bytesFormat(value)}
             innerRadius={0.5}
             padAngle={0.7}
             cornerRadius={3}

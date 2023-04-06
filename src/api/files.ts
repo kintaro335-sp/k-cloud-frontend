@@ -99,7 +99,7 @@ export async function uploadBlobAPI(
         onUploadProgress: (progressEvent) => {
           if (typeof cb === 'function') {
             if (progressEvent.progress === undefined) return;
-            cb(progressEvent.progress * 100);
+            cb(progressEvent.progress);
           }
         }
       })

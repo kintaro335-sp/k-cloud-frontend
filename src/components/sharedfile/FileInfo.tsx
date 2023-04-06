@@ -5,7 +5,7 @@ import { ImagePreview, CommonFile } from './filepreview';
 import { apiUrl } from '../../config';
 // redux
 import { useSelector } from '../../redux/store';
-import Numeral from 'numeral';
+import { bytesFormat } from '../../utils/files';
 
 function FilePreview({ mime, url }: { mime: string; url: string }) {
   if (mime.includes('image')) {
@@ -22,6 +22,7 @@ export default function FileInfo() {
   if (info === null) return <></>;
 
   const urlDownload = `${apiUrl}/shared-file/content/${id}?d=1`;
+  const urlDirect = `${apiUrl}/shared-file/content/${id}`;
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -29,11 +30,11 @@ export default function FileInfo() {
         <CardContent>
           <FilePreview mime={info?.mime_type} url={urlDownload} />
         </CardContent>
-        <CardHeader
-          title={<>{info?.name}</>}
-          subheader={<>{info.type === 'file' && Numeral(info.size).format('0.0 b')}</>}
-        />
-        <Stack sx={{ margin: '20px' }} direction="row">
+        <CardHeader title={<>{info?.name}</>} subheader={<>{info.type === 'file' && bytesFormat(info.size)}</>} />
+        <Stack sx={{ margin: '20px' }}>
+          <Button LinkComponent="a" href={urlDirect} variant="contained" target='_blank'>
+            Link Directo
+          </Button>
           <Button LinkComponent="a" href={urlDownload} download={info.name} variant="contained">
             Descargar
           </Button>

@@ -55,7 +55,16 @@ const theme = createTheme({
     h6: {
       fontWeight: 700
     },
-    button:{
+    body1: {
+      fontWeight: 400
+    },
+    body2: {
+      fontWeight: 300
+    },
+    caption: {
+      fontWeight: 500
+    },
+    button: {
       fontWeight: 600
     }
   }

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Box, Dialog, DialogContent } from '@mui/material';
+import { Dialog, DialogContent, Box } from '@mui/material';
 import { Icon } from '@iconify/react';
 import videoIcon from '@iconify/icons-ant-design/video-camera-filled';
 
-export default function VideoFile({ url }: { url: string }) {
+export default function VideoPreview({ url }: { url: string }) {
   const [open, setOpen] = useState(false);
 
   const clickOpen = () => {

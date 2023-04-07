@@ -62,3 +62,9 @@ export interface Folder {
   name: string;
   content: Array<Folder | FileI>;
 }
+
+export interface UsedSpaceType {
+  type: string;
+  used: number;
+}
+

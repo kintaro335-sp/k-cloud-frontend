@@ -1,21 +1,25 @@
 import { useEffect } from 'react';
-import { Toolbar } from '@mui/material';
+import { Toolbar, Grid } from '@mui/material';
 import { BackButton } from '../../components/atoms';
-import { UsedSpacePie } from '../../components/dashboard/stats';
+import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie } from '../../components/dashboard/stats';
 // redux
 import { useSelector } from '../../redux/store';
-import { setTotal, setUsed } from '../../redux/slices/stats';
+import { setTotal, setUsed, setUsedSpaceFiles, setUsedSpaceUsers } from '../../redux/slices/stats';
 // api
-import { getusedSpace } from '../../api/admin';
+import { getusedSpace, getUsedSpaceUser, getUsedSpaceByFileType } from '../../api/admin';
 
 export default function Stats() {
   const { access_token } = useSelector((state) => state.session);
 
   useEffect(() => {
     async function getusedSpaceEffect() {
-      const result = await getusedSpace(access_token, true);
-      setTotal(result.total);
-      setUsed(result.used);
+      const resultSpace = await getusedSpace(access_token, true);
+      setTotal(resultSpace.total);
+      setUsed(resultSpace.used);
+      const resultSpaceUser = await getUsedSpaceUser(access_token);
+      setUsedSpaceUsers(resultSpaceUser);
+      const resultSpaceFile = await getUsedSpaceByFileType(access_token);
+      setUsedSpaceFiles(resultSpaceFile);
     }
     getusedSpaceEffect();
   }, [access_token]);
@@ -25,7 +29,17 @@ export default function Stats() {
       <Toolbar>
         <BackButton to="/admin" />
       </Toolbar>
-      <UsedSpacePie />
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6} lg={4}>
+          <UsedSpacePie />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <UsedSpaceUserPie />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <UsedSpaceFileTPie />
+        </Grid>
+      </Grid>
     </>
   );
 }

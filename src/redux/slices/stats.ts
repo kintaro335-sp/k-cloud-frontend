@@ -1,14 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { dispatch } from '../store';
+import { UsedSpaceType } from '../../@types/files';
+import { UsedSpaceUser } from '../../@types/admin';
 
 interface StatsState {
   totalSpace: number;
   usedSpace: number;
+  spaceUsedFiles: UsedSpaceType[];
+  spaceUsedUsers: UsedSpaceUser[];
 }
 
 const initialState: StatsState = {
   totalSpace: 0,
-  usedSpace: 0
+  usedSpace: 0,
+  spaceUsedFiles: [],
+  spaceUsedUsers: []
 };
 
 const slice = createSlice({
@@ -20,6 +26,12 @@ const slice = createSlice({
     },
     setUsed(state, action) {
       state.usedSpace = action.payload as number;
+    },
+    setUsedSpaceFiles(state, action) {
+      state.spaceUsedFiles = action.payload as UsedSpaceType[];
+    },
+    setUsedSpaceUsers(state, action) {
+      state.spaceUsedUsers = action.payload as UsedSpaceUser[];
     }
   }
 });
@@ -37,6 +49,22 @@ export function setTotal(total: number) {
 export function setUsed(used: number) {
   try {
     dispatch(slice.actions.setUsed(used));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setUsedSpaceUsers(data: UsedSpaceUser[]) {
+  try {
+    dispatch(slice.actions.setUsedSpaceUsers(data));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setUsedSpaceFiles(data: UsedSpaceType[]) {
+  try {
+    dispatch(slice.actions.setUsedSpaceFiles(data));
   } catch (err) {
     console.error(err);
   }

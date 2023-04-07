@@ -1,22 +1,22 @@
 import { useTheme } from '@mui/material/styles';
-import { Card, CardHeader, CardContent, Box, Typography } from '@mui/material';
+import { Card, CardHeader, CardContent, Box } from '@mui/material';
 import { ResponsivePie } from '@nivo/pie';
 // redux
 import { useSelector } from '../../../redux/store';
 import { bytesFormat } from '../../../utils/files';
 
 export default function UsedSpacePie() {
-  const { totalSpace, usedSpace } = useSelector((state) => state.stats);
+  const { totalSpace, usedSpace, spaceUsedUsers } = useSelector((state) => state.stats);
   const theme = useTheme();
   return (
     <Card>
-      <CardHeader title="Espacio usado" />
+      <CardHeader title="Espacio usado por Usuario" />
       <CardContent>
         <Box sx={{ width: '100%', height: '500px' }}>
           <ResponsivePie
             data={[
               { id: 'free', label: 'Free', value: totalSpace - usedSpace, color: 'hsl(30, 1%, 50%)' },
-              { id: 'used', label: 'Used', value: usedSpace, color: 'hsl(0, 100%, 46%)' }
+              ...spaceUsedUsers.map((u) => ({ id: u.id, label: u.username, value: u.usedSpace }))
             ]}
             margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
             valueFormat={(value) => bytesFormat(value)}
@@ -25,40 +25,6 @@ export default function UsedSpacePie() {
             cornerRadius={3}
             activeOuterRadiusOffset={8}
             borderWidth={1}
-            defs={[
-              {
-                id: 'dots',
-                type: 'patternDots',
-                background: 'inherit',
-                color: 'rgba(255, 0, 0, 1)',
-                size: 4,
-                padding: 1,
-                stagger: true
-              },
-              {
-                id: 'lines',
-                type: 'patternLines',
-                background: 'inherit',
-                color: 'rgba(150, 150, 150, 1)',
-                rotation: -45,
-                lineWidth: 6,
-                spacing: 10
-              }
-            ]}
-            fill={[
-              {
-                match: {
-                  id: 'free'
-                },
-                id: 'lines'
-              },
-              {
-                match: {
-                  id: 'used'
-                },
-                id: 'dots'
-              }
-            ]}
             tooltip={(props) => (
               <Box sx={{ backgroundColor: theme.palette.background.default, borderRadius: '5px', padding: '0.4ex' }}>
                 {props.datum.label}: {bytesFormat(props.datum.value)}

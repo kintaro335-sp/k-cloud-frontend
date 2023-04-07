@@ -9,7 +9,7 @@ import { bytesFormat } from '../../utils/files';
 import moment from 'moment';
 
 function FilePreview({ mime, url }: { mime: string; url: string }) {
-  if (mime.includes('/image')) {
+  if (mime.includes('image/')) {
     return <ImagePreview url={url} />;
   }
 

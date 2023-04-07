@@ -10,6 +10,7 @@ interface FileItemProps {
 export default function FileItem({ path, fileP }: FileItemProps) {
   if (fileP === null) return <></>;
   const { size, sended, totalBlobs, blobsSended, file, blobProgress, written } = fileP;
+  const blobSizeReal = size < BLOB_SIZE ? size : BLOB_SIZE;
 
   return (
     <ListItem>
@@ -28,12 +29,12 @@ export default function FileItem({ path, fileP }: FileItemProps) {
             </Stack>
             <Stack direction="row" spacing={1}>
               <Typography variant="body1">
-                Enviado: {bytesFormat(sended + Math.floor(BLOB_SIZE * blobProgress))}
+                Enviado: {bytesFormat(sended + Math.floor(blobSizeReal * blobProgress))}
               </Typography>
               <CircularProgress variant="determinate" value={(sended / size) * 100} />
             </Stack>
             <Stack direction="row" spacing={1}>
-              <Typography variant="body1">Blob: {bytesFormat(Math.floor(BLOB_SIZE * blobProgress))}</Typography>
+              <Typography variant="body1">Blob: {bytesFormat(Math.floor(blobSizeReal * blobProgress))}</Typography>
               <CircularProgress variant="determinate" value={blobProgress * 100} />
             </Stack>
           </Stack>

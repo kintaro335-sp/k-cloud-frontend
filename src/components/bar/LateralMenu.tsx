@@ -27,7 +27,8 @@ export default function LateralMenu() {
       filesDir.forEach((dir) => {
         const fileT = files[dir];
         if (fileT === null || fileT === undefined) return;
-        progress += fileT.sended + Math.floor(BLOB_SIZE * fileT.blobProgress);
+        const blobSizeReal = fileT.size < BLOB_SIZE ? fileT.size : BLOB_SIZE;
+        progress += fileT.sended + Math.floor(blobSizeReal * fileT.blobProgress);
         total += fileT.size;
       });
       const totalAvg = progress / total;

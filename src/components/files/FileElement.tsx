@@ -29,7 +29,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
       <CardHeader
         title={
           <Tooltip title={<Typography variant="body2">{file.name}</Typography>}>
-            <Box sx={{ width: { xs: '12ex', md: '17ex', lg: '20ex' } }}>
+            <Box sx={{ width: { xs: '12ex', md: '15ex', lg: '17ex' } }}>
               <Box
                 sx={{
                   whiteSpace: 'nowrap',
@@ -52,10 +52,8 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         action={
           sf ? (
             file.type === 'file' && (
-              <Stack direction="row" spacing={2}>
+              <Stack direction="row" spacing={0}>
                 <DownloadButton url={`${urlComplete}?d=1`} name={file.name} />
-                <CopyClipboard url={urlComplete} title="Compiar Enlace Directo" />
-                <CopyClipboard url={`${urlComplete}?d=1`} title="Compiar Enlace de Descarga" />
               </Stack>
             )
           ) : (

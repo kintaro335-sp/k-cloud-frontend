@@ -53,7 +53,7 @@ export default function FolderExplorer() {
       <Box sx={{ height: '74vh', overflowY: 'scroll' }}>
         <Grid container spacing={2}>
           {content.map((file, i) => (
-            <Grid key={`${file.name}-${i}`} item xs={6} md={3} lg={2}>
+            <Grid key={`${file.name}-${i}`} item xs={12} md={4} lg={3}>
               <FileElement file={file} sf />
             </Grid>
           ))}

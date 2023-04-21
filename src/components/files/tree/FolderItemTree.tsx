@@ -15,7 +15,7 @@ interface FolderItemTreeProps {
   path?: string;
 }
 
-export default function FolderItemTree({ folder, index, level, path }: FolderItemTreeProps) {
+export default function FolderItemTree({ folder, index, level, path = '' }: FolderItemTreeProps) {
   const { name, content } = folder;
   const dispatch = useDispatch();
   return (
@@ -25,11 +25,8 @@ export default function FolderItemTree({ folder, index, level, path }: FolderIte
       label={
         <Typography
           onDoubleClick={() => {
-            if (!path) {
-              dispatch(setPath(`${name}`));
-            } else {
-              dispatch(setPath(`${path}/${name}`));
-            }
+            console.log(`${path}/${name}`);
+            dispatch(setPath(`${path}/${name}`));
           }}
           variant="body2"
         >
@@ -46,7 +43,7 @@ export default function FolderItemTree({ folder, index, level, path }: FolderIte
               folder={elem}
               index={i}
               level={level + 1}
-              path={`${name}`}
+              path={`${path}/${name}`}
             />
           );
         }

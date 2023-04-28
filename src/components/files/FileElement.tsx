@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack } from '@mui/material';
-import { CopyClipboard } from '../atoms';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
 import { DownloadButton } from '../atoms/';
@@ -23,6 +22,7 @@ interface FileInfoProps {
 }
 
 function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
+  const { id } = useParams();
   return (
     <Card>
       <CardContent>{children}</CardContent>
@@ -51,11 +51,13 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         }
         action={
           sf ? (
-            file.type === 'file' && (
-              <Stack direction="row" spacing={0}>
+            <Stack direction="row" spacing={0}>
+              {file.type === 'file' ? (
                 <DownloadButton url={`${urlComplete}?d=1`} name={file.name} />
-              </Stack>
-            )
+              ) : (
+                <DownloadButton url={`${apiUrl}/shared-file/zip/${id}/${url}`} name={file.name} variant="zip" />
+              )}
+            </Stack>
           ) : (
             <MenuFile url={url} file={file} urlComplete={urlComplete} />
           )

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Typography, Box, Tooltip, Stack } from '@mui/material';
 import { TokenElement } from '../../@types/sharedfiles';
 import TokenIcon from './TokenIcon';
-import { CopyClipboard } from '../atoms';
+import { CopyClipboard, DownloadButton } from '../atoms';
 // config
 import { apiUrl } from '../../config';
 
@@ -14,6 +14,7 @@ export default function TokenItem({ token }: TokenElementProps) {
   const { id, name, type } = token;
 
   const urlRaw = `${apiUrl}/shared-file/content/${id}`;
+  const urlZipDowload = `${apiUrl}/shared-file/zip/${id}`;
   const urlRawDownload = `${urlRaw}?d=1`;
   const urlNormal = `${window.origin}/shared-files/id/${id}`;
 
@@ -48,6 +49,7 @@ export default function TokenItem({ token }: TokenElementProps) {
         action={
           <Stack direction="row">
             <CopyClipboard url={type === 'file' ? urlRaw : urlNormal} />
+            <DownloadButton url={urlZipDowload} name={name} variant="zip" />
           </Stack>
         }
       />

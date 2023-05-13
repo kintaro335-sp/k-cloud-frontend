@@ -11,7 +11,7 @@ interface TokenElementProps {
 }
 
 export default function TokenItem({ token }: TokenElementProps) {
-  const { id, name, type } = token;
+  const { id, name, type, mime_type } = token;
 
   const urlRaw = `${apiUrl}/shared-file/content/${id}`;
   const urlZipDowload = `${apiUrl}/shared-file/zip/${id}`;
@@ -22,7 +22,7 @@ export default function TokenItem({ token }: TokenElementProps) {
     <Card>
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-          <TokenIcon type={type} />
+          <TokenIcon type={type} mime_type={mime_type} url={urlRaw} />
         </Box>
       </CardContent>
       <CardHeader
@@ -49,6 +49,7 @@ export default function TokenItem({ token }: TokenElementProps) {
         action={
           <Stack direction="row">
             <CopyClipboard url={type === 'file' ? urlRaw : urlNormal} />
+            {type === 'file' && <DownloadButton url={urlRawDownload} name={name} />}
             <DownloadButton url={urlZipDowload} name={name} variant="zip" />
           </Stack>
         }

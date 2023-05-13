@@ -46,7 +46,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         }
         subheader={
           <Box>
-            {file.type} {!sf && <>T:{file.tokens}</>} {file.type === 'file' && bytesFormat(file.size)}
+            {file.type} {!sf && <>T:{file.tokens}</>} {bytesFormat(file.size)}
           </Box>
         }
         action={

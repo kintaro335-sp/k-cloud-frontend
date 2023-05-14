@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { apiUrl } from '../config';
-import { User, SpaceUsed, SpaceConfig, UsedSpaceUser } from '../@types/admin';
+import { User, SpaceUsed, SpaceConfig, UsedSpaceUser, UsageG } from '../@types/admin';
 import { MessageResponse } from '../@types/auth';
 import { UsedSpaceType } from '../@types/files';
 
@@ -55,5 +55,15 @@ export async function setDedicatedSpace(token: string, type: string, quantity: n
 
 export async function getDedicatedSpaceConfig(token: string): Promise<SpaceConfig> {
   const result = await conn.get(`dedicated-space?t=${token}`);
+  return result.data;
+}
+
+export async function getMemoryUsageRss(token: string): Promise<UsageG> {
+  const result = await conn.get(`memory/rss`);
+  return result.data;
+}
+
+export async function getMemoryUsageBuffer(token: string): Promise<UsageG> {
+  const result = await conn.get(`memory/buffer`);
   return result.data;
 }

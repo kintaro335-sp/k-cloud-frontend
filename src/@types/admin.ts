@@ -26,3 +26,7 @@ export interface UsedSpaceUser {
   username: string;
   usedSpace: number;
 }
+
+export interface UsageG {
+  usage: number;
+}

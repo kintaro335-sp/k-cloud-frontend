@@ -11,7 +11,7 @@ export default function LineChartGenral({ title, data }: LineChartGenralProps) {
   return (
     <Card>
       <CardHeader title={title} />
-      <CardContent>
+      <CardContent sx={{ height: '500px' }}>
         <LineChartPrefab data={data} />
       </CardContent>
     </Card>

@@ -1,15 +1,30 @@
-import { useEffect } from 'react';
-import { Toolbar, Grid } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/atoms';
 import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie } from '../../components/dashboard/stats';
+import { LineChartGeneral } from '../../components/dashboard/stats/logs';
 // redux
 import { useSelector } from '../../redux/store';
-import { setTotal, setUsed, setUsedSpaceFiles, setUsedSpaceUsers } from '../../redux/slices/stats';
+import {
+  setTotal,
+  setUsed,
+  setUsedSpaceFiles,
+  setUsedSpaceUsers,
+  setActivityMethods,
+  setActivityRoute,
+  setActivityStatuscode
+} from '../../redux/slices/stats';
 // api
-import { getusedSpace, getUsedSpaceUser, getUsedSpaceByFileType } from '../../api/admin';
+import { getusedSpace, getUsedSpaceUser, getUsedSpaceByFileType, getLineChartData } from '../../api/admin';
+// types
+import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
 
 export default function Stats() {
+  const theme = useTheme();
   const { access_token } = useSelector((state) => state.session);
+  const { activityMethods, activityRoute, activityStatuscode } = useSelector((state) => state.stats);
+  const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
 
   useEffect(() => {
     async function getusedSpaceEffect() {
@@ -24,11 +39,29 @@ export default function Stats() {
     getusedSpaceEffect();
   }, [access_token]);
 
+  useEffect(() => {
+    async function getActivityStats() {
+      // methods
+      const dataMethods = await getLineChartData(GROUPFILTER.METHOD, time, access_token);
+      setActivityMethods(dataMethods);
+      // methods
+      const dataStatusCode = await getLineChartData(GROUPFILTER.STATUSCODE, time, access_token);
+      setActivityStatuscode(dataStatusCode);
+      // methods
+      const dataRoute = await getLineChartData(GROUPFILTER.ROUTE, time, access_token);
+      setActivityRoute(dataRoute);
+    }
+    getActivityStats();
+  }, [time]);
+
   return (
     <>
       <Toolbar>
         <BackButton to="/admin" />
       </Toolbar>
+      <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>
+        Uso de Espacio
+      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6} lg={4}>
           <UsedSpacePie />
@@ -38,6 +71,51 @@ export default function Stats() {
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <UsedSpaceFileTPie />
+        </Grid>
+      </Grid>
+      <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>
+        Actividad
+      </Typography>
+      <Toolbar>
+        <RadioGroup
+          row
+          value={time}
+          onChange={(_, val) => {
+            //@ts-ignore
+            setTime(val);
+          }}
+        >
+          <FormControlLabel
+            value={TIMEOPTION.TODAY}
+            control={<Radio />}
+            label={<Box sx={{ color: theme.palette.text.primary }}>hoy</Box>}
+          />
+          <FormControlLabel
+            value={TIMEOPTION.LAST7DAYS}
+            control={<Radio />}
+            label={<Box sx={{ color: theme.palette.text.primary }}>ultimos 7 dias</Box>}
+          />
+          <FormControlLabel
+            value={TIMEOPTION.THISMONTH}
+            control={<Radio />}
+            label={<Box sx={{ color: theme.palette.text.primary }}>este mes</Box>}
+          />
+          <FormControlLabel
+            value={TIMEOPTION.LAST30DAYS}
+            control={<Radio />}
+            label={<Box sx={{ color: theme.palette.text.primary }}>ultimos 30 dias</Box>}
+          />
+        </RadioGroup>
+      </Toolbar>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <LineChartGeneral title="method" data={activityMethods} />
+        </Grid>
+        <Grid item xs={12}>
+          <LineChartGeneral title="Status Code" data={activityStatuscode} />
+        </Grid>
+        <Grid item xs={12}>
+          <LineChartGeneral title="Route" data={activityRoute} />
         </Grid>
       </Grid>
     </>

@@ -3,6 +3,7 @@ import { apiUrl } from '../config';
 import { User, SpaceUsed, SpaceConfig, UsedSpaceUser, UsageG } from '../@types/admin';
 import { MessageResponse } from '../@types/auth';
 import { UsedSpaceType } from '../@types/files';
+import { GROUPFILTER, TIMEOPTION, StatsLineChart } from '../@types/stats';
 
 const conn = axios.create({
   baseURL: `${apiUrl}/admin`
@@ -59,11 +60,16 @@ export async function getDedicatedSpaceConfig(token: string): Promise<SpaceConfi
 }
 
 export async function getMemoryUsageRss(token: string): Promise<UsageG> {
-  const result = await conn.get(`memory/rss`);
+  const result = await conn.get(`memory/rss?t=${token}`);
   return result.data;
 }
 
 export async function getMemoryUsageBuffer(token: string): Promise<UsageG> {
-  const result = await conn.get(`memory/buffer`);
+  const result = await conn.get(`memory/buffer?t=${token}`);
+  return result.data;
+}
+
+export async function getLineChartData(group: GROUPFILTER, time: TIMEOPTION, token: string): Promise<StatsLineChart> {
+  const result = await conn.get(`logs/stats/${group}/line/${time}?t=${token}`);
   return result.data;
 }

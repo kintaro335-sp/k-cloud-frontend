@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Button, TextField, Paper, Grid, Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Icon } from '@iconify/react';
 import folderAddIcon from '@iconify/icons-ant-design/folder-add-filled';
 import { useSnackbar } from 'notistack';
@@ -14,6 +15,7 @@ import { useSelector, useDispatch } from '../../redux/store';
 export default function AddFolder() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
   const anchorRef = useRef<HTMLButtonElement | null>(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -80,11 +82,13 @@ export default function AddFolder() {
                 >
                   Cancelar
                 </Button>{' '}
-                <Button
+                <LoadingButton
                   fullWidth
                   variant="contained"
+                  loading={loading}
                   onClick={() => {
                     if (name !== '' && !['/'].includes(name)) {
+                      setLoading(true);
                       createFolder(`${path}/${name}`, access_token).then((res) => {
                         enqueueSnackbar(res.message, { variant: 'success' });
                         getListFiles(path, access_token).then((response) => {
@@ -92,6 +96,7 @@ export default function AddFolder() {
                           clickClose();
                           setName('');
                           setOpen(false);
+                          setLoading(false);
                         });
                       });
                     } else {
@@ -100,7 +105,7 @@ export default function AddFolder() {
                   }}
                 >
                   Crear
-                </Button>
+                </LoadingButton>
               </Stack>
             </Grid>
           </Grid>

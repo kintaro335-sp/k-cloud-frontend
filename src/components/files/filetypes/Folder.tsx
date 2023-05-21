@@ -1,16 +1,12 @@
 import { Box } from '@mui/material';
 import { Icon } from '@iconify/react';
 import folderIcon from '@iconify/icons-ant-design/folder-filled';
-// redux
-import { useDispatch } from '../../../redux/store';
-import { setPath } from '../../../redux/slices/session';
 
-export default function Folder({ url }: { url: string }) {
-  const dispatch = useDispatch();
+interface FolderProps {
+  click: () => void;
+}
 
-  const click = () => {
-    dispatch(setPath(url));
-  };
+export default function Folder({ click }: FolderProps) {
 
   return (
     <Box sx={{ display: 'flex', aligItems: 'center', justifyContent: 'center', width: '100%' }} onClick={click}>

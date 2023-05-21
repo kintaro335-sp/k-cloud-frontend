@@ -1,7 +1,7 @@
 import axios from 'axios';
 import axiosObs from 'axios-observable';
 import { apiUrl } from '../config';
-import { FilePTempResponse } from '../@types/files';
+import { FileI, FilePTempResponse, Folder } from '../@types/files';
 
 const connFilesObs = axiosObs.create({
   baseURL: `${apiUrl}/files`
@@ -11,18 +11,8 @@ const connFiles = axios.create({
   baseURL: `${apiUrl}/files`
 });
 
-type FileType = 'file' | 'folder';
-
-export interface FileP {
-  name: string;
-  type: FileType;
-  size: string;
-  extension: string;
-  mime_type: string;
-}
-
 export interface ListFile {
-  list: FileP[];
+  list: FileI[];
 }
 
 export interface BlobFP {
@@ -93,13 +83,26 @@ export async function writeBlobAPI(path: string, position: number, blob: string,
   });
 }
 
-export async function uploadBlobAPI(path: string, position: number, blob: Blob, token: string) {
+export async function uploadBlobAPI(
+  path: string,
+  position: number,
+  blob: Blob,
+  token: string,
+  cb?: (newProgress: number) => void
+) {
   return new Promise((resolve, reject) => {
     const f = new File([blob], `blob-${position}`, { type: '' });
     const formdata = new FormData();
     formdata.append('file', f);
     connFiles
-      .post(`/write/${path}?pos=${position}&t=${token}`, formdata)
+      .post(`/write/${path}?pos=${position}&t=${token}`, formdata, {
+        onUploadProgress: (progressEvent) => {
+          if (typeof cb === 'function') {
+            if (progressEvent.progress === undefined) return;
+            cb(progressEvent.progress);
+          }
+        }
+      })
       .then((res) => {
         resolve(res.data);
       })
@@ -110,7 +113,7 @@ export async function uploadBlobAPI(path: string, position: number, blob: Blob, 
   });
 }
 
-export default async function statusFlieAPI(path: string, token: string): Promise<FilePTempResponse> {
+export async function statusFileAPI(path: string, token: string): Promise<FilePTempResponse> {
   return new Promise((resolve, reject) => {
     connFiles
       .get(`status/${path}?t=${token}`)
@@ -129,6 +132,19 @@ export async function closeFileAPI(path: string, token: string) {
       .post(`close/${path}?t=${token}`)
       .then((res) => {
         resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export async function getTreeAPI(path: string, token: string): Promise<Array<Folder | FileI>> {
+  return new Promise((resolve, reject) => {
+    connFiles
+      .get(`tree/${path}?t=${token}`)
+      .then((res) => {
+        resolve(res.data.content);
       })
       .catch((err) => {
         reject(err);

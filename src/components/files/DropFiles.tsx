@@ -17,7 +17,7 @@ export default function DropFiles() {
         borderStyle: 'dashed',
         borderWidth: '3px',
         borderColor: '#4A4A4A',
-        backgroundColor: '#C0C0C0'
+        backgroundColor: '#2D2D2D'
       }}
       onDrop={(e) => {
         e.preventDefault();

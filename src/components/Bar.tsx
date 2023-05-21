@@ -1,12 +1,8 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { AppBar, Container, Toolbar, Typography, Box, Button, Stack, Drawer, IconButton, Paper } from '@mui/material';
-import FileList from './files/upload/FileList';
-import { UserProfile } from './bar';
+import { Link, useLocation } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import { AppBar, Container, Toolbar, Typography, Box, Button, Stack, Grid, useMediaQuery } from '@mui/material';
+import { UserProfile, LateralMenu, Uploads } from './bar';
 import useAuth from '../hooks/useAuth';
-import { Icon } from '@iconify/react';
-import barsI from '@iconify/icons-ant-design/bars-outlined';
-import { useSelector } from '../redux/store';
 
 interface BarProps {
   children: React.ReactNode;
@@ -14,7 +10,12 @@ interface BarProps {
 
 export default function Bar({ children }: BarProps) {
   const { isAuthenticated } = useAuth();
-  const { filesDir } = useSelector((state) => state.files);
+  const { pathname } = useLocation();
+  const pagesShowList = ['/files'];
+  const showMenuL = isAuthenticated && pagesShowList.includes(pathname);
+  const theme = useTheme();
+  const bk = useMediaQuery(theme.breakpoints.up('md'));
+  const mobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <>
@@ -29,19 +30,36 @@ export default function Bar({ children }: BarProps) {
             >
               Cloud
             </Typography>
-            <Stack>
+            <Stack spacing={2} direction="row">
               {!isAuthenticated && (
-                <Button component={Link} to="/login" variant="contained" sx={{ float: 'right' }}>
-                  Login
-                </Button>
+                <>
+                  {pathname !== '/login' && (
+                    <Button component={Link} to="/login" variant="contained" sx={{ float: 'right' }}>
+                      Login
+                    </Button>
+                  )}
+                </>
               )}
               {isAuthenticated && <UserProfile />}
+              {pathname !== '/shared-files' && (
+                <Button component={Link} to="/shared-files" variant="contained" sx={{ float: 'right' }}>
+                  Shared Files
+                </Button>
+              )}
+              {mobile && isAuthenticated && <Uploads />}
             </Stack>
           </Toolbar>
         </Container>
       </AppBar>
       <Box sx={{ height: '64px' }} />
-      {children}
+      <Grid container spacing={1} sx={{ height: '90vh' }}>
+        <Grid item xs={2} sx={{ display: { xs: 'none', md: showMenuL ? 'block' : 'none' }, height: '100%' }}>
+          <LateralMenu />
+        </Grid>
+        <Grid item xs={showMenuL && bk ? 10 : 12} sx={{ height: '100%' }}>
+          {children}
+        </Grid>
+      </Grid>
     </>
   );
 }

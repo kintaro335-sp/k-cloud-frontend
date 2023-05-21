@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Box, CircularProgress, Typography, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { ListItem, ListItemText, Box, Stack, LinearProgress, Typography, CircularProgress } from '@mui/material';
 import { FileToUpload } from '../../../@types/files';
+import { BLOB_SIZE, bytesFormat } from '../../../utils/files';
 
 interface FileItemProps {
   path: string;
@@ -9,18 +9,38 @@ interface FileItemProps {
 
 export default function FileItem({ path, fileP }: FileItemProps) {
   if (fileP === null) return <></>;
-  const { size, sended, file, blobSended } = fileP;
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    setProgress((size / sended) * 100);
-  }, [sended, size]);
+  const { size, sended, totalBlobs, blobsSended, file, blobProgress, written } = fileP;
+  const blobSizeReal = size < BLOB_SIZE ? size : BLOB_SIZE;
 
   return (
     <ListItem>
-      <ListItemIcon>
-        <CircularProgress variant="determinate" value={progress} />
-      </ListItemIcon>
-      <ListItemText primary={file.name} secondary={`en:${path}`} />
+      <ListItemText
+        primary={
+          <Stack spacing={1}>
+            <Box>
+              {file.name} Total: {bytesFormat(size)}
+            </Box>
+            <Box>
+              {blobsSended}/{totalBlobs}
+            </Box>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="body1">Escrito: {bytesFormat(written)}</Typography>
+              <CircularProgress variant="determinate" value={(written / size) * 100} />
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="body1">
+                Enviado: {bytesFormat(sended + Math.floor(blobSizeReal * blobProgress))}
+              </Typography>
+              <CircularProgress variant="determinate" value={(sended / size) * 100} />
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="body1">Blob: {bytesFormat(Math.floor(blobSizeReal * blobProgress))}</Typography>
+              <CircularProgress variant="determinate" value={blobProgress * 100} />
+            </Stack>
+          </Stack>
+        }
+        secondary={`en:${path}`}
+      />
     </ListItem>
   );
 }

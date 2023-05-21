@@ -24,7 +24,7 @@ export default function VideoFile({ url }: { url: string }) {
       </Box>
       <Dialog open={open} onClose={clickClose} maxWidth="lg">
         <DialogContent>
-          <Box component="video" controls src={url} width="100%" height="100%" />
+          <Box component="video" controls src={url} width="100%" height="auto" />
         </DialogContent>
       </Dialog>
     </>

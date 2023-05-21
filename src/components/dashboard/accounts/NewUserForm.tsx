@@ -30,7 +30,7 @@ export default function NewUserForm() {
   };
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().min(6).required(),
+    username: Yup.string().required(),
     password: Yup.string().min(8).required()
   });
 
@@ -38,7 +38,7 @@ export default function NewUserForm() {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting }
+    formState: { isSubmitting, errors, touchedFields }
   } = useForm<FormValues>({
     resolver: yupResolver(validationSchema)
   });
@@ -65,10 +65,23 @@ export default function NewUserForm() {
           <form onSubmit={handleSubmit(submitData)}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <TextField label="Nombre de usuario" {...register('username')} fullWidth />
+                <TextField
+                  label="Nombre de usuario"
+                  {...register('username')}
+                  fullWidth
+                  error={Boolean(errors.username?.message) && Boolean(touchedFields.username)}
+                  helperText={Boolean(touchedFields.username) && errors.username?.message}
+                />
               </Grid>
               <Grid item xs={12}>
-                <TextField label="contraseña" type="password" {...register('password')} fullWidth />
+                <TextField
+                  label="contraseña"
+                  type="password"
+                  {...register('password')}
+                  fullWidth
+                  error={Boolean(errors.password?.message) && Boolean(touchedFields.password)}
+                  helperText={Boolean(touchedFields.password) && errors.password?.message}
+                />
               </Grid>
               <Grid item xs={12}>
                 <LoadingButton variant="contained" loading={isSubmitting} type="submit">

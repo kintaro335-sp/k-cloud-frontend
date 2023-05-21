@@ -1,5 +1,6 @@
 import { encode } from 'base-64';
-export const BLOB_SIZE = 1048576 * 10;
+export const BLOB_SIZE = 1048576 * 60;
+import Numeral from 'numeral';
 
 /**
  * obtener el base64 de un archivo
@@ -22,6 +23,10 @@ export async function getBase64File(file: Blob): Promise<string | undefined> {
       }
     };
   });
+}
+
+export function bytesFormat(bytes: number) {
+  return Numeral(bytes).format('0.0 ib');
 }
 
 export function getBestSize(size: number) {

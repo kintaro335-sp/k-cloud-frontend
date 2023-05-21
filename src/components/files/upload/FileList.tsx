@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { List, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { List, Box, LinearProgress } from '@mui/material';
 import FileItem from './FileItem';
 import { useSelector } from '../../../redux/store';
 

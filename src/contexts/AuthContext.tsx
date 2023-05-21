@@ -7,12 +7,14 @@ import { verifyAuth } from '../api/auth';
 export const AuthContext = createContext({
   isAdmin: false,
   isAuthenticated: false,
-  init: false
+  init: false,
+  username: ''
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [init, setInit] = useState(false);
   const { access_token } = useSelector((state) => state.session);
+  const [username, setUsername] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -22,6 +24,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         verifyAuth(access_token)
           .then((u) => {
             setIsAdmin(u.isadmin);
+            setUsername(u.username);
             setIsAuthenticated(true);
             setInit(true);
           })
@@ -38,7 +41,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     verifyAuthToken();
   }, [access_token]);
 
-  const value = useMemo(() => ({ isAuthenticated, init, isAdmin }), [isAuthenticated, init, isAdmin]);
+  const value = useMemo(() => ({ isAuthenticated, init, isAdmin, username }), [isAuthenticated, init, isAdmin, username]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

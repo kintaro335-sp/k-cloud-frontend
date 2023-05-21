@@ -3,6 +3,8 @@ import { Box, Grid, Typography, Card, CardContent, CardHeader } from '@mui/mater
 // icons
 import { Icon } from '@iconify/react';
 import usersIcon from '@iconify/icons-ant-design/user';
+import statsIcon from '@iconify/icons-ant-design/pie-chart-fill';
+import settingsIcon from '@iconify/icons-material-symbols/settings';
 
 interface OptionMenuAdmin {
   title: string;
@@ -16,6 +18,16 @@ export default function AdminMenu() {
       title: 'Usuarios',
       icon: <Icon icon={usersIcon} width="100%" height="100%" />,
       link: '/admin/accounts'
+    },
+    {
+      title: 'Estadisticas',
+      icon: <Icon icon={statsIcon} width="100%" height="100%" />,
+      link: '/admin/stats'
+    },
+    {
+      title: 'Sistema',
+      icon: <Icon icon={settingsIcon} width="100%" height="100%" />,
+      link: '/admin/system'
     }
   ];
 
@@ -25,7 +37,7 @@ export default function AdminMenu() {
         {options.map((opt) => (
           <Grid item xs={12} md={6} lg={4} key={opt.title}>
             <Box component={Link} to={opt.link} sx={{ textDecoration: 'none', display: 'flex', width: '100%' }}>
-              <Card>
+              <Card sx={{ width: '100%' }}>
                 <CardContent sx={{ display: 'flex' }}>{opt.icon}</CardContent>
                 <CardHeader
                   title={

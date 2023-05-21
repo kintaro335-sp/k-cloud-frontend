@@ -1,12 +1,12 @@
 {
   "name": "k-cloud-frontend",
   "private": true,
-  "version": "0.8.3",
+  "version": "0.8.4",
   "license": "MIT",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "build:log":"tsc && vite build -l info",
+    "build:log": "tsc && vite build -l info",
     "preview": "vite preview --host"
   },
   "dependencies": {
@@ -20,7 +20,8 @@
     "@mui/lab": "^5.0.0-alpha.94",
     "@mui/material": "^5.10.0",
     "@mui/x-date-pickers": "^6.0.1",
-    "@nivo/pie": "^0.80.0",
+    "@nivo/line": "^0.83.0",
+    "@nivo/pie": "^0.83.0",
     "@reduxjs/toolkit": "^1.8.4",
     "axios": "^1.2.0",
     "axios-observable": "^2.0.0",

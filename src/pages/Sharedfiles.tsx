@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
-import { TokensList, PaginationT } from '../components/sharedfiles';
+import { TokensList } from '../components/sharedfiles';
+import { PaginationT } from '../components/atoms';
 // redux
 import { useSelector } from '../redux/store';
 import {
@@ -9,15 +10,15 @@ import {
   clearIntervalPages,
   clearIntervalTokens,
   setIntervalIdPages,
-  setIntervalIdTokens
+  setIntervalIdTokens,
+  setPage
 } from '../redux/slices/sharedfiles';
-import { setInfo } from '../redux/slices/sharedfile';
 // api
 import { getTokensList, getPagesTokens } from '../api/sharedfiles';
 // import { isAxiosError } from 'axios';
 
 export default function ShareFiles() {
-  const { page } = useSelector((state) => state.sharedfiles);
+  const { page, pages } = useSelector((state) => state.sharedfiles);
 
   useEffect(() => {
     clearIntervalPages();
@@ -48,7 +49,13 @@ export default function ShareFiles() {
           <TokensList />
         </Grid>
         <Grid item xs={12}>
-          <PaginationT />
+          <PaginationT
+            pages={pages}
+            page={page}
+            onChangePage={(_, value) => {
+              setPage(value);
+            }}
+          />
         </Grid>
       </Grid>
     </Box>

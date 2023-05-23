@@ -30,3 +30,10 @@ export interface UsedSpaceUser {
 export interface UsageG {
   usage: number;
 }
+
+export interface LogR {
+  date: number;
+  route: string;
+  statusCode: string;
+  method: string;
+}

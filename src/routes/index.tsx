@@ -10,7 +10,7 @@ import {
   SharedFile,
   SetupUser
 } from '../pages';
-import { Accounts, Stats, AdminMenu, SystemSettings } from '../pages/dashboard';
+import { Accounts, Stats, AdminMenu, SystemSettings, Logs } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
 
 export default function Routes() {
@@ -72,6 +72,14 @@ export default function Routes() {
       element: (
         <Authguard admin redirect redirectTo="/login">
           <Stats />
+        </Authguard>
+      )
+    },
+    {
+      path: '/admin/logs',
+      element:(
+        <Authguard admin redirect redirectTo='/login'>
+          <Logs />
         </Authguard>
       )
     },

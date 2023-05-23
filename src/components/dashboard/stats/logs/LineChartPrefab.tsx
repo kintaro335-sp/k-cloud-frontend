@@ -1,18 +1,20 @@
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { ResponsiveLine } from '@nivo/line';
+import { ResponsiveLine, DatumValue } from '@nivo/line';
 import { StatsLineChart } from '../../../../@types/stats';
 
 interface LineChartPrefabProps {
   data: StatsLineChart;
+  yFormat?: (val: DatumValue) => string;
 }
 
-export default function LineChartPrefab({ data }: LineChartPrefabProps) {
+export default function LineChartPrefab({ data, yFormat }: LineChartPrefabProps) {
   const theme = useTheme();
 
   return (
     <ResponsiveLine
       data={data}
+      yFormat={yFormat}
       margin={{ top: 50, bottom: 150, left: 50, right: 50 }}
       xScale={{ type: 'point' }}
       yScale={{ type: 'linear', max: 'auto', min: 'auto', stacked: true, reverse: false }}
@@ -42,7 +44,8 @@ export default function LineChartPrefab({ data }: LineChartPrefabProps) {
       useMesh={true}
       tooltip={(props) => (
         <Box sx={{ backgroundColor: theme.palette.background.default, borderRadius: '5px', padding: '0.4ex' }}>
-          {props.point.serieId}: {props.point.data.y.toString()}
+          {props.point.serieId}:{' '}
+          {typeof yFormat === 'function' ? yFormat(props.point.data.y) : props.point.data.y.toString()}
         </Box>
       )}
       legends={[

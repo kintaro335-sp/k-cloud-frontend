@@ -69,6 +69,11 @@ export async function getMemoryUsageBuffer(token: string): Promise<UsageG> {
   return result.data;
 }
 
+export async function getMemoryUsageData(token: string): Promise<StatsLineChart> {
+  const result = await conn.get(`memory/stats/line?t=${token}`);
+  return result.data;
+}
+
 export async function getLineChartData(group: GROUPFILTER, time: TIMEOPTION, token: string): Promise<StatsLineChart> {
   const result = await conn.get(`logs/stats/${group}/line/${time}?t=${token}`);
   return result.data;

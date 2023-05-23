@@ -13,17 +13,28 @@ import {
   setUsedSpaceUsers,
   setActivityMethods,
   setActivityRoute,
-  setActivityStatuscode
+  setActivityStatuscode,
+  clearIntervalMemUsage,
+  setMemoryInterval,
+  setMemoryUsageH
 } from '../../redux/slices/stats';
 // api
-import { getusedSpace, getUsedSpaceUser, getUsedSpaceByFileType, getLineChartData } from '../../api/admin';
+import {
+  getusedSpace,
+  getUsedSpaceUser,
+  getUsedSpaceByFileType,
+  getLineChartData,
+  getMemoryUsageData
+} from '../../api/admin';
 // types
 import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
+// utils
+import { bytesFormat } from '../../utils/files';
 
 export default function Stats() {
   const theme = useTheme();
   const { access_token } = useSelector((state) => state.session);
-  const { activityMethods, activityRoute, activityStatuscode } = useSelector((state) => state.stats);
+  const { activityMethods, activityRoute, activityStatuscode, memoryUsageH } = useSelector((state) => state.stats);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
 
   useEffect(() => {
@@ -53,6 +64,17 @@ export default function Stats() {
     }
     getActivityStats();
   }, [time]);
+
+  useEffect(() => {
+    clearIntervalMemUsage();
+    async function getMemoryUsageHEffect() {
+      const data = await getMemoryUsageData(access_token);
+      setMemoryUsageH(data);
+    }
+    // @ts-ignore
+    setMemoryInterval(setInterval(getMemoryUsageHEffect, 3000));
+    getMemoryUsageHEffect();
+  }, [access_token]);
 
   return (
     <>
@@ -116,6 +138,17 @@ export default function Stats() {
         </Grid>
         <Grid item xs={12}>
           <LineChartGeneral title="Route" data={activityRoute} />
+        </Grid>
+      </Grid>
+      <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>
+        Uso de Memoria
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <LineChartGeneral title="Total" data={[memoryUsageH[0]]} yFormat={(val) => bytesFormat(Number(val))} />
+        </Grid>
+        <Grid item xs={12}>
+          <LineChartGeneral title="Buffers" data={[memoryUsageH[1]]} yFormat={(val) => bytesFormat(Number(val))} />
         </Grid>
       </Grid>
     </>

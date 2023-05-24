@@ -8,6 +8,7 @@ import { useSnackbar } from 'notistack';
 import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
 // api
+import { isAxiosError } from 'axios';
 import { loginApi } from '../../api/auth';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -36,8 +37,20 @@ export default function LoginForm({ ...props }: CardProps) {
       dispatch(setAccessToken(access_token));
     } catch (error) {
       setIsLoading(false);
-      enqueueSnackbar('ha ocurrido un error', { variant: 'error' });
-      console.error(error);
+      if (isAxiosError(error)) {
+        const { response } = error;
+        switch (response?.status) {
+          case 400:
+            enqueueSnackbar(response.data.message, { variant: 'error' });
+            break;
+          case 500:
+            enqueueSnackbar('Error interno del servidor', { variant: 'error' });
+            break;
+          default:
+            enqueueSnackbar('ha ocurrido un error', { variant: 'error' });
+            break;
+        }
+      }
     }
   };
 

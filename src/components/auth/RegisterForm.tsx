@@ -37,6 +37,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
       if (password === confirmPassword) {
         if (setup) {
           await createFirstUser(username, password);
+          enqueueSnackbar('Primer usuario agregado con exito', { variant: 'success' });
         } else {
           const { access_token } = await registerApi(username, password);
           enqueueSnackbar('Register success', { variant: 'success' });

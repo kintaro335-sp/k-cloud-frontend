@@ -5,6 +5,7 @@ import { clearIntervalUser } from '../redux/slices/admin';
 import { setInfo, setContent, setPath } from '../redux/slices/sharedfile';
 import { clearIntervalPages, clearIntervalTokens } from '../redux/slices/sharedfiles';
 import { clearIntervalMemUsage } from '../redux/slices/stats';
+import { clearIntervalLogsId } from '../redux/slices/logs';
 
 interface SystemcontextProps {
   children: React.ReactNode;
@@ -31,6 +32,9 @@ export default function Systemcontext({ children }: SystemcontextProps) {
     }
     if (pathname !== '/admin/stats') {
       clearIntervalMemUsage();
+    }
+    if (pathname !== '/admin/logs') {
+      clearIntervalLogsId();
     }
   }, [pathname]);
 

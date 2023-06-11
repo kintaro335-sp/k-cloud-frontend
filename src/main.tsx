@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import FileUploadC from './contexts/FileUploadContext';
 import AuthProvider from './contexts/AuthContext';
 import Systemcontext from './contexts/SystemContext';
+import FileSelectContext from './contexts/FileSelectContext';
 import ThemeP from './theme/ThemeP';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -18,15 +19,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ReduxProvider store={store}>
         <PersistGate persistor={persistor}>
           <BrowserRouter>
-            <AuthProvider>
-              <FileUploadC>
-                <Systemcontext>
-                  <ThemeP>
-                    <App />
-                  </ThemeP>
-                </Systemcontext>
-              </FileUploadC>
-            </AuthProvider>
+            <FileSelectContext>
+              <AuthProvider>
+                <FileUploadC>
+                  <Systemcontext>
+                    <ThemeP>
+                      <App />
+                    </ThemeP>
+                  </Systemcontext>
+                </FileUploadC>
+              </AuthProvider>
+            </FileSelectContext>
           </BrowserRouter>
         </PersistGate>
       </ReduxProvider>

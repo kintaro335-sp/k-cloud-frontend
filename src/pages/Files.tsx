@@ -6,7 +6,8 @@ import AddFolder from '../components/files/AddFolder';
 import UploadSingleFile from '../components/files/UploadSingleFile';
 import { useSnackbar } from 'notistack';
 import DropFiles from '../components/files/DropFiles';
-
+// contexts
+import FileSelectContext from '../contexts/FileSelectContext';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { setFiles, setTree, onSetInterval, cancelFilesInterval, setPath } from '../redux/slices/session';
@@ -57,7 +58,7 @@ export default function Files() {
     );
   }, [access_token, path]);
 
-  const filesMemo = useMemo(() => files, [files])
+  const filesMemo = useMemo(() => files, [files]);
 
   return (
     <>

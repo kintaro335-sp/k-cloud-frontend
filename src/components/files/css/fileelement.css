@@ -1,0 +1,7 @@
+.cardfile .checkfile {
+  display: none;
+}
+
+.cardfile:hover .checkfile {
+  display: block;
+}

@@ -1,10 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack } from '@mui/material';
+import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack, Checkbox } from '@mui/material';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
 import { DownloadButton } from '../atoms/';
 import { bytesFormat } from '../../utils/files';
 import { FileI } from '../../@types/files';
+// hooks
+import useFileSelect from '../../hooks/useFileSelect';
 // api
 import { apiUrl } from '../../config';
 
@@ -12,6 +14,8 @@ import { apiUrl } from '../../config';
 import { useSelector, useDispatch } from '../../redux/store';
 import { setPath as setPathSession } from '../../redux/slices/session';
 import { setPath as setPathSF } from '../../redux/slices/sharedfile';
+//css
+import './css/fileelement.css';
 
 interface FileInfoProps {
   file: FileI;
@@ -23,8 +27,20 @@ interface FileInfoProps {
 
 function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
   const { id } = useParams();
+  const { files, select, deselect } = useFileSelect();
+  const selected = files.includes(file.name);
   return (
-    <Card>
+    <Card className="cardfile">
+      {!sf && (
+        <Box sx={{ position: 'absolute', display: selected ? 'block !important' : undefined }} className="checkfile">
+          <Checkbox
+            checked={selected}
+            onClick={() => {
+              selected ? deselect(file.name) : select(file.name);
+            }}
+          />
+        </Box>
+      )}
       <CardContent>{children}</CardContent>
       <CardHeader
         title={

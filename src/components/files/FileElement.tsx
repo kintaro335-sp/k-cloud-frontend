@@ -31,17 +31,22 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
   const selected = files.includes(file.name);
   return (
     <Card className="cardfile">
-      {!sf && (
-        <Box sx={{ position: 'absolute', display: selected ? 'block !important' : undefined }} className="checkfile">
-          <Checkbox
-            checked={selected}
-            onClick={() => {
-              selected ? deselect(file.name) : select(file.name);
-            }}
-          />
-        </Box>
-      )}
-      <CardContent>{children}</CardContent>
+      <CardContent>
+        {!sf && (
+          <Box
+            sx={{ display: selected ? 'block !important' : undefined, top: '20px', zIndex: 100 }}
+            className="checkfile"
+          >
+            <Checkbox
+              checked={selected}
+              onClick={() => {
+                selected ? deselect(file.name) : select(file.name);
+              }}
+            />
+          </Box>
+        )}
+        {children}
+      </CardContent>
       <CardHeader
         title={
           <Tooltip title={<Typography variant="body2">{file.name}</Typography>}>

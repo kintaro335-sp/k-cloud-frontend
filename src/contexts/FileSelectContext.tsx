@@ -3,14 +3,16 @@ import { createContext, useState } from 'react';
 export const FileSelectC = createContext<{
   files: string[];
   select: (val: string) => void;
+  selectAll: (files: string[]) => void;
   deselect: (val: string) => void;
-  clearSelect: (val: string) => void;
+  clearSelect: () => void;
   showOptions: boolean;
 }>({
   files: [],
   select: (val) => {},
+  selectAll: (files) => {},
   deselect: (val) => {},
-  clearSelect: (val) => {},
+  clearSelect: () => {},
   showOptions: false
 });
 
@@ -25,10 +27,16 @@ export default function FileSelectContext({ children }: { children: React.ReactN
     setFiles((files) => files.filter((f) => f !== val));
   };
 
-  const clearSelect = (val: string) => {};
+  const selectAll = (filesN: string[]) => {
+    setFiles(filesN);
+  };
+
+  const clearSelect = () => {
+    setFiles([]);
+  };
 
   return (
-    <FileSelectC.Provider value={{ files, select, deselect, clearSelect, showOptions: files.length !== 0 }}>
+    <FileSelectC.Provider value={{ files, select, deselect, clearSelect, selectAll, showOptions: files.length !== 0 }}>
       {children}
     </FileSelectC.Provider>
   );

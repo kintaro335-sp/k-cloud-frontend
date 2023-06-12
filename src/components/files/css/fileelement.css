@@ -1,4 +1,9 @@
+.cardfile {
+  position: relative;
+}
+
 .cardfile .checkfile {
+  position: absolute;
   display: none;
 }
 

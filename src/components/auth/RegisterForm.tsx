@@ -1,14 +1,15 @@
-import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Card, CardProps, CardContent, Grid, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 // redux
 import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
 // api
-import { registerApi } from '../../api/auth';
+import { registerApi, loginApi } from '../../api/auth';
 import { createFirstUser } from '../../api/setup';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -28,15 +29,33 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
   const { isAuthenticated } = useAuth();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit } = useForm<FormValues>();
+
+  const validationSchema = yup.object().shape({
+    username: yup.string().required(),
+    password: yup.string().required(),
+    confirmPassword: yup.string().required()
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors, touchedFields }
+  } = useForm<FormValues>({
+    defaultValues: {
+      username: '',
+      password: '',
+      confirmPassword: ''
+    },
+    resolver: yupResolver(validationSchema)
+  });
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    setIsLoading(true);
     try {
       const { username, password, confirmPassword } = data;
       if (password === confirmPassword) {
         if (setup) {
           await createFirstUser(username, password);
+          const resultLogin = await loginApi(username, password);
+          dispatch(setAccessToken(resultLogin.access_token));
           enqueueSnackbar('Primer usuario agregado con exito', { variant: 'success' });
         } else {
           const { access_token } = await registerApi(username, password);
@@ -46,9 +65,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
       } else {
         enqueueSnackbar('Passwords do not match', { variant: 'error' });
       }
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       enqueueSnackbar('ha ocurrido un error', { variant: 'error' });
       console.error(error);
     }
@@ -64,16 +81,41 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField fullWidth label="Username" {...register('username')} />
+              <TextField
+                fullWidth
+                label="Username"
+                {...register('username')}
+                error={Boolean(errors.username) || touchedFields.username}
+                // @ts-ignore
+                helperText={(Boolean(errors.username) || touchedFields.username) && errors.username?.message}
+              />
             </Grid>
             <Grid item xs={12}>
-              <TextField fullWidth label="Password" type="password" {...register('password')} />
+              <TextField
+                fullWidth
+                label="Password"
+                type="password"
+                {...register('password')}
+                error={Boolean(errors.password) || touchedFields.password}
+                // @ts-ignore
+                helperText={(Boolean(errors.password) || touchedFields.password) && errors.password?.message}
+              />
             </Grid>
             <Grid item xs={12}>
-              <TextField fullWidth label="Confirm password" type="password" {...register('confirmPassword')} />
+              <TextField
+                fullWidth
+                label="Confirm password"
+                type="password"
+                {...register('confirmPassword')}
+                error={Boolean(errors.confirmPassword) || touchedFields.confirmPassword}
+                // @ts-ignore
+                helperText={
+                  (Boolean(errors.confirmPassword) || touchedFields.confirmPassword) && errors.confirmPassword?.message
+                }
+              />
             </Grid>
             <Grid item xs={12}>
-              <LoadingButton type="submit" variant="contained" color="primary" loading={isLoading}>
+              <LoadingButton type="submit" variant="contained" color="primary" loading={isSubmitting}>
                 Register
               </LoadingButton>
             </Grid>

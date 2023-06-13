@@ -1,8 +1,12 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Card, CardContent, Grid, TextField, CardHeader, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// api
 import { setPassword } from '../../../../../api/admin';
+import { isAxiosError } from 'axios';
+// redux
 import { useSelector } from '../../../../../redux/store';
+// utils
 import { useSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -43,8 +47,18 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
         enqueueSnackbar(response.message, { variant: 'success' });
       }
     } catch (err) {
+      if (isAxiosError(err)) {
+        switch (err.response?.status) {
+          case 500:
+          case 401:
+          case 400:
+            enqueueSnackbar(err.response.data.message, { variant: 'error' });
+            break;
+        }
+      } else {
+        enqueueSnackbar('Ha ocurrido un error', { variant: 'error' });
+      }
       console.error(err);
-      enqueueSnackbar('Ha ocurrido un error', { variant: 'error' });
     }
   };
 

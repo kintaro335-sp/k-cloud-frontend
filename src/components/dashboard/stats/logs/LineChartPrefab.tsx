@@ -15,7 +15,7 @@ export default function LineChartPrefab({ data, yFormat }: LineChartPrefabProps)
     <ResponsiveLine
       data={data}
       yFormat={yFormat}
-      margin={{ top: 50, bottom: 150, left: 50, right: 50 }}
+      margin={{ top: 50, bottom: 150, left: 75, right: 50 }}
       xScale={{ type: 'point' }}
       yScale={{ type: 'linear', max: 'auto', min: 'auto', stacked: true, reverse: false }}
       axisTop={null}
@@ -34,7 +34,8 @@ export default function LineChartPrefab({ data, yFormat }: LineChartPrefabProps)
         tickRotation: 0,
         legend: 'count',
         legendOffset: -40,
-        legendPosition: 'middle'
+        legendPosition: 'middle',
+        format: yFormat
       }}
       pointSize={10}
       pointColor={{ theme: 'background' }}

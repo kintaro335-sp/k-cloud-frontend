@@ -41,8 +41,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
         })
         .catch((err) => {
           if (isAxiosError(err)) {
-            resolve(false);
           }
+          resolve(false);
         });
       setInitializedFile(path);
     });

@@ -1,10 +1,13 @@
 import { Stack } from '@mui/material';
-import { SelectAllButton } from './options';
+import { SelectAllButton, ShareButton, StopShareButton, CancelButton } from './options';
 
 export default function ContextualMenu() {
   return (
-    <Stack>
+    <Stack direction="row">
       <SelectAllButton />
+      <ShareButton />
+      <StopShareButton />
+      <CancelButton />
     </Stack>
   );
 }

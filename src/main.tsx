@@ -11,6 +11,7 @@ import FileUploadC from './contexts/FileUploadContext';
 import AuthProvider from './contexts/AuthContext';
 import Systemcontext from './contexts/SystemContext';
 import FileSelectContext from './contexts/FileSelectContext';
+import GalleryContext from './contexts/GalleryContext';
 import ThemeP from './theme/ThemeP';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -21,13 +22,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
             <FileSelectContext>
               <AuthProvider>
-                <FileUploadC>
-                  <Systemcontext>
-                    <ThemeP>
-                      <App />
-                    </ThemeP>
-                  </Systemcontext>
-                </FileUploadC>
+                <GalleryContext>
+                  <FileUploadC>
+                    <Systemcontext>
+                      <ThemeP>
+                        <App />
+                      </ThemeP>
+                    </Systemcontext>
+                  </FileUploadC>
+                </GalleryContext>
               </AuthProvider>
             </FileSelectContext>
           </BrowserRouter>

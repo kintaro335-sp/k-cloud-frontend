@@ -90,10 +90,11 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
 
 interface FileElementProps {
   file: FileI;
+  arrayIndex: number;
   sf?: boolean;
 }
 
-export default function FileElement({ file, sf = false }: FileElementProps) {
+export default function FileElement({ file, sf = false, arrayIndex }: FileElementProps) {
   const { name, size, type, mime_type, extension, tokens } = file;
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -120,7 +121,7 @@ export default function FileElement({ file, sf = false }: FileElementProps) {
     if (mime_type.includes('image/')) {
       return (
         <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
-          <ImgFile url={urlComplete} />
+          <ImgFile url={urlComplete} arrayIndex={arrayIndex} />
         </FileInfo>
       );
     }

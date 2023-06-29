@@ -145,10 +145,14 @@ export default function Stats() {
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <LineChartGeneral title="Total" data={[memoryUsageH[0]]} yFormat={(val) => bytesFormat(Number(val))} />
+          <LineChartGeneral title="Total" data={[memoryUsageH[0] || []]} yFormat={(val) => bytesFormat(Number(val))} />
         </Grid>
         <Grid item xs={12}>
-          <LineChartGeneral title="Buffers" data={[memoryUsageH[1]]} yFormat={(val) => bytesFormat(Number(val))} />
+          <LineChartGeneral
+            title="Buffers"
+            data={[memoryUsageH[1] || []]}
+            yFormat={(val) => bytesFormat(Number(val))}
+          />
         </Grid>
       </Grid>
     </>

@@ -5,7 +5,7 @@ import { StatsLineChart } from '../../../../@types/stats';
 
 interface LineChartPrefabProps {
   data: StatsLineChart;
-  yFormat?: (val: DatumValue) => string;
+  yFormat?: (val: string) => string;
 }
 
 export default function LineChartPrefab({ data, yFormat }: LineChartPrefabProps) {
@@ -14,7 +14,7 @@ export default function LineChartPrefab({ data, yFormat }: LineChartPrefabProps)
   return (
     <ResponsiveLine
       data={data}
-      yFormat={yFormat}
+      yFormat={typeof yFormat === 'function' ? (val) => yFormat(val.toString()) : undefined}
       margin={{ top: 50, bottom: 150, left: 75, right: 50 }}
       xScale={{ type: 'point' }}
       yScale={{ type: 'linear', max: 'auto', min: 'auto', stacked: true, reverse: false }}
@@ -46,7 +46,7 @@ export default function LineChartPrefab({ data, yFormat }: LineChartPrefabProps)
       tooltip={(props) => (
         <Box sx={{ backgroundColor: theme.palette.background.default, borderRadius: '5px', padding: '0.4ex' }}>
           {props.point.serieId}:{' '}
-          {typeof yFormat === 'function' ? yFormat(props.point.data.y) : props.point.data.y.toString()}
+          {typeof yFormat === 'function' ? yFormat(props.point.data.y.toString()) : props.point.data.y.toString()}
         </Box>
       )}
       legends={[

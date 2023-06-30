@@ -3,7 +3,8 @@ import { Box } from '@mui/material';
 import { Icon } from '@iconify/react';
 import FileIcon from '@iconify/icons-ant-design/file';
 import FolderIcon from '@iconify/icons-ant-design/folder';
-import { ImgFile, VideoFile } from '../files/filetypes';
+import { VideoFile } from '../files/filetypes';
+import { ImgFileT } from './filetypes';
 
 export default function TokenIcon({ type, mime_type, url }: { type: FileType; mime_type: string; url: string }) {
   if (type === 'folder') {
@@ -19,7 +20,7 @@ export default function TokenIcon({ type, mime_type, url }: { type: FileType; mi
   }
 
   if (mime_type.includes('image/')) {
-    return <ImgFile url={url} />;
+    return <ImgFileT url={url} />;
   }
 
   return (

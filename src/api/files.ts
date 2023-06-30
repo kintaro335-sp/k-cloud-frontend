@@ -151,3 +151,24 @@ export async function getTreeAPI(path: string, token: string): Promise<Array<Fol
       });
   });
 }
+
+// funciones creadas a partir de las anteriores
+
+export async function deleteSelectedFiles(path: string, fileNames: string[], token: string) {
+  const results = fileNames.map(async (file, i): Promise<1 | 0> => {
+    return new Promise((res) => {
+      setTimeout(() => {
+        deleteFile(`${path}/${file}`, token)
+          .then(() => {
+            res(1);
+          })
+          .catch((err) => {
+            console.error(err);
+            res(0);
+          });
+      }, i * 12);
+    });
+  });
+
+  return await Promise.all(results);
+}

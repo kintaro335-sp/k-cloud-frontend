@@ -12,6 +12,8 @@ interface StatsState {
   activityMethods: StatsLineChart;
   activityStatuscode: StatsLineChart;
   activityRoute: StatsLineChart;
+  memoryUsageH: StatsLineChart;
+  memoryUsageInterval: number | null;
 }
 
 const initialState: StatsState = {
@@ -21,7 +23,9 @@ const initialState: StatsState = {
   spaceUsedUsers: [],
   activityMethods: [],
   activityRoute: [],
-  activityStatuscode: []
+  activityStatuscode: [],
+  memoryUsageH: [],
+  memoryUsageInterval: null
 };
 
 const slice = createSlice({
@@ -48,6 +52,18 @@ const slice = createSlice({
     },
     setActivityStatuscode(state, action) {
       state.activityStatuscode = action.payload as StatsLineChart;
+    },
+    setMemoryUsageH(state, action) {
+      state.memoryUsageH = action.payload as StatsLineChart;
+    },
+    setMemoryUsageInterval(state, action) {
+      state.memoryUsageInterval = action.payload as number;
+    },
+    clearIntervalMemUsage(state) {
+      if (state.memoryUsageInterval !== null) {
+        clearInterval(state.memoryUsageInterval);
+        state.memoryUsageInterval = null;
+      }
     }
   }
 });
@@ -105,6 +121,30 @@ export function setActivityRoute(data: StatsLineChart) {
 export function setActivityStatuscode(data: StatsLineChart) {
   try {
     dispatch(slice.actions.setActivityStatuscode(data));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setMemoryUsageH(data: StatsLineChart) {
+  try {
+    dispatch(slice.actions.setMemoryUsageH(data));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setMemoryInterval(idInterval: number) {
+  try {
+    dispatch(slice.actions.setMemoryUsageInterval(idInterval));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function clearIntervalMemUsage() {
+  try {
+    dispatch(slice.actions.clearIntervalMemUsage());
   } catch (err) {
     console.error(err);
   }

@@ -15,10 +15,12 @@ import { initializeFileAPI, uploadBlobAPI, closeFileAPI, statusFileAPI } from '.
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { timeOutIf } from '../utils/promises';
 import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
 
 export const FileUploadContext = createContext({ uploadFile: (path: string, file: File | null) => {} });
 
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
+  const { enqueueSnackbar } = useSnackbar();
   const { access_token } = useSelector((state) => state.session);
   const { filesDir } = useSelector((state) => state.files);
 
@@ -41,8 +43,11 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
         })
         .catch((err) => {
           if (isAxiosError(err)) {
-            resolve(false);
+            if (err.response?.status === 400) {
+              enqueueSnackbar('Espacio Insuficiente', { variant: 'error' });
+            }
           }
+          resolve(false);
         });
       setInitializedFile(path);
     });
@@ -113,8 +118,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     const startWrite = await initializeFile(path);
     if (startWrite) {
       await sendBlobs(path);
-      await closeFile(path);
     }
+    await closeFile(path);
   };
 
   useEffect(() => {

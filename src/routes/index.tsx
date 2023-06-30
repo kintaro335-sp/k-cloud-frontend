@@ -10,8 +10,13 @@ import {
   SharedFile,
   SetupUser
 } from '../pages';
-import { Accounts, Stats, AdminMenu, SystemSettings } from '../pages/dashboard';
+import { Accounts, Stats, AdminMenu, SystemSettings, Logs } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
+import GalleryContext from '../contexts/GalleryContext';
+
+function ContextsR({ children }: { children: JSX.Element }) {
+  return <GalleryContext>{children}</GalleryContext>;
+}
 
 export default function Routes() {
   return useRoutes([
@@ -43,7 +48,9 @@ export default function Routes() {
       path: '/files',
       element: (
         <Authguard redirect redirectTo="/login">
-          <FilesPage />
+          <ContextsR>
+            <FilesPage />
+          </ContextsR>
         </Authguard>
       )
     },
@@ -76,12 +83,28 @@ export default function Routes() {
       )
     },
     {
+      path: '/admin/logs',
+      element: (
+        <Authguard admin redirect redirectTo="/login">
+          <Logs />
+        </Authguard>
+      )
+    },
+    {
       path: '/shared-files',
-      element: <SharedFiles />
+      element: (
+        <ContextsR>
+          <SharedFiles />
+        </ContextsR>
+      )
     },
     {
       path: '/shared-files/id/:id',
-      element: <SharedFile />
+      element: (
+        <ContextsR>
+          <SharedFile />
+        </ContextsR>
+      )
     },
     {
       path: '*',

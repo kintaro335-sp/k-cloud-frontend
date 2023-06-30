@@ -6,7 +6,7 @@ import AddFolder from '../components/files/AddFolder';
 import UploadSingleFile from '../components/files/UploadSingleFile';
 import { useSnackbar } from 'notistack';
 import DropFiles from '../components/files/DropFiles';
-
+import { ContextualMenuSelect } from '../components/files/menuselect';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { setFiles, setTree, onSetInterval, cancelFilesInterval, setPath } from '../redux/slices/session';
@@ -14,10 +14,12 @@ import { setFiles, setTree, onSetInterval, cancelFilesInterval, setPath } from '
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
 import { FileI } from '../@types/files';
+import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const { showOptions } = useFileSelect();
   const { access_token, path, files } = useSelector((state) => state.session);
   const [showQ, setShowQ] = useState<number>(24);
 
@@ -57,11 +59,11 @@ export default function Files() {
     );
   }, [access_token, path]);
 
-  const filesMemo = useMemo(() => files, [files])
+  const filesMemo = useMemo(() => files, [files]);
 
   return (
     <>
-      <Card sx={{ margin: '1ex' }}>
+      <Card sx={{ margin: '2px' }}>
         <CardContent>
           <Grid container spacing={1}>
             <Grid item xs={9}>
@@ -82,13 +84,18 @@ export default function Files() {
               <DropFiles />
             </Grid>
           </Grid>
+          {showOptions && (
+            <Grid item xs={12}>
+              <ContextualMenuSelect />
+            </Grid>
+          )}
         </CardContent>
       </Card>
       <Box sx={{ width: '100%', height: '68%', marginTop: '2ex', overflowY: 'scroll' }}>
         <Grid container spacing={2}>
           {filesMemo.slice(0, showQ).map((file: FileI, i) => (
             <Grid item key={file.name + i} xs={6} md={4} lg={3}>
-              <FileElement file={file} />
+              <FileElement file={file} arrayIndex={i} />
             </Grid>
           ))}
           {files.length > showQ && (

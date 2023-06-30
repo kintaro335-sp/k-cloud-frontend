@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { apiUrl } from '../config';
-import { User, SpaceUsed, SpaceConfig, UsedSpaceUser, UsageG } from '../@types/admin';
+import { User, SpaceUsed, SpaceConfig, UsedSpaceUser, UsageG, LogR } from '../@types/admin';
 import { MessageResponse } from '../@types/auth';
 import { UsedSpaceType } from '../@types/files';
 import { GROUPFILTER, TIMEOPTION, StatsLineChart } from '../@types/stats';
@@ -69,7 +69,22 @@ export async function getMemoryUsageBuffer(token: string): Promise<UsageG> {
   return result.data;
 }
 
+export async function getMemoryUsageData(token: string): Promise<StatsLineChart> {
+  const result = await conn.get(`memory/stats/line?t=${token}`);
+  return result.data;
+}
+
 export async function getLineChartData(group: GROUPFILTER, time: TIMEOPTION, token: string): Promise<StatsLineChart> {
   const result = await conn.get(`logs/stats/${group}/line/${time}?t=${token}`);
+  return result.data;
+}
+
+export async function getLogsList(page: number, token: string): Promise<LogR[]> {
+  const result = await conn.get(`logs/list?page=${page}&t=${token}`);
+  return result.data;
+}
+
+export async function getPagesLogs(token: string): Promise<{ pages: number }> {
+  const result = await conn.get(`logs/pages?t=${token}`);
   return result.data;
 }

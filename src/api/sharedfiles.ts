@@ -23,7 +23,7 @@ export async function getTokenInfo(id: string): Promise<SFInfoResponse> {
 }
 
 export async function deleteToken(id: string, token: string): Promise<{ message: string }> {
-  const response = await sfconn.delete(`/${id}?t=${token}`);
+  const response = await sfconn.delete(`token/${id}?t=${token}`);
   return response.data;
 }
 
@@ -55,4 +55,41 @@ export async function getTokensList(page: number): Promise<TokenElement[]> {
 export async function getPagesTokens(): Promise<{ pages: number }> {
   const response = await sfconn.get(`tokens/pages`);
   return response.data;
+}
+// funciones creadas a partir de las principales funciones
+
+export async function shareMultipleFiles(path: string, fileNames: string[], token: string) {
+  const fileNamesR = JSON.parse(JSON.stringify(fileNames)) as string[];
+  const shareRequests = fileNamesR.map(async (fileName, i) => {
+    return new Promise((res) => {
+      setTimeout(() => {
+        shareFile(path + '/' + fileName, false, Date.now(), token)
+          .then(() => {
+            res(1);
+          })
+          .catch(() => {
+            res(0);
+          });
+      }, (1 + i) * 1000);
+    });
+  });
+  return await Promise.all(shareRequests);
+}
+
+export async function StopShareFiles(path: string, fileNames: string[], token: string) {
+  const fileNamesR = JSON.parse(JSON.stringify(fileNames)) as string[];
+  const requests = fileNamesR.map(async (fileName, i): Promise<1 | 0> => {
+    return new Promise((res) => {
+      setTimeout(() => {
+        deleteTokensByPath(path + '/' + fileName, token)
+          .then(() => {
+            res(1);
+          })
+          .catch(() => {
+            res(0);
+          });
+      }, (1 + i) * 12);
+    });
+  });
+  return await Promise.all(requests);
 }

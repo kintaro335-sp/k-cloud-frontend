@@ -10,7 +10,7 @@ export default function DropFiles() {
   return (
     <Box
       sx={{
-        padding: '2em',
+        padding: '1.1em',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

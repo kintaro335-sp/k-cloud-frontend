@@ -22,15 +22,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
             <FileSelectContext>
               <AuthProvider>
-                <GalleryContext>
-                  <FileUploadC>
-                    <Systemcontext>
-                      <ThemeP>
-                        <App />
-                      </ThemeP>
-                    </Systemcontext>
-                  </FileUploadC>
-                </GalleryContext>
+                <FileUploadC>
+                  <Systemcontext>
+                    <ThemeP>
+                      <App />
+                    </ThemeP>
+                  </Systemcontext>
+                </FileUploadC>
               </AuthProvider>
             </FileSelectContext>
           </BrowserRouter>

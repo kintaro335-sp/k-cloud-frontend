@@ -54,7 +54,7 @@ export default function FolderExplorer() {
         <Grid container spacing={2}>
           {content.map((file, i) => (
             <Grid key={`${file.name}-${i}`} item xs={12} md={4} lg={3}>
-              <FileElement file={file} sf />
+              <FileElement file={file} arrayIndex={i} sf />
             </Grid>
           ))}
         </Grid>

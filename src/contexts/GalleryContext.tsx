@@ -43,9 +43,9 @@ export default function GalleryContext({ children }: GalleryContextProps) {
 
   const urlComplete = sfc
     ? `${apiUrl}/shared-file/content/${id}${firstdiagonal}${sharedfile.path}${diagonal}${
-        isFileSF ? '' : sharedfile.content[selected].name
+        isFileSF ? '' : sharedfile.content[selected]?.name
       }`
-    : `${apiUrl}/files/list/${session.path}${diagonal}${session.files[selected].name}?t=${session.access_token}`;
+    : `${apiUrl}/files/list/${session.path}${diagonal}${session.files[selected]?.name}?t=${session.access_token}`;
 
   return (
     <GalleryContextC.Provider value={{ openImage }}>

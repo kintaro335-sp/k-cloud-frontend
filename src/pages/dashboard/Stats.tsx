@@ -30,6 +30,7 @@ import {
 import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
 // utils
 import { bytesFormat } from '../../utils/files';
+import { SerieLineChart } from '../../@types/stats';
 
 export default function Stats() {
   const theme = useTheme();
@@ -37,8 +38,15 @@ export default function Stats() {
   const { activityMethods, activityRoute, activityStatuscode, memoryUsageH } = useSelector((state) => state.stats);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
 
-  const total = memoryUsageH[0] || []
-  const buffer_info = memoryUsageH[1] || []
+  const processdata = (arr: SerieLineChart | undefined): SerieLineChart => {
+    if (arr === undefined) {
+      return { id: '', data: [] };
+    }
+    return arr;
+  };
+
+  const total = processdata(memoryUsageH[0]);
+  const buffer_info = processdata(memoryUsageH[1]);
 
   useEffect(() => {
     async function getusedSpaceEffect() {
@@ -151,11 +159,7 @@ export default function Stats() {
           <LineChartGeneral title="Total" data={[total]} yFormat={(val) => bytesFormat(Number(val))} />
         </Grid>
         <Grid item xs={12}>
-          <LineChartGeneral
-            title="Buffers"
-            data={[buffer_info]}
-            yFormat={(val) => bytesFormat(Number(val))}
-          />
+          <LineChartGeneral title="Buffers" data={[buffer_info]} yFormat={(val) => bytesFormat(Number(val))} />
         </Grid>
       </Grid>
     </>

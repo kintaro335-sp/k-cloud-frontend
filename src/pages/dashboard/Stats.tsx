@@ -37,6 +37,9 @@ export default function Stats() {
   const { activityMethods, activityRoute, activityStatuscode, memoryUsageH } = useSelector((state) => state.stats);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
 
+  const total = memoryUsageH[0] || []
+  const buffer_info = memoryUsageH[1] || []
+
   useEffect(() => {
     async function getusedSpaceEffect() {
       const resultSpace = await getusedSpace(access_token, true);
@@ -145,12 +148,12 @@ export default function Stats() {
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <LineChartGeneral title="Total" data={[memoryUsageH[0] || []]} yFormat={(val) => bytesFormat(Number(val))} />
+          <LineChartGeneral title="Total" data={[total]} yFormat={(val) => bytesFormat(Number(val))} />
         </Grid>
         <Grid item xs={12}>
           <LineChartGeneral
             title="Buffers"
-            data={[memoryUsageH[1] || []]}
+            data={[buffer_info]}
             yFormat={(val) => bytesFormat(Number(val))}
           />
         </Grid>

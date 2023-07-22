@@ -1,24 +1,37 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const colors = {
+  Night: '#0b090a',
+  Eerieblack: '#161a1d',
+  Bloodred: '#660708',
+  Cornellred: '#a4161a',
+  Cornellred2: '#ba181b',
+  Imperialred: '#e5383b',
+  Silver: '#b1a7a6',
+  Timberwolf: '#d3d3d3',
+  Whitesmoke: '#f5f3f4',
+  White: '#ffffff'
+};
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#D00600'
+      main: colors.Cornellred
     },
     secondary: {
-      main: '#860400'
+      main: colors.Cornellred2
     },
     text: {
-      primary: '#FFFFFF',
-      secondary: '#EEEEEE',
-      disabled: '#808080'
+      primary: colors.White,
+      secondary: colors.Whitesmoke,
+      disabled: colors.Silver
     },
     background: {
-      default: '#121212',
-      paper: '#151515'
+      default: colors.Night,
+      paper: colors.Eerieblack
     },
     error: {
-      main: '#FF0000'
+      main: colors.Bloodred
     },
     warning: {
       main: '#FAFF00'
@@ -33,6 +46,15 @@ const theme = createTheme({
     },
     success: {
       main: '#00A855'
+    }
+  },
+  components: {
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'Montserrat'
+        }
+      }
     }
   },
   typography: {

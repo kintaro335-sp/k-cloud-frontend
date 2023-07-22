@@ -34,18 +34,18 @@ const theme = createTheme({
       main: colors.Bloodred
     },
     warning: {
-      main: '#FAFF00'
+      main: colors.Eerieblack
     },
     info: {
-      main: '#FF002E'
+      main: colors.Bloodred
     },
     action: {
-      disabledBackground: '#DE4040',
-      disabled: '#808080',
-      hover: '#BB0000'
+      disabledBackground: colors.Silver,
+      disabled: colors.Whitesmoke,
+      hover: colors.Bloodred
     },
     success: {
-      main: '#00A855'
+      main: colors.Imperialred
     }
   },
   components: {

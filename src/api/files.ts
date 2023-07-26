@@ -152,6 +152,27 @@ export async function getTreeAPI(path: string, token: string): Promise<Array<Fol
   });
 }
 
+export async function moveFile(
+  path: string,
+  newPath: string,
+  fileName: string,
+  token: string
+): Promise<{ message: string }> {
+  const pathComplete = `${path}/${fileName}`;
+  const newPathComplete = `${newPath}/${fileName}`;
+
+  return new Promise((resolve, reject) => {
+    connFiles
+      .post(`move/${pathComplete}?t=${token}`, { newpath: newPathComplete })
+      .then((result) => {
+        resolve(result.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
 // funciones creadas a partir de las anteriores
 
 export async function deleteSelectedFiles(path: string, fileNames: string[], token: string) {

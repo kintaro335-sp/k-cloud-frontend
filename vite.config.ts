@@ -52,7 +52,9 @@ const iconsPack3 = [
   '@iconify/icons-material-symbols/settings',
   '@iconify/icons-material-symbols/content-copy',
   '@iconify/icons-material-symbols/format-list-bulleted',
-  '@iconify/icons-material-symbols/share'
+  '@iconify/icons-material-symbols/share',
+  '@iconify/icons-material-symbols/drive-file-move',
+  '@iconify/icons-material-symbols/close'
 ];
 
 // https://vitejs.dev/config/

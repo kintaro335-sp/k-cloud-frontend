@@ -158,8 +158,10 @@ export async function moveFile(
   fileName: string,
   token: string
 ): Promise<{ message: string }> {
-  const pathComplete = `${path}/${fileName}`;
-  const newPathComplete = `${newPath}/${fileName}`;
+  const diagonalP = path === '' ? '' : '/';
+  const diagonalNP = newPath === '' ? '' : '/';
+  const pathComplete = `${path}${diagonalP}${fileName}`;
+  const newPathComplete = `${newPath}${diagonalNP}${fileName}`;
 
   return new Promise((resolve, reject) => {
     connFiles

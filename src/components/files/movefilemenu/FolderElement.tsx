@@ -4,7 +4,7 @@ import { FileI } from '../../../@types/files';
 
 interface FolderElementProps {
   file: FileI;
-  click: () => void;
+  click: (foldername: string) => void;
 }
 
 export default function FolderElement({ file, click }: FolderElementProps) {
@@ -15,7 +15,7 @@ export default function FolderElement({ file, click }: FolderElementProps) {
   return (
     <Card>
       <CardContent>
-        <Folder click={click} />
+        <Folder click={() => click(file.name)} />
       </CardContent>
       <CardHeader
         title={

@@ -9,7 +9,7 @@ interface FolderProps {
 export default function Folder({ click }: FolderProps) {
 
   return (
-    <Box sx={{ display: 'flex', aligItems: 'center', justifyContent: 'center', width: '100%' }} onDoubleClick={click}>
+    <Box sx={{ display: 'flex', aligItems: 'center', justifyContent: 'center', width: '100%' }} onClick={click}>
       <Icon icon={folderIcon} width="220px" height="220px" />
     </Box>
   );

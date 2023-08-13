@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { TokensMenu } from './tokens';
+import { OptionsMove } from './movefilemenu';
 import { useSnackbar } from 'notistack';
 // icons
 import { Icon } from '@iconify/react';
@@ -9,7 +10,7 @@ import moreIcon from '@iconify/icons-ant-design/more-outlined';
 import deleteIcon from '@iconify/icons-ant-design/delete-outlined';
 import donloadIcon from '@iconify/icons-ant-design/down-circle-outline';
 import shareIcon from '@iconify/icons-material-symbols/share';
-import zipfolderIcon from '@iconify/icons-material-symbols/folder-zip'
+import zipfolderIcon from '@iconify/icons-material-symbols/folder-zip';
 
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
@@ -19,7 +20,7 @@ import { setFiles } from '../../redux/slices/session';
 import { deleteFile, getListFiles } from '../../api/files';
 import { shareFile } from '../../api/sharedfiles';
 import { FileI } from '../../@types/files';
-import { apiUrl } from '../../config'
+import { apiUrl } from '../../config';
 
 export default function MenuFile({ file, url, urlComplete }: { file: FileI; url: string; urlComplete: string }) {
   const [open, setOpen] = useState(false);
@@ -43,10 +44,16 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
         <Icon icon={moreIcon} width="29px" height="29px" color={theme.palette.text.secondary} />
       </IconButton>
       <Menu open={open} anchorEl={anchorRef.current} onClose={clickClose}>
-        {file.type === 'file' && <MenuItem component="a" href={`${urlComplete}&d=1`} download={file.name.split('.')[0]}>
-          <Icon icon={donloadIcon} width="25px" height="25px" /> Descargar
-        </MenuItem>}
-        <MenuItem component="a" href={`${apiUrl}/files/zip/${url}?t=${access_token}`} download={file.name.split('.')[0]}>
+        {file.type === 'file' && (
+          <MenuItem component="a" href={`${urlComplete}&d=1`} download={file.name.split('.')[0]}>
+            <Icon icon={donloadIcon} width="25px" height="25px" /> Descargar
+          </MenuItem>
+        )}
+        <MenuItem
+          component="a"
+          href={`${apiUrl}/files/zip/${url}?t=${access_token}`}
+          download={file.name.split('.')[0]}
+        >
           <Icon icon={zipfolderIcon} width="25px" height="25px" /> Descargar como Zip
         </MenuItem>
         <MenuItem
@@ -60,6 +67,7 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
           <Icon icon={shareIcon} width="25px" height="25px" /> Compartir
         </MenuItem>
         <TokensMenu url={url} />
+        <OptionsMove menuItem pathFrom={path} filesToMove={[file.name]} />
         <MenuItem
           onClick={() => {
             if (window.confirm(`desea eliminar ${file.name}?`)) {

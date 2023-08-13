@@ -24,7 +24,7 @@ export default function FolderItemTree({ folder, index, level, path = '' }: Fold
       nodeId={`${name}-${index}-${level}`}
       label={
         <Typography
-          onDoubleClick={() => {
+          onClick={() => {
             console.log(`${path}/${name}`);
             dispatch(setPath(`${path}/${name}`));
           }}

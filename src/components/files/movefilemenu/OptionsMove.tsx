@@ -55,6 +55,7 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false }: 
       setLoading(false);
     } else if (filesToMove.length !== 0) {
     }
+    clickClose();
   };
 
   const allowMove = pathFrom === pathTo;
@@ -89,19 +90,22 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false }: 
             />
           </Box>
           <Grid container spacing={2} sx={{ minWidth: '400px', minHeight: '150px' }}>
-            {files.map((f, i) => (
-              <Grid item xs={12} md={6} lg={4} key={i}>
-                <FolderElement
-                  file={f}
-                  click={(filename) => {
-                    setPathTo((av) => {
-                      const diagonal = av === '' ? '' : '/';
-                      return `${av}${diagonal}${filename}`;
-                    });
-                  }}
-                />
-              </Grid>
-            ))}
+            {files.map((f, i) => {
+              if (f.name === filesToMove[0] && pathFrom === pathTo) return;
+              return (
+                <Grid item xs={12} md={6} lg={4} key={i}>
+                  <FolderElement
+                    file={f}
+                    click={(filename) => {
+                      setPathTo((av) => {
+                        const diagonal = av === '' ? '' : '/';
+                        return `${av}${diagonal}${filename}`;
+                      });
+                    }}
+                  />
+                </Grid>
+              );
+            })}
           </Grid>
           <Stack>
             <LoadingButton variant="contained" disabled={allowMove} onClick={clickMove} loading={loading}>

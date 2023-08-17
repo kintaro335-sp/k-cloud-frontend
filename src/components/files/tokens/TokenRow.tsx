@@ -7,7 +7,7 @@ interface TokenRowProps {
 }
 
 export default function TokenRow({ token }: TokenRowProps) {
-  const { id, expires, expire } = token;
+  const { id, expires, expire, publict } = token;
   return (
     <TableRow>
       <TableCell>
@@ -18,6 +18,7 @@ export default function TokenRow({ token }: TokenRowProps) {
         </Typography>
       </TableCell>
       <TableCell>{expire ? 'si' : 'no'}</TableCell>
+      <TableCell>{publict ? 'si' : 'no'}</TableCell>
       <TableCell>{expire ? moment(expires).format('DD-MM-YYYY hh:mm a') : '-'}</TableCell>
       <TableCell>
         <TokenActions id={id} />

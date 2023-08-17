@@ -57,6 +57,7 @@ export default function TokensTable({ url }: TokensTableProps) {
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>expira</TableCell>
+              <TableCell>publico</TableCell>
               <TableCell>expiración</TableCell>
               <TableCell />
             </TableRow>

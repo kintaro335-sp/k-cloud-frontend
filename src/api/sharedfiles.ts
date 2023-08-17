@@ -10,10 +10,11 @@ const sfconn = axios.create({
 export async function shareFile(
   path: string,
   expires: boolean,
+  publict: boolean,
   expire: number,
   token: string
 ): Promise<{ id: string }> {
-  const response = await sfconn.post(`share/${path}?t=${token}`, { expires, expire });
+  const response = await sfconn.post(`share/${path}?t=${token}`, { expires, expire, public: publict });
   return response.data;
 }
 
@@ -63,7 +64,7 @@ export async function shareMultipleFiles(path: string, fileNames: string[], toke
   const shareRequests = fileNamesR.map(async (fileName, i) => {
     return new Promise((res) => {
       setTimeout(() => {
-        shareFile(path + '/' + fileName, false, Date.now(), token)
+        shareFile(path + '/' + fileName, false, true, Date.now(), token)
           .then(() => {
             res(1);
           })

@@ -24,6 +24,7 @@ interface NewTokenFormProps {
 
 interface NewTokenValues {
   expire: boolean;
+  publict: boolean;
   expires: Date;
 }
 
@@ -40,6 +41,7 @@ export default function NewTokenForm({ url }: NewTokenFormProps) {
   } = useForm<NewTokenValues>({
     defaultValues: {
       expire: false,
+      publict: true,
       expires: new Date()
     }
   });
@@ -47,7 +49,7 @@ export default function NewTokenForm({ url }: NewTokenFormProps) {
   const values = watch();
 
   const onHandleSubmit: SubmitHandler<NewTokenValues> = async (values) => {
-    await shareFile(url, values.expire, values.expires.getTime(), access_token);
+    await shareFile(url, values.expire, values.publict, values.expires.getTime(), access_token);
     const tokens = await getTokensByPath(url, access_token);
     dispatch(setTokens(tokens));
     enqueueSnackbar('Token Generado', { variant: 'success' });
@@ -71,8 +73,25 @@ export default function NewTokenForm({ url }: NewTokenFormProps) {
                 control={<Switch />}
               />
             </Grid>
+            <Grid item xs={4}>
+              <FormControlLabel
+                label="Publico"
+                labelPlacement="bottom"
+                checked={values.publict}
+                onChange={(e) => {
+                  //@ts-ignore
+                  setValue('publict', e.target.checked);
+                }}
+                control={<Switch />}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <LoadingButton variant="contained" type="submit" loading={isSubmitting}>
+                <Icon icon={addIcon} width="33px" height="33px" />
+              </LoadingButton>
+            </Grid>
             {values.expire && (
-              <Grid item xs={4}>
+              <Grid item xs={12}>
                 <DesktopDateTimePicker
                   label="fecha de expiración"
                   value={moment(values.expires)}
@@ -83,11 +102,6 @@ export default function NewTokenForm({ url }: NewTokenFormProps) {
                 />
               </Grid>
             )}
-            <Grid item xs={4}>
-              <LoadingButton variant="contained" type="submit" loading={isSubmitting}>
-                <Icon icon={addIcon} width="33px" height="33px" />
-              </LoadingButton>
-            </Grid>
           </Grid>
         </form>
       </LocalizationProvider>

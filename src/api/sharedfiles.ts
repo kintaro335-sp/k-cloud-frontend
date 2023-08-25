@@ -81,15 +81,13 @@ export async function StopShareFiles(path: string, fileNames: string[], token: s
   const fileNamesR = JSON.parse(JSON.stringify(fileNames)) as string[];
   const requests = fileNamesR.map(async (fileName, i): Promise<1 | 0> => {
     return new Promise((res) => {
-      setTimeout(() => {
-        deleteTokensByPath(path + '/' + fileName, token)
-          .then(() => {
-            res(1);
-          })
-          .catch(() => {
-            res(0);
-          });
-      }, (1 + i) * 12);
+      deleteTokensByPath(path + '/' + fileName, token)
+        .then(() => {
+          res(1);
+        })
+        .catch(() => {
+          res(0);
+        });
     });
   });
   return await Promise.all(requests);

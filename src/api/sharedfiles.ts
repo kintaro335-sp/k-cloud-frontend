@@ -92,3 +92,30 @@ export async function StopShareFiles(path: string, fileNames: string[], token: s
   });
   return await Promise.all(requests);
 }
+
+// with auth
+
+export async function getTokensListByUser(page: number, token: string): Promise<TokenElement[]> {
+  const result = await sfconn.get(`tokens/user/page/${page}?t=${token}`);
+  return result.data;
+}
+
+export async function getTokenPagesByUser(token: string): Promise<{ pages: number }> {
+  const result = await sfconn.get(`tokens/user/pages?t=${token}`);
+  return result.data.pages;
+}
+
+interface newTokenInfoProps {
+  expire: boolean;
+  publict: boolean;
+  expires: Date;
+}
+
+export async function updateToken(idT: string, newSF: newTokenInfoProps, token: string) {
+  const result = await sfconn.post(`tokens/user/${idT}?t=${token}`, {
+    expires: newSF.expire,
+    expire: newSF.expires.getTime(),
+    public: newSF.publict
+  });
+  return result.data;
+}

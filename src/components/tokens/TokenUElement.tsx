@@ -1,23 +1,23 @@
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, Typography, Box, Tooltip, Stack } from '@mui/material';
+import { Link } from 'react-router-dom'
+// componenets
+import { Card, Box, CardContent, Typography, CardHeader, Tooltip } from '@mui/material';
+import TokenMenu from './TokenMenu';
+import { TokenIcon } from '../atoms';
+// types
 import { TokenElement } from '../../@types/sharedfiles';
-import TokenIcon from '../atoms/TokenIcon';
-import { CopyClipboard, DownloadButton } from '../atoms';
 // config
 import { apiUrl } from '../../config';
 
-interface TokenElementProps {
+interface TokenUElementProps {
   token: TokenElement;
 }
 
-export default function TokenItem({ token }: TokenElementProps) {
-  const { id, name, type, mime_type } = token;
-
+export default function TokenUElement({ token }: TokenUElementProps) {
+  const { id, expire, expires, mime_type, name, publict, type } = token;
   const urlRaw = `${apiUrl}/shared-file/content/${id}`;
   const urlZipDowload = `${apiUrl}/shared-file/zip/${id}`;
   const urlRawDownload = `${urlRaw}?d=1`;
   const urlNormal = `${window.origin}/shared-files/id/${id}`;
-
   return (
     <Card>
       <CardContent>
@@ -47,11 +47,7 @@ export default function TokenItem({ token }: TokenElementProps) {
         }
         subheader={<Box>{type}</Box>}
         action={
-          <Stack direction="row">
-            <CopyClipboard url={type === 'file' ? urlRaw : urlNormal} />
-            {type === 'file' && <DownloadButton url={urlRawDownload} name={name} />}
-            <DownloadButton url={urlZipDowload} name={name} variant="zip" />
-          </Stack>
+          <TokenMenu token={token} />
         }
       />
     </Card>

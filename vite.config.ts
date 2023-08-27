@@ -43,7 +43,8 @@ const iconsPack2 = [
   '@iconify/icons-material-symbols/add',
   '@iconify/icons-material-symbols/folder',
   '@iconify/icons-material-symbols/folder-open',
-  '@iconify/icons-material-symbols/folder-zip'
+  '@iconify/icons-material-symbols/folder-zip',
+  '@iconify/icons-material-symbols/edit'
 ];
 
 const iconsPack3 = [

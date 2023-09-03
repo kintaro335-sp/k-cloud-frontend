@@ -55,7 +55,9 @@ const iconsPack3 = [
   '@iconify/icons-material-symbols/format-list-bulleted',
   '@iconify/icons-material-symbols/share',
   '@iconify/icons-material-symbols/drive-file-move',
-  '@iconify/icons-material-symbols/close'
+  '@iconify/icons-material-symbols/close',
+  '@iconify/icons-material-symbols/arrow-right-alt-rounded',
+  '@iconify/icons-material-symbols/arrow-left-rounded'
 ];
 
 // https://vitejs.dev/config/
@@ -70,7 +72,7 @@ export default defineConfig({
           'icons/Pack1': iconsPack1,
           'icons/Pack2': iconsPack2,
           'icons/Pack3': iconsPack3,
-          utils: ['base-64', 'lodash'],
+          utils: ['lodash'],
           ...renderchinks(require('./package.json').dependencies)
         }
       }

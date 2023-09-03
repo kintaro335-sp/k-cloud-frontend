@@ -44,7 +44,7 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
   } = useForm<NewTokenValues>({
     defaultValues: {
       expire: token?.expire || false,
-      publict: token?.publict || true,
+      publict: token?.publict || false,
       expires: token?.expires !== undefined ? new Date(token.expires) : new Date()
     }
   });

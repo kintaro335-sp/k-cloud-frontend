@@ -21,7 +21,7 @@ export default function TokenRow({ token }: TokenRowProps) {
       <TableCell>{publict ? 'si' : 'no'}</TableCell>
       <TableCell>{expire ? moment(expires).format('DD-MM-YYYY hh:mm a') : '-'}</TableCell>
       <TableCell>
-        <TokenActions id={id} />
+        <TokenActions id={id} token={token} />
       </TableCell>
     </TableRow>
   );

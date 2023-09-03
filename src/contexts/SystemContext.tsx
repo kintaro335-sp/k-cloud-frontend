@@ -7,6 +7,7 @@ import { cancelFilesInterval } from '../redux/slices/session';
 import { clearIntervalUser } from '../redux/slices/admin';
 import { setInfo, setContent, setPath } from '../redux/slices/sharedfile';
 import { clearIntervalPages, clearIntervalTokens } from '../redux/slices/sharedfiles';
+import { clearIntervalPagesU, clearIntervalTokensU } from '../redux/slices/sharedfilesuser';
 import { clearIntervalMemUsage } from '../redux/slices/stats';
 import { clearIntervalLogsId } from '../redux/slices/logs';
 // hooks
@@ -42,6 +43,10 @@ export default function Systemcontext({ children }: SystemcontextProps) {
     }
     if (pathname !== '/admin/logs') {
       clearIntervalLogsId();
+    }
+    if (pathname !== '/tokens') {
+      clearIntervalPagesU();
+      clearIntervalTokensU();
     }
   }, [pathname]);
 

@@ -8,7 +8,8 @@ import {
   ChangePasswordPage,
   SharedFiles,
   SharedFile,
-  SetupUser
+  SetupUser,
+  Tokens
 } from '../pages';
 import { Accounts, Stats, AdminMenu, SystemSettings, Logs } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
@@ -50,6 +51,16 @@ export default function Routes() {
         <Authguard redirect redirectTo="/login">
           <ContextsR>
             <FilesPage />
+          </ContextsR>
+        </Authguard>
+      )
+    },
+    {
+      path: '/tokens',
+      element: (
+        <Authguard redirect redirectTo="/login">
+          <ContextsR>
+            <Tokens />
           </ContextsR>
         </Authguard>
       )

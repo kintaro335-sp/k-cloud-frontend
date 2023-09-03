@@ -58,7 +58,7 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
         </MenuItem>
         <MenuItem
           onClick={() => {
-            shareFile(url, false, Date.now(), access_token).then(() => {
+            shareFile(url, false, true, Date.now(), access_token).then(() => {
               enqueueSnackbar('compartido', { variant: 'success' });
             });
             clickClose();

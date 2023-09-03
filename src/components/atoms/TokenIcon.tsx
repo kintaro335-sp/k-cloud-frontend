@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import FileIcon from '@iconify/icons-ant-design/file';
 import FolderIcon from '@iconify/icons-ant-design/folder';
 import { VideoFile } from '../files/filetypes';
-import { ImgFileT } from './filetypes';
+import { ImgFileT } from '../sharedfiles/filetypes';
 
 export default function TokenIcon({ type, mime_type, url }: { type: FileType; mime_type: string; url: string }) {
   if (type === 'folder') {

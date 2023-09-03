@@ -28,6 +28,11 @@ export default function UserProfile() {
     navigate('/files');
   };
 
+  const handleGotoTokens = () => {
+    clickClose();
+    navigate('/tokens');
+  };
+
   const handleGoAdministration = () => {
     clickClose();
     navigate('/admin');
@@ -57,6 +62,7 @@ export default function UserProfile() {
 
       <Menu open={open} onClose={clickClose} anchorEl={anchorRef.current}>
         <MenuItem onClick={handleGotoFiles}>Tus Archivos</MenuItem>
+        <MenuItem onClick={handleGotoTokens}>Tokens</MenuItem>
         {isAdmin && <MenuItem onClick={handleGoAdministration}>Administración</MenuItem>}
         <MenuItem onClick={handleChangePassword}>Cambiar Contraseña</MenuItem>
         <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>

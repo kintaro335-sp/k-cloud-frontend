@@ -15,6 +15,9 @@ export default function PaginationT({ pages, page, onChangePage }: PaginationTPr
           page={page}
           defaultPage={1}
           count={pages}
+          siblingCount={3}
+          showFirstButton
+          showLastButton
           renderItem={(item) => <PaginationItem {...item} />}
         />
       )}

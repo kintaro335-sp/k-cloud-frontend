@@ -1,7 +1,7 @@
 {
   "name": "k-cloud-frontend",
   "private": true,
-  "version": "0.8.5",
+  "version": "0.9.0",
   "license": "MIT",
   "scripts": {
     "dev": "vite --host",

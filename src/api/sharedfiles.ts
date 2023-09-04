@@ -102,7 +102,7 @@ export async function getTokensListByUser(page: number, token: string): Promise<
 
 export async function getTokenPagesByUser(token: string): Promise<{ pages: number }> {
   const result = await sfconn.get(`tokens/user/pages?t=${token}`);
-  return result.data.pages;
+  return result.data;
 }
 
 interface newTokenInfoProps {

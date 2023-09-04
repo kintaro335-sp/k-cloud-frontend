@@ -3,13 +3,18 @@ import { Link } from 'react-router-dom';
 import { Card, Box, CardContent, Typography, CardHeader, Tooltip, Stack } from '@mui/material';
 import TokenMenu from './TokenMenu';
 import { TokenIcon } from '../atoms';
+// icons
+import { Icon } from '@iconify/react';
+import publicIcon from '@iconify/icons-material-symbols/public';
+import publicOffIcon from '@iconify/icons-material-symbols/public-off';
 // types
 import { TokenElement } from '../../@types/sharedfiles';
 // redux
 import { useSelector } from '../../redux/store';
 // config
 import { apiUrl } from '../../config';
-import moment from 'moment';
+// utils
+import { fullDateFormat } from '../../utils/dateformat';
 
 interface TokenUElementProps {
   token: TokenElement;
@@ -53,9 +58,15 @@ export default function TokenUElement({ token }: TokenUElementProps) {
           <Box>
             <Stack direction="row" spacing={2}>
               <Box>{type}</Box>
-              <Box>{publict ? 'publico' : 'privado'}</Box>
+              <Box>
+                {publict ? (
+                  <Icon icon={publicIcon} width="25px" height="25px" />
+                ) : (
+                  <Icon icon={publicOffIcon} width="25px" height="25px" />
+                )}
+              </Box>
               <Box>{expire ? 'expira' : 'permanente'}</Box>
-              <Box>{expire && moment(new Date(expires)).format('YYYY-MM-DD h:mm:ss A')}</Box>
+              <Box>{expire && fullDateFormat(new Date(expires))}</Box>
             </Stack>
           </Box>
         }

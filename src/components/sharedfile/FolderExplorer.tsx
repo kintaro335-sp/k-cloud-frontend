@@ -9,8 +9,8 @@ import { useSelector } from '../../redux/store';
 import { setPath, setContent } from '../../redux/slices/sharedfile';
 // api
 import { getContentToken, getContentTokenPath } from '../../api/sharedfiles';
-// moment
-import moment from 'moment';
+// utils
+import { fullDateFormat } from '../../utils/dateformat';
 
 export default function FolderExplorer() {
   const { id } = useParams();
@@ -36,10 +36,8 @@ export default function FolderExplorer() {
         <Stack spacing={2} direction="column">
           <Stack spacing={1} direction="row">
             <Typography variant="h5">{info?.name}</Typography>
-            <Typography variant="body1">Creado: {moment(info?.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
-            {info?.expire && (
-              <Typography variant="body1">expira: {moment(info?.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>
-            )}
+            <Typography variant="body1">Creado: {fullDateFormat(info?.createdAt || 0)}</Typography>
+            {info?.expire && <Typography variant="body1">expira: {fullDateFormat(info?.expires)}</Typography>}
           </Stack>
           <RouteBar
             title={info?.name}

@@ -44,7 +44,9 @@ const iconsPack2 = [
   '@iconify/icons-material-symbols/folder',
   '@iconify/icons-material-symbols/folder-open',
   '@iconify/icons-material-symbols/folder-zip',
-  '@iconify/icons-material-symbols/edit'
+  '@iconify/icons-material-symbols/edit',
+  '@iconify/icons-material-symbols/public',
+  '@iconify/icons-material-symbols/public-off'
 ];
 
 const iconsPack3 = [

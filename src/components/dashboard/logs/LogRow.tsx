@@ -1,6 +1,6 @@
 import { TableRow, TableCell } from '@mui/material';
 import { LogR } from '../../../@types/admin';
-import moment from 'moment';
+import { fullDateFormat } from '../../../utils/dateformat';
 
 interface LogRowProps {
   info: LogR;
@@ -11,7 +11,7 @@ export default function LogRow({ info }: LogRowProps) {
 
   return (
     <TableRow>
-      <TableCell>{moment(date).format('YYYY-MM-DD h:mm:ss A')}</TableCell>
+      <TableCell>{fullDateFormat(date)}</TableCell>
       <TableCell>{route}</TableCell>
       <TableCell>{method}</TableCell>
       <TableCell>{statusCode}</TableCell>

@@ -51,12 +51,12 @@ export default function Files() {
     }
     getFiles();
     setShowQ(24);
-    onSetInterval(
+    /* onSetInterval(
       // @ts-ignore
       setInterval(() => {
         getFiles();
       }, 5000)
-    );
+    ); */
   }, [access_token, path]);
 
   const filesMemo = useMemo(() => files, [files]);

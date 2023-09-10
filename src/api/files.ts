@@ -113,7 +113,7 @@ export async function uploadBlobAPI(
   });
 }
 
-export async function statusFileAPI(path: string, token: string): Promise<FilePTempResponse> {
+export async function statusFileAPI(path: string, token: string): Promise<FilePTempResponse | null> {
   return new Promise((resolve, reject) => {
     connFiles
       .get(`status/${path}?t=${token}`)
@@ -121,7 +121,7 @@ export async function statusFileAPI(path: string, token: string): Promise<FilePT
         resolve(res.data);
       })
       .catch((err) => {
-        reject(err);
+        resolve(null);
       });
   });
 }

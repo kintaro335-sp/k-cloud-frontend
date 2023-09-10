@@ -90,14 +90,20 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       const n = await sendBlob(path, positionfrom, positionto - positionfrom);
       setBlobsSended(path, i + 1);
       const backendStatus = await statusFileAPI(path, access_token);
-      setWrittenProgress(path, backendStatus.saved);
-      pass = backendStatus.blobsNum <= 3;
+      if (backendStatus !== null) {
+        setWrittenProgress(path, backendStatus.saved);
+        pass = backendStatus.blobsNum <= 3;
+      }
       while (!pass) {
         const backendStatus = await statusFileAPI(path, access_token);
-        setWrittenProgress(path, backendStatus.saved);
-        const applyTimeout = backendStatus.blobsNum === 0;
-        await timeOutIf(1000, () => !applyTimeout);
-        pass = applyTimeout;
+        if (backendStatus !== null) {
+          setWrittenProgress(path, backendStatus.saved);
+          const applyTimeout = backendStatus.blobsNum === 0;
+          await timeOutIf(1000, () => !applyTimeout);
+          pass = applyTimeout;
+        } else {
+          break;
+        }
       }
     }
     return new Promise((res) => {

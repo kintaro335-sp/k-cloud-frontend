@@ -1,5 +1,5 @@
 import React, { createContext, useEffect } from 'react';
-import { useSelector, getState } from '../redux/store';
+import { useSelector, getState, useDispatch } from '../redux/store';
 import {
   addFile,
   onWriteBlob,
@@ -7,11 +7,11 @@ import {
   setTotalBlobs,
   setBlobsSended,
   removeFileUploading,
-  removeCompletedFiles,
   setBlobProgress,
   setWrittenProgress
 } from '../redux/slices/fileUploader';
-import { initializeFileAPI, uploadBlobAPI, closeFileAPI, statusFileAPI } from '../api/files';
+import { setFiles } from '../redux/slices/session';
+import { initializeFileAPI, uploadBlobAPI, statusFileAPI, getListFiles } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { timeOutIf } from '../utils/promises';
 import { isAxiosError } from 'axios';
@@ -21,7 +21,8 @@ export const FileUploadContext = createContext({ uploadFile: (path: string, file
 
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
   const { enqueueSnackbar } = useSnackbar();
-  const { access_token } = useSelector((state) => state.session);
+  const dispatch = useDispatch();
+  const { access_token, path } = useSelector((state) => state.session);
   const { filesDir } = useSelector((state) => state.files);
 
   const uploadFile = (path: string, file: File | null) => {
@@ -126,6 +127,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       await sendBlobs(path);
     }
     await closeFile(path);
+    const listFiles = await getListFiles(path, access_token);
+    dispatch(setFiles(listFiles.list));
   };
 
   useEffect(() => {

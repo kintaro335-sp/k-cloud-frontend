@@ -128,7 +128,7 @@ export default function FileElement({ file, sf = false, arrayIndex }: FileElemen
     if (mime_type.includes('video')) {
       return (
         <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
-          <VideoFile url={urlComplete} />
+          <VideoFile url={urlComplete} nameFile={name} />
         </FileInfo>
       );
     }

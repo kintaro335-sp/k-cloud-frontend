@@ -9,7 +9,8 @@ import {
   SharedFiles,
   SharedFile,
   SetupUser,
-  Tokens
+  Tokens,
+  TokenView
 } from '../pages';
 import { Accounts, Stats, AdminMenu, SystemSettings, Logs } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
@@ -61,6 +62,16 @@ export default function Routes() {
         <Authguard redirect redirectTo="/login">
           <ContextsR>
             <Tokens />
+          </ContextsR>
+        </Authguard>
+      )
+    },
+    {
+      path: '/tokens/id/:id',
+      element: (
+        <Authguard redirect redirectTo="/login">
+          <ContextsR>
+            <TokenView />
           </ContextsR>
         </Authguard>
       )

@@ -9,6 +9,7 @@ import statsReducer from './slices/stats';
 import sharedfilesReducer from './slices/sharedfiles';
 import sharedfilesuserReducer from './slices/sharedfilesuser';
 import tokenexplorerReducer from './slices/tokenexplorer';
+import tokenviewReducer from './slices/tokenview';
 import sharedfileReducer from './slices/sharedfile';
 import logsReducer from './slices/logs';
 
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   sharedfiles: sharedfilesReducer,
   sharedfile: sharedfileReducer,
   tokenexplorer: tokenexplorerReducer,
+  tokenview: tokenviewReducer,
   logs: logsReducer
 });
 

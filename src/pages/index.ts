@@ -10,5 +10,6 @@ export const SharedFiles = lazy(() => import('./Sharedfiles'));
 export const SharedFile = lazy(() => import('./SharedFile'));
 export const SetupUser = lazy(() => import('./SetupUser'));
 export const Tokens = lazy(() => import('./Tokens'));
+export const TokenView = lazy(() => import('./TokenView'));
 
 export { default as Loading } from './Loading';

@@ -11,7 +11,6 @@ import FileUploadC from './contexts/FileUploadContext';
 import AuthProvider from './contexts/AuthContext';
 import Systemcontext from './contexts/SystemContext';
 import FileSelectContext from './contexts/FileSelectContext';
-import GalleryContext from './contexts/GalleryContext';
 import ThemeP from './theme/ThemeP';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

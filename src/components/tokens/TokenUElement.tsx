@@ -24,8 +24,7 @@ export default function TokenUElement({ token }: TokenUElementProps) {
   const { access_token } = useSelector((state) => state.session);
   const { id, expire, expires, mime_type, name, publict, type } = token;
   const urlRaw = `${apiUrl}/shared-file/tokens/user/content/${id}?t=${access_token}`;
-  const urlZipDowload = `${apiUrl}/shared-file/zip/${id}`;
-  const urlRawDownload = `${urlRaw}?d=1`;
+  const urlRawDownload = `${urlRaw}?d=1&t=${access_token}`;
   const urlNormal = `${window.origin}/shared-files/id/${id}`;
   return (
     <Card>
@@ -36,7 +35,7 @@ export default function TokenUElement({ token }: TokenUElementProps) {
       </CardContent>
       <CardHeader
         title={
-          <Box component={Link} to={`/shared-files/id/${id}`} sx={{ color: 'secondary.main' }}>
+          <Box component={Link} to={`/tokens/id/${id}`} sx={{ color: 'secondary.main' }}>
             <Tooltip title={<Typography>{name}</Typography>}>
               <Box sx={{ width: { xs: '14ex', md: '16ex', lg: '17ex' } }}>
                 <Box

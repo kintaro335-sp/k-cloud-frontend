@@ -105,6 +105,12 @@ export async function getTokenPagesByUser(token: string): Promise<{ pages: numbe
   return result.data;
 }
 
+
+export async function getTokenInfoByUser(id: string, token:string): Promise<SFInfoResponse> {
+  const response = await sfconn.get(`tokens/user/info/${id}?t=${token}`);
+  return response.data;
+}
+
 interface newTokenInfoProps {
   expire: boolean;
   publict: boolean;

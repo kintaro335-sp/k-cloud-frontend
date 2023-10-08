@@ -12,6 +12,7 @@ import { clearIntervalMemUsage } from '../redux/slices/stats';
 import { clearIntervalLogsId } from '../redux/slices/logs';
 // hooks
 import useFileSelect from '../hooks/useFileSelect';
+import { useBeforeunload } from 'react-beforeunload';
 
 interface SystemcontextProps {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ interface SystemcontextProps {
 
 export default function Systemcontext({ children }: SystemcontextProps) {
   const { path } = useSelector((state) => state.session);
+  const { filesDir } = useSelector((state) => state.files);
   const { pathname } = useLocation();
   const { clearSelect } = useFileSelect();
 
@@ -53,6 +55,8 @@ export default function Systemcontext({ children }: SystemcontextProps) {
   useEffect(() => {
     clearSelect();
   }, [path]);
+
+  useBeforeunload(filesDir.length !== 0 ? (e) => e.preventDefault() : undefined);
 
   return <>{children}</>;
 }

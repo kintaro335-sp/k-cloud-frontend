@@ -4,15 +4,7 @@ import { TokensUList } from '../components/tokens';
 import { PaginationT } from '../components/atoms';
 // redux
 import { useSelector } from '../redux/store';
-import {
-  setPagesU,
-  setTokensU,
-  clearIntervalPagesU,
-  clearIntervalTokensU,
-  setIntervalIdPagesU,
-  setIntervalIdTokensU,
-  setPageU
-} from '../redux/slices/sharedfilesuser';
+import { setPagesU, setTokensU, setPageU } from '../redux/slices/sharedfilesuser';
 // api
 import { getTokensListByUser, getTokenPagesByUser } from '../api/sharedfiles';
 
@@ -21,25 +13,19 @@ export default function Tokens() {
   const { pages, page } = useSelector((state) => state.sharedfilesuser);
 
   useEffect(() => {
-    clearIntervalPagesU();
     async function PagesEffect() {
       const { pages } = await getTokenPagesByUser(access_token);
       setPagesU(pages);
     }
     PagesEffect();
-    // @ts-ignore
-    setIntervalIdPagesU(setInterval(PagesEffect, 10000));
   }, []);
 
   useEffect(() => {
-    clearIntervalTokensU();
     async function TokensEffect() {
       const resp = await getTokensListByUser(page, access_token);
       setTokensU(resp);
     }
     TokensEffect();
-    // @ts-ignore
-    setIntervalIdTokensU(setInterval(TokensEffect, 5000));
   }, [page]);
 
   return (

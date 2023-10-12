@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 // redux
 import { useSelector } from '../redux/store';
 // slices
-import { cancelFilesInterval } from '../redux/slices/session';
 import { clearIntervalUser } from '../redux/slices/admin';
 import { setInfo, setContent, setPath } from '../redux/slices/sharedfile';
 import { clearIntervalPages, clearIntervalTokens } from '../redux/slices/sharedfiles';
@@ -25,9 +24,6 @@ export default function Systemcontext({ children }: SystemcontextProps) {
   const { clearSelect } = useFileSelect();
 
   useEffect(() => {
-    if (pathname !== '/files') {
-      cancelFilesInterval();
-    }
     if (pathname !== '/admin/accounts') {
       clearIntervalUser();
     }

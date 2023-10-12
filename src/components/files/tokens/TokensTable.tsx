@@ -14,7 +14,7 @@ import TokenRow from './TokenRow';
 import { useSnackbar } from 'notistack';
 // redux
 import { useSelector, useDispatch } from '../../../redux/store';
-import { setTokens, onSetTokenInterval, cancelTokenInterval } from '../../../redux/slices/session';
+import { setTokens } from '../../../redux/slices/session';
 // api
 import { getTokensByPath, deleteTokensByPath } from '../../../api/sharedfiles';
 
@@ -28,14 +28,11 @@ export default function TokensTable({ url }: TokensTableProps) {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    cancelTokenInterval();
     async function getTokensEffect() {
       const tokensRes = await getTokensByPath(url, access_token);
       dispatch(setTokens(tokensRes));
     }
     getTokensEffect();
-    // @ts-ignore
-    onSetTokenInterval(setInterval(getTokensEffect, 5000));
   }, [access_token]);
 
   const onClickRemoveTokens = async () => {

@@ -9,7 +9,7 @@ import DropFiles from '../components/files/DropFiles';
 import { ContextualMenuSelect } from '../components/files/menuselect';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { setFiles, setTree, onSetInterval, cancelFilesInterval, setPath } from '../redux/slices/session';
+import { setFiles, setTree, setPath } from '../redux/slices/session';
 // api
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
@@ -28,7 +28,6 @@ export default function Files() {
   };
 
   useEffect(() => {
-    cancelFilesInterval();
     async function getFiles() {
       const { list } = await getListFiles(path, access_token).catch((err) => {
         if (isAxiosError(err)) {
@@ -51,12 +50,6 @@ export default function Files() {
     }
     getFiles();
     setShowQ(24);
-    /* onSetInterval(
-      // @ts-ignore
-      setInterval(() => {
-        getFiles();
-      }, 5000)
-    ); */
   }, [access_token, path]);
 
   const filesMemo = useMemo(() => files, [files]);

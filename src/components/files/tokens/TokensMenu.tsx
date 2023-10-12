@@ -10,9 +10,10 @@ import tokensIcon from '@iconify/icons-material-symbols/format-list-bulleted';
 
 interface TokensMenuProps {
   url: string;
+  onClose?: VoidFunction;
 }
 
-export default function TokensMenu({ url }: TokensMenuProps) {
+export default function TokensMenu({ url, onClose }: TokensMenuProps) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
@@ -24,6 +25,9 @@ export default function TokensMenu({ url }: TokensMenuProps) {
     cancelTokenInterval();
     dispatch(setTokens([]));
     setOpen(false);
+    if (typeof onClose === 'function') {
+      onClose();
+    }
   };
 
   return (

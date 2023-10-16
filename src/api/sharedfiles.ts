@@ -60,21 +60,13 @@ export async function getPagesTokens(): Promise<{ pages: number }> {
 // funciones creadas a partir de las principales funciones
 
 export async function shareMultipleFiles(path: string, fileNames: string[], token: string) {
-  const fileNamesR = JSON.parse(JSON.stringify(fileNames)) as string[];
-  const shareRequests = fileNamesR.map(async (fileName, i) => {
-    return new Promise((res) => {
-      setTimeout(() => {
-        shareFile(path + '/' + fileName, false, true, Date.now(), token)
-          .then(() => {
-            res(1);
-          })
-          .catch(() => {
-            res(0);
-          });
-      }, (1 + i) * 1000);
-    });
+  const result = await sfconn.post(`/sharemf/${path}?t=${token}`, {
+    public: true,
+    expires: false,
+    expire: new Date().getTime(),
+    files: fileNames
   });
-  return await Promise.all(shareRequests);
+  return result.data as string[];
 }
 
 export async function StopShareFiles(path: string, fileNames: string[], token: string) {
@@ -105,8 +97,7 @@ export async function getTokenPagesByUser(token: string): Promise<{ pages: numbe
   return result.data;
 }
 
-
-export async function getTokenInfoByUser(id: string, token:string): Promise<SFInfoResponse> {
+export async function getTokenInfoByUser(id: string, token: string): Promise<SFInfoResponse> {
   const response = await sfconn.get(`tokens/user/info/${id}?t=${token}`);
   return response.data;
 }

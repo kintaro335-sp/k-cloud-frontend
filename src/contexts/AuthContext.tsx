@@ -49,19 +49,25 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
+    newSocket.on('message', (data) => {
+      console.log(data);
+    });
     newSocket.connect();
     socketClient.current = newSocket;
   }, [access_token]);
 
   useEffect(() => {
-    socketClient.current.removeListener('file-change')
-    socketClient.current.on('file-change', async (msg) => {
-      if(msg.path !== path) {
-        return 
+    socketClient.current.removeListener('file-change');
+    socketClient.current.removeListener('token-change');
+    const listener = async (msg: { path: string }) => {
+      if (msg.path !== path) {
+        return;
       }
       const listFiles = await getListFiles(path, access_token);
       dispatch(setFiles(listFiles.list));
-    });
+    };
+    socketClient.current.on('file-change', listener);
+    socketClient.current.on('token-change', listener);
   }, [socketClient.current, access_token, path]);
 
   const value = useMemo(

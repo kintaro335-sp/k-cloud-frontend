@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/atoms';
@@ -14,8 +14,6 @@ import {
   setActivityMethods,
   setActivityRoute,
   setActivityStatuscode,
-  clearIntervalMemUsage,
-  setMemoryInterval,
   setMemoryUsageH
 } from '../../redux/slices/stats';
 // api
@@ -26,6 +24,7 @@ import {
   getLineChartData,
   getMemoryUsageData
 } from '../../api/admin';
+import { createNewSocket } from '../../api/websocket';
 // types
 import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
 // utils
@@ -34,6 +33,7 @@ import { SerieLineChart } from '../../@types/stats';
 
 export default function Stats() {
   const theme = useTheme();
+  const socketClient = useRef(createNewSocket());
   const { access_token } = useSelector((state) => state.session);
   const { activityMethods, activityRoute, activityStatuscode, memoryUsageH } = useSelector((state) => state.stats);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
@@ -77,14 +77,19 @@ export default function Stats() {
   }, [time]);
 
   useEffect(() => {
-    clearIntervalMemUsage();
     async function getMemoryUsageHEffect() {
       const data = await getMemoryUsageData(access_token);
       setMemoryUsageH(data);
+      setMemoryUsageH(data);
     }
-    // @ts-ignore
-    setMemoryInterval(setInterval(getMemoryUsageHEffect, 3000));
     getMemoryUsageHEffect();
+    const newSocket = createNewSocket();
+    newSocket.auth = { access_token };
+    newSocket.on('memory-usage-update', async () => {
+      getMemoryUsageHEffect();
+    });
+    newSocket.connect();
+    socketClient.current = newSocket;
   }, [access_token]);
 
   return (

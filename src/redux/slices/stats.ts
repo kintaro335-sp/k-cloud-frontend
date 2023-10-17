@@ -13,7 +13,6 @@ interface StatsState {
   activityStatuscode: StatsLineChart;
   activityRoute: StatsLineChart;
   memoryUsageH: StatsLineChart;
-  memoryUsageInterval: number | null;
 }
 
 const initialState: StatsState = {
@@ -24,8 +23,7 @@ const initialState: StatsState = {
   activityMethods: [],
   activityRoute: [],
   activityStatuscode: [],
-  memoryUsageH: [],
-  memoryUsageInterval: null
+  memoryUsageH: []
 };
 
 const slice = createSlice({
@@ -55,15 +53,6 @@ const slice = createSlice({
     },
     setMemoryUsageH(state, action) {
       state.memoryUsageH = action.payload as StatsLineChart;
-    },
-    setMemoryUsageInterval(state, action) {
-      state.memoryUsageInterval = action.payload as number;
-    },
-    clearIntervalMemUsage(state) {
-      if (state.memoryUsageInterval !== null) {
-        clearInterval(state.memoryUsageInterval);
-        state.memoryUsageInterval = null;
-      }
     }
   }
 });
@@ -129,22 +118,6 @@ export function setActivityStatuscode(data: StatsLineChart) {
 export function setMemoryUsageH(data: StatsLineChart) {
   try {
     dispatch(slice.actions.setMemoryUsageH(data));
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-export function setMemoryInterval(idInterval: number) {
-  try {
-    dispatch(slice.actions.setMemoryUsageInterval(idInterval));
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-export function clearIntervalMemUsage() {
-  try {
-    dispatch(slice.actions.clearIntervalMemUsage());
   } catch (err) {
     console.error(err);
   }

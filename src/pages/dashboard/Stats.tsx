@@ -34,6 +34,7 @@ import { SerieLineChart } from '../../@types/stats';
 export default function Stats() {
   const theme = useTheme();
   const socketClient = useRef(createNewSocket());
+  const clockRef = useRef(false);
   const { access_token } = useSelector((state) => state.session);
   const { activityMethods, activityRoute, activityStatuscode, memoryUsageH } = useSelector((state) => state.stats);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
@@ -83,10 +84,13 @@ export default function Stats() {
       setMemoryUsageH(data);
     }
     getMemoryUsageHEffect();
+  }, [access_token, clockRef.current]);
+
+  useEffect(() => {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
-    newSocket.on('memory-usage-update', async () => {
-      getMemoryUsageHEffect();
+    newSocket.on('memory-usage-update', () => {
+      clockRef.current = !clockRef.current;
     });
     newSocket.connect();
     socketClient.current = newSocket;

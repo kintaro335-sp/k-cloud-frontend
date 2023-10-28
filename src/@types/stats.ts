@@ -1,7 +1,7 @@
 export enum GROUPFILTER {
-  STATUSCODE = 'statuscode',
-  METHOD = 'method',
-  ROUTE = 'route'
+  ACTION = 'action',
+  STATUS = 'status',
+  RESAON = 'reason'
 }
 
 export enum TIMEOPTION {

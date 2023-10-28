@@ -65,13 +65,13 @@ export default function Stats() {
   useEffect(() => {
     async function getActivityStats() {
       // methods
-      const dataMethods = await getLineChartData(GROUPFILTER.METHOD, time, access_token);
+      const dataMethods = await getLineChartData(GROUPFILTER.ACTION, time, access_token);
       setActivityMethods(dataMethods);
       // methods
-      const dataStatusCode = await getLineChartData(GROUPFILTER.STATUSCODE, time, access_token);
+      const dataStatusCode = await getLineChartData(GROUPFILTER.STATUS, time, access_token);
       setActivityStatuscode(dataStatusCode);
       // methods
-      const dataRoute = await getLineChartData(GROUPFILTER.ROUTE, time, access_token);
+      const dataRoute = await getLineChartData(GROUPFILTER.RESAON, time, access_token);
       setActivityRoute(dataRoute);
     }
     getActivityStats();
@@ -150,7 +150,7 @@ export default function Stats() {
         </RadioGroup>
       </Toolbar>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <LineChartGeneral title="method" data={activityMethods} />
         </Grid>
         <Grid item xs={12}>
@@ -158,7 +158,7 @@ export default function Stats() {
         </Grid>
         <Grid item xs={12}>
           <LineChartGeneral title="Route" data={activityRoute} />
-        </Grid>
+        </Grid> */}
       </Grid>
       <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>
         Uso de Memoria

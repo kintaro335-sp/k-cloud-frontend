@@ -1,20 +1,23 @@
 import { TableRow, TableCell } from '@mui/material';
-import { LogR } from '../../../@types/admin';
+import { SharedFileActivity } from '../../../@types/admin';
 import { fullDateFormat } from '../../../utils/dateformat';
 
 interface LogRowProps {
-  info: LogR;
+  info: SharedFileActivity;
 }
 
 export default function LogRow({ info }: LogRowProps) {
-  const { date, method, route, statusCode } = info;
+  const { date, user, tokenid, path, action, reason, status } = info;
 
   return (
     <TableRow>
       <TableCell>{fullDateFormat(date)}</TableCell>
-      <TableCell>{route}</TableCell>
-      <TableCell>{method}</TableCell>
-      <TableCell>{statusCode}</TableCell>
+      <TableCell>{user}</TableCell>
+      <TableCell>{tokenid}</TableCell>
+      <TableCell>{path}</TableCell>
+      <TableCell>{action}</TableCell>
+      <TableCell>{reason}</TableCell>
+      <TableCell>{status}</TableCell>
     </TableRow>
   );
 }

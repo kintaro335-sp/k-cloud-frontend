@@ -11,9 +11,9 @@ import {
   setUsed,
   setUsedSpaceFiles,
   setUsedSpaceUsers,
-  setActivityMethods,
-  setActivityRoute,
-  setActivityStatuscode,
+  setActivityActions,
+  setActivityReason,
+  setActivityStatus,
   setMemoryUsageH
 } from '../../redux/slices/stats';
 // api
@@ -34,9 +34,10 @@ import { SerieLineChart } from '../../@types/stats';
 export default function Stats() {
   const theme = useTheme();
   const socketClient = useRef(createNewSocket());
-  const clockRef = useRef(false);
+  const [clockRef, setClockRef] = useState(false);
+  const [statUpdate, setStatUpdate] = useState(false);
   const { access_token } = useSelector((state) => state.session);
-  const { activityMethods, activityRoute, activityStatuscode, memoryUsageH } = useSelector((state) => state.stats);
+  const { activityActions, activityReason, activityStatus, memoryUsageH } = useSelector((state) => state.stats);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
 
   const processdata = (arr: SerieLineChart | undefined): SerieLineChart => {
@@ -66,16 +67,16 @@ export default function Stats() {
     async function getActivityStats() {
       // methods
       const dataMethods = await getLineChartData(GROUPFILTER.ACTION, time, access_token);
-      setActivityMethods(dataMethods);
+      setActivityActions(dataMethods);
       // methods
       const dataStatusCode = await getLineChartData(GROUPFILTER.STATUS, time, access_token);
-      setActivityStatuscode(dataStatusCode);
+      setActivityStatus(dataStatusCode);
       // methods
       const dataRoute = await getLineChartData(GROUPFILTER.RESAON, time, access_token);
-      setActivityRoute(dataRoute);
+      setActivityReason(dataRoute);
     }
     getActivityStats();
-  }, [time]);
+  }, [access_token, time, statUpdate]);
 
   useEffect(() => {
     async function getMemoryUsageHEffect() {
@@ -84,13 +85,16 @@ export default function Stats() {
       setMemoryUsageH(data);
     }
     getMemoryUsageHEffect();
-  }, [access_token, clockRef.current]);
+  }, [access_token, clockRef]);
 
   useEffect(() => {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
     newSocket.on('memory-usage-update', () => {
-      clockRef.current = !clockRef.current;
+      setClockRef((val) => !val);
+    });
+    newSocket.on('stats-update', () => {
+      setStatUpdate((val) => !val);
     });
     newSocket.connect();
     socketClient.current = newSocket;
@@ -150,15 +154,15 @@ export default function Stats() {
         </RadioGroup>
       </Toolbar>
       <Grid container spacing={3}>
-        {/* <Grid item xs={12}>
-          <LineChartGeneral title="method" data={activityMethods} />
+        <Grid item xs={12}>
+          <LineChartGeneral title="Action" data={activityActions} />
         </Grid>
         <Grid item xs={12}>
-          <LineChartGeneral title="Status Code" data={activityStatuscode} />
+          <LineChartGeneral title="Status Code" data={activityStatus} />
         </Grid>
         <Grid item xs={12}>
-          <LineChartGeneral title="Route" data={activityRoute} />
-        </Grid> */}
+          <LineChartGeneral title="Route" data={activityReason} />
+        </Grid>
       </Grid>
       <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>
         Uso de Memoria

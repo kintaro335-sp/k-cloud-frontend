@@ -44,6 +44,8 @@ export default function TokensTable({ url }: TokensTableProps) {
       if (data.path !== url) {
         return;
       }
+      console.log(data);
+      console.log(url);
       const tokensRes = await getTokensByPath(url, access_token);
       dispatch(setTokens(tokensRes));
     });

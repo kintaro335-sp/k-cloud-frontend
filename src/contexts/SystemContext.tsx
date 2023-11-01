@@ -5,7 +5,6 @@ import { useSelector } from '../redux/store';
 // slices
 import { clearIntervalUser } from '../redux/slices/admin';
 import { setInfo, setContent, setPath } from '../redux/slices/sharedfile';
-import { clearIntervalLogsId } from '../redux/slices/logs';
 // hooks
 import useFileSelect from '../hooks/useFileSelect';
 import { useBeforeunload } from 'react-beforeunload';
@@ -28,9 +27,6 @@ export default function Systemcontext({ children }: SystemcontextProps) {
       setInfo(null);
       setPath('');
       setContent([]);
-    }
-    if (pathname !== '/admin/logs') {
-      clearIntervalLogsId();
     }
   }, [pathname]);
 

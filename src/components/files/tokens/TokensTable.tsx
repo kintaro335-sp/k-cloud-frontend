@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   TableContainer,
   Table,
@@ -14,28 +14,43 @@ import TokenRow from './TokenRow';
 import { useSnackbar } from 'notistack';
 // redux
 import { useSelector, useDispatch } from '../../../redux/store';
-import { setTokens, onSetTokenInterval, cancelTokenInterval } from '../../../redux/slices/session';
+import { setTokens } from '../../../redux/slices/session';
 // api
 import { getTokensByPath, deleteTokensByPath } from '../../../api/sharedfiles';
+import { createNewSocket } from '../../../api/websocket';
 
 interface TokensTableProps {
   url: string;
 }
 
 export default function TokensTable({ url }: TokensTableProps) {
+  const socketClient = useRef(createNewSocket());
   const { access_token, tokens } = useSelector((state) => state.session);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    cancelTokenInterval();
     async function getTokensEffect() {
       const tokensRes = await getTokensByPath(url, access_token);
       dispatch(setTokens(tokensRes));
     }
     getTokensEffect();
-    // @ts-ignore
-    onSetTokenInterval(setInterval(getTokensEffect, 5000));
+  }, [access_token]);
+
+  useEffect(() => {
+    const newSocket = createNewSocket();
+    newSocket.auth = { access_token };
+    newSocket.on('token-change', async (data) => {
+      if (data.path !== url) {
+        return;
+      }
+      console.log(data);
+      console.log(url);
+      const tokensRes = await getTokensByPath(url, access_token);
+      dispatch(setTokens(tokensRes));
+    });
+    newSocket.connect();
+    socketClient.current = newSocket;
   }, [access_token]);
 
   const onClickRemoveTokens = async () => {

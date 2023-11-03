@@ -1,19 +1,21 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Grid, Box } from '@mui/material';
 import { PaginationT } from '../../components/atoms';
 import { LogsTable } from '../../components/dashboard/logs';
 // redux
 import { useSelector } from '../../redux/store';
-import { setIntervalLogsId, clearIntervalLogsId, setLogs, setPage, setPages } from '../../redux/slices/logs';
+import { setLogs, setPage, setPages } from '../../redux/slices/logs';
 // api
 import { getLogsList, getPagesLogs } from '../../api/admin';
+import { createNewSocket } from '../../api/websocket';
 
 export default function Logs(): JSX.Element {
+  const socketClient = useRef(createNewSocket());
   const { access_token } = useSelector((state) => state.session);
   const { page, pages } = useSelector((state) => state.logs);
+  const [statUpdate, setStatUpdate] = useState(false);
 
   useEffect(() => {
-    clearIntervalLogsId();
     async function getLogsEffect() {
       const logs = await getLogsList(page, access_token);
       setLogs(logs);
@@ -21,9 +23,17 @@ export default function Logs(): JSX.Element {
       setPages(pr.pages);
     }
     getLogsEffect();
-    // @ts-ignore
-    setIntervalLogsId(setInterval(getLogsEffect, 10000));
-  }, [access_token, page]);
+  }, [access_token, page, statUpdate]);
+
+  useEffect(() => {
+    const newSocket = createNewSocket();
+    newSocket.auth = { access_token };
+    newSocket.on('stats-update', () => {
+      setStatUpdate((val) => !val);
+    });
+    newSocket.connect();
+    socketClient.current = newSocket;
+  }, [access_token]);
 
   return (
     <Box>

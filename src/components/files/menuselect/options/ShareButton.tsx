@@ -17,8 +17,7 @@ export default function ShareButton() {
 
   const onClickShare = () => {
     shareMultipleFiles(path, files, access_token).then((result) => {
-      const count = result.filter((n) => n === 1).length;
-      enqueueSnackbar(`Compartido ${count} de ${result.length} Archivos`, { variant: 'success' });
+      enqueueSnackbar(`Compartido ${result.length} Archivos`, { variant: 'success' });
     });
     clearSelect();
   };

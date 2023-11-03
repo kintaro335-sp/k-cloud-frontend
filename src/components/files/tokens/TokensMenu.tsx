@@ -4,15 +4,16 @@ import NewTokenForm from './NewTokenForm';
 import TokensTable from './TokensTable';
 // redux
 import { useDispatch } from '../../../redux/store';
-import { cancelTokenInterval, setTokens } from '../../../redux/slices/session';
+import { setTokens } from '../../../redux/slices/session';
 import { Icon } from '@iconify/react';
 import tokensIcon from '@iconify/icons-material-symbols/format-list-bulleted';
 
 interface TokensMenuProps {
   url: string;
+  onClose?: VoidFunction;
 }
 
-export default function TokensMenu({ url }: TokensMenuProps) {
+export default function TokensMenu({ url, onClose }: TokensMenuProps) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
@@ -21,9 +22,11 @@ export default function TokensMenu({ url }: TokensMenuProps) {
   };
 
   const clickClose = () => {
-    cancelTokenInterval();
     dispatch(setTokens([]));
     setOpen(false);
+    if (typeof onClose === 'function') {
+      onClose();
+    }
   };
 
   return (

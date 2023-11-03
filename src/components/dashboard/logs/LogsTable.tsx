@@ -12,9 +12,12 @@ export default function LogsTable() {
         <TableHead>
           <TableRow>
             <TableCell>Fecha</TableCell>
+            <TableCell>Usuario</TableCell>
+            <TableCell>tokenId</TableCell>
             <TableCell>Ruta</TableCell>
-            <TableCell>Metodo</TableCell>
-            <TableCell>Codigo</TableCell>
+            <TableCell>accion</TableCell>
+            <TableCell>Razon</TableCell>
+            <TableCell>Estado</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

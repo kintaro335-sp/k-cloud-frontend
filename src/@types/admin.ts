@@ -12,7 +12,6 @@ export interface User {
 }
 
 export interface AdminState {
-  userInterval: number | null;
   users: User[];
 }
 
@@ -36,4 +35,21 @@ export interface LogR {
   route: string;
   statusCode: string;
   method: string;
+}
+
+export type ActionT = 'CREATED' | 'READ' | 'DOWNLOAD' | 'DELETE' | 'DOWNLOAD_ZIP' | 'MODIFY';
+
+export type statusT = 'ALLOWED' | 'DENIED';
+
+export type reasonT = 'NOT_EXIST' | 'EXPIRED' | 'WRONG_OWNER' | 'NONE';
+
+export interface SharedFileActivity {
+  id: string;
+  date: Date;
+  action: ActionT;
+  status: statusT;
+  reason: reasonT;
+  user: string;
+  tokenid: string;
+  path: string;
 }

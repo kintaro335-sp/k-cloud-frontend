@@ -51,6 +51,7 @@ export default function TokenMenu({ token }: TokenMenuProps) {
               <Icon icon={iconEdit} width="25px" height="25px" /> Editar
             </MenuItem>
           )}
+          onClose={clickClose}
         >
           <NewTokenForm url="" edit token={token} />
         </CustomDialog>

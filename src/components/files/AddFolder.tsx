@@ -57,12 +57,9 @@ export default function AddFolder() {
                     if (name !== '' && !['/'].includes(name)) {
                       createFolder(`${path}/${name}`, access_token).then((res) => {
                         enqueueSnackbar(res.message, { variant: 'success' });
-                        getListFiles(path, access_token).then((response) => {
-                          dispatch(setFiles(response.list));
-                          clickClose();
-                          setName('');
-                          setOpen(false);
-                        });
+                        clickClose();
+                        setName('');
+                        setOpen(false);
                       });
                     } else {
                       enqueueSnackbar('Nombre no valido', { variant: 'error' });

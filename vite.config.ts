@@ -65,6 +65,7 @@ const iconsPack3 = [
 // https://vitejs.dev/config/
 export default defineConfig({
   preview: { strictPort: true, port: 3000 },
+  server: { port: 3000 },
   build: {
     chunkSizeWarningLimit: 650,
     rollupOptions: {

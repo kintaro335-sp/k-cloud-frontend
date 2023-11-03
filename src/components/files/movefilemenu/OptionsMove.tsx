@@ -19,9 +19,10 @@ interface OptionMoveProps {
   pathFrom: string;
   filesToMove: string[];
   menuItem?: boolean;
+  onClose?: VoidFunction;
 }
 
-export default function OptionMove({ pathFrom, filesToMove, menuItem = false }: OptionMoveProps) {
+export default function OptionMove({ pathFrom, filesToMove, menuItem = false, onClose }: OptionMoveProps) {
   const { enqueueSnackbar } = useSnackbar();
   const { access_token } = useSelector((state) => state.session);
   const [pathTo, setPathTo] = useState('');
@@ -36,6 +37,9 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false }: 
 
   const clickClose = () => {
     setOpen(false);
+    if (typeof onClose === 'function') {
+      onClose();
+    }
   };
 
   useEffect(() => {

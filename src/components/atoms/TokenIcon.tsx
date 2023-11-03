@@ -7,6 +7,8 @@ import { VideoFile } from '../files/filetypes';
 import { ImgFileT } from '../sharedfiles/filetypes';
 
 export default function TokenIcon({ type, mime_type, url }: { type: FileType; mime_type: string; url: string }) {
+  const name = url.split('/').pop() || '';
+
   if (type === 'folder') {
     return (
       <Box sx={{ display: 'inline-block' }}>
@@ -16,7 +18,7 @@ export default function TokenIcon({ type, mime_type, url }: { type: FileType; mi
   }
 
   if (mime_type.includes('video/')) {
-    return <VideoFile url={url} />;
+    return <VideoFile url={url} nameFile={name} />;
   }
 
   if (mime_type.includes('image/')) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/atoms';
@@ -11,11 +11,9 @@ import {
   setUsed,
   setUsedSpaceFiles,
   setUsedSpaceUsers,
-  setActivityMethods,
-  setActivityRoute,
-  setActivityStatuscode,
-  clearIntervalMemUsage,
-  setMemoryInterval,
+  setActivityActions,
+  setActivityReason,
+  setActivityStatus,
   setMemoryUsageH
 } from '../../redux/slices/stats';
 // api
@@ -26,6 +24,7 @@ import {
   getLineChartData,
   getMemoryUsageData
 } from '../../api/admin';
+import { createNewSocket } from '../../api/websocket';
 // types
 import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
 // utils
@@ -34,8 +33,11 @@ import { SerieLineChart } from '../../@types/stats';
 
 export default function Stats() {
   const theme = useTheme();
+  const socketClient = useRef(createNewSocket());
+  const [clockRef, setClockRef] = useState(false);
+  const [statUpdate, setStatUpdate] = useState(false);
   const { access_token } = useSelector((state) => state.session);
-  const { activityMethods, activityRoute, activityStatuscode, memoryUsageH } = useSelector((state) => state.stats);
+  const { activityActions, activityReason, activityStatus, memoryUsageH } = useSelector((state) => state.stats);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
 
   const processdata = (arr: SerieLineChart | undefined): SerieLineChart => {
@@ -64,27 +66,38 @@ export default function Stats() {
   useEffect(() => {
     async function getActivityStats() {
       // methods
-      const dataMethods = await getLineChartData(GROUPFILTER.METHOD, time, access_token);
-      setActivityMethods(dataMethods);
+      const dataMethods = await getLineChartData(GROUPFILTER.ACTION, time, access_token);
+      setActivityActions(dataMethods);
       // methods
-      const dataStatusCode = await getLineChartData(GROUPFILTER.STATUSCODE, time, access_token);
-      setActivityStatuscode(dataStatusCode);
+      const dataStatusCode = await getLineChartData(GROUPFILTER.STATUS, time, access_token);
+      setActivityStatus(dataStatusCode);
       // methods
-      const dataRoute = await getLineChartData(GROUPFILTER.ROUTE, time, access_token);
-      setActivityRoute(dataRoute);
+      const dataRoute = await getLineChartData(GROUPFILTER.RESAON, time, access_token);
+      setActivityReason(dataRoute);
     }
     getActivityStats();
-  }, [time]);
+  }, [access_token, time, statUpdate]);
 
   useEffect(() => {
-    clearIntervalMemUsage();
     async function getMemoryUsageHEffect() {
       const data = await getMemoryUsageData(access_token);
       setMemoryUsageH(data);
+      setMemoryUsageH(data);
     }
-    // @ts-ignore
-    setMemoryInterval(setInterval(getMemoryUsageHEffect, 3000));
     getMemoryUsageHEffect();
+  }, [access_token, clockRef]);
+
+  useEffect(() => {
+    const newSocket = createNewSocket();
+    newSocket.auth = { access_token };
+    newSocket.on('memory-usage-update', () => {
+      setClockRef((val) => !val);
+    });
+    newSocket.on('stats-update', () => {
+      setStatUpdate((val) => !val);
+    });
+    newSocket.connect();
+    socketClient.current = newSocket;
   }, [access_token]);
 
   return (
@@ -142,13 +155,13 @@ export default function Stats() {
       </Toolbar>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <LineChartGeneral title="method" data={activityMethods} />
+          <LineChartGeneral title="Action" data={activityActions} />
         </Grid>
         <Grid item xs={12}>
-          <LineChartGeneral title="Status Code" data={activityStatuscode} />
+          <LineChartGeneral title="Status Code" data={activityStatus} />
         </Grid>
         <Grid item xs={12}>
-          <LineChartGeneral title="Route" data={activityRoute} />
+          <LineChartGeneral title="Route" data={activityReason} />
         </Grid>
       </Grid>
       <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>

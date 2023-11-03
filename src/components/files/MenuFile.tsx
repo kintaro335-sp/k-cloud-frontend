@@ -66,20 +66,13 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
         >
           <Icon icon={shareIcon} width="25px" height="25px" /> Compartir
         </MenuItem>
-        <TokensMenu url={url} />
-        <OptionsMove menuItem pathFrom={path} filesToMove={[file.name]} />
+        <TokensMenu url={url} onClose={clickClose} />
+        <OptionsMove menuItem pathFrom={path} filesToMove={[file.name]} onClose={clickClose} />
         <MenuItem
           onClick={() => {
             if (window.confirm(`desea eliminar ${file.name}?`)) {
               deleteFile(url, access_token).then((res) => {
                 enqueueSnackbar(res.message, { variant: 'success' });
-                getListFiles(path, access_token)
-                  .then((response) => {
-                    dispatch(setFiles(response.list));
-                  })
-                  .catch((err) => {
-                    enqueueSnackbar(err.message, { variant: 'error' });
-                  });
               });
             }
           }}

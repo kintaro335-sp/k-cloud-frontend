@@ -21,7 +21,7 @@ export default function Files() {
   const dispatch = useDispatch();
   const { showOptions } = useFileSelect();
   const { access_token, path, files } = useSelector((state) => state.session);
-  const [showQ, setShowQ] = useState<number>(24);
+  const [showQ, setShowQ] = useState<number>(48);
 
   const handleShowMore = () => {
     setShowQ((prev) => prev + 12);

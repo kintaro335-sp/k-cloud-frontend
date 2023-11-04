@@ -2,6 +2,7 @@ import { Card, CardHeader, CardContent } from '@mui/material';
 import LineChartPrefab from './LineChartPrefab';
 import { StatsLineChart } from '../../../../@types/stats';
 import { DatumValue } from '@nivo/line';
+import { getMaxNumber } from '../../../../utils/stats';
 
 interface LineChartGenralProps {
   title: string;
@@ -10,11 +11,14 @@ interface LineChartGenralProps {
 }
 
 export default function LineChartGenral({ title, data, yFormat }: LineChartGenralProps) {
-  return (
+
+  const maxY = getMaxNumber(data, 10, 20)
+
+  return ( 
     <Card>
       <CardHeader title={title} />
       <CardContent sx={{ height: '500px' }}>
-        <LineChartPrefab data={data} yFormat={yFormat} />
+        <LineChartPrefab data={data} yFormat={yFormat} maxY={maxY} />
       </CardContent>
     </Card>
   );

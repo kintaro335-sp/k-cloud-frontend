@@ -28,6 +28,11 @@ export async function deleteToken(id: string, token: string): Promise<{ message:
   return response.data;
 }
 
+export async function deleteTokens(ids: string[], token: string): Promise<{ message: string }> {
+  const response = await sfconn.patch(`token/delete?t=${token}`, { ids });
+  return response.data;
+}
+
 export async function getContentTokenPath(id: string, path: string): Promise<{ list: FileI[] }> {
   const response = await sfconn.get(`content/${id}/${path}`);
   return response.data;

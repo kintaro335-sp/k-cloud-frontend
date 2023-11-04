@@ -6,9 +6,10 @@ import { StatsLineChart } from '../../../../@types/stats';
 interface LineChartPrefabProps {
   data: StatsLineChart;
   yFormat?: (val: string) => string;
+  maxY?: number | string;
 }
 
-export default function LineChartPrefab({ data, yFormat }: LineChartPrefabProps) {
+export default function LineChartPrefab({ data, yFormat, maxY = 'auto' }: LineChartPrefabProps) {
   const theme = useTheme();
 
   return (
@@ -17,7 +18,8 @@ export default function LineChartPrefab({ data, yFormat }: LineChartPrefabProps)
       yFormat={typeof yFormat === 'function' ? (val) => yFormat(val.toString()) : undefined}
       margin={{ top: 50, bottom: 150, left: 75, right: 50 }}
       xScale={{ type: 'point' }}
-      yScale={{ type: 'linear', max: 'auto', min: 'auto', stacked: true, reverse: false }}
+      // @ts-ignore
+      yScale={{ type: 'linear', max: maxY, min: 'auto', stacked: false, reverse: false }}
       axisTop={null}
       axisRight={null}
       axisBottom={{

@@ -33,11 +33,7 @@ export default function Tokens() {
   useEffect(() => {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
-    newSocket.on('message', (data) => {
-      console.log(data);
-    });
-    newSocket.on('token-change', async (data) => {
-      console.log(data);
+    newSocket.on('token-change', async () => {
       const { pages } = await getTokenPagesByUser(access_token);
       setPagesU(pages);
       const resp = await getTokensListByUser(page, access_token);

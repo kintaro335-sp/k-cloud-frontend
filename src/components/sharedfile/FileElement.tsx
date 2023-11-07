@@ -9,18 +9,17 @@ import { FileI } from '../../@types/files';
 import { apiUrl } from '../../config';
 
 // redux
-import { useSelector, useDispatch } from '../../redux/store';
-import { setPath as setPathSF } from '../../redux/slices/tokenview';
+import { useSelector } from '../../redux/store';
+import { setPath as setPathSF } from '../../redux/slices/sharedfile';
 
 interface FileInfoProps {
   file: FileI;
   children: JSX.Element;
   url: string;
   urlComplete: string;
-  sf?: boolean;
 }
 
-function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
+function FileInfo({ file, children, url, urlComplete }: FileInfoProps) {
   const { id } = useParams();
 
   return (
@@ -63,7 +62,6 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
 interface FileElementProps {
   file: FileI;
   arrayIndex: number;
-  sf?: boolean;
 }
 
 export default function FileElement({ file, arrayIndex }: FileElementProps) {
@@ -76,7 +74,7 @@ export default function FileElement({ file, arrayIndex }: FileElementProps) {
   const diagonal = pathSelected ? '/' : '';
 
   const url = `${sharedfile.path}${diagonal}${name}`;
-  const urlComplete = `${apiUrl}/shared-file/tokens/user/content/${id}/${sharedfile.path}${diagonal}${name}?t=${session.access_token}`;
+  const urlComplete = `${apiUrl}/shared-file/content/${id}/${sharedfile.path}${diagonal}${name}?t=${session.access_token}`;
 
   const onClickFolder = () => {
     setPathSF(url);
@@ -85,27 +83,27 @@ export default function FileElement({ file, arrayIndex }: FileElementProps) {
   if (type === 'file') {
     if (mime_type.includes('image/')) {
       return (
-        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf>
-          <ImagePreview url={urlComplete} arrayIndex={arrayIndex} tokenView />
+        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
+          <ImagePreview url={urlComplete} arrayIndex={arrayIndex} />
         </FileInfo>
       );
     }
     if (mime_type.includes('video')) {
       return (
-        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf>
+        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
           <VideoFile url={urlComplete} nameFile={name} />
         </FileInfo>
       );
     }
     return (
-      <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf>
+      <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
         <OtherFile url={urlComplete} />
       </FileInfo>
     );
   }
 
   return (
-    <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf>
+    <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
       <Folder click={onClickFolder} />
     </FileInfo>
   );

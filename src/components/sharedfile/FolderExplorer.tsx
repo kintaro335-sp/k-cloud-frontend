@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Grid, Box, Stack, Typography } from '@mui/material';
 import { DownloadButton } from '../atoms';
 import { RouteBar } from '../files/routebar';
-import FileElement from '../files/FileElement';
+import FileElement from './FileElement';
 // redux
 import { useSelector } from '../../redux/store';
 import { setPath, setContent } from '../../redux/slices/sharedfile';
@@ -59,7 +59,7 @@ export default function FolderExplorer() {
         <Grid container spacing={2}>
           {content.map((file, i) => (
             <Grid key={`${file.name}-${i}`} item xs={12} md={4} lg={3}>
-              <FileElement file={file} arrayIndex={i} sf />
+              <FileElement file={file} arrayIndex={i} />
             </Grid>
           ))}
         </Grid>

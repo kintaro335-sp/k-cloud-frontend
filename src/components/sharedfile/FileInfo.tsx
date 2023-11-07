@@ -1,16 +1,17 @@
 import { useParams } from 'react-router-dom';
 import { Box, Card, CardHeader, CardContent, Button, Stack, Typography } from '@mui/material';
-import { ImagePreview, CommonFile, VideoPreview } from './filepreview';
+import { CommonFile, VideoPreview } from './filepreview';
 // config
 import { apiUrl } from '../../config';
 // redux
 import { useSelector } from '../../redux/store';
 import { bytesFormat } from '../../utils/files';
 import moment from 'moment';
+import ImagePreview from '../atoms/filespreview/ImagePreview';
 
 function FilePreview({ mime, url }: { mime: string; url: string }) {
   if (mime.includes('image/')) {
-    return <ImagePreview url={url} />;
+    return <ImagePreview url={url} arrayIndex={url} />;
   }
 
   if (mime.includes('video')) {

@@ -11,7 +11,7 @@ import { useSelector } from '../redux/store';
 import { apiUrl } from '../config';
 
 export const GalleryContextC = createContext({
-  openImage: (file: number | string, sfc?: boolean, isFileSfc?: boolean, tokenView?: boolean) => {}
+  openImage: (file: number | string, sfc?: boolean, tokenView?: boolean) => {}
 });
 
 interface GalleryContextProps {
@@ -30,12 +30,10 @@ export default function GalleryContext({ children }: GalleryContextProps) {
   const [RawURL, setRawURL] = useState('');
   const [selected, setSelected] = useState(0);
   const [sfc, setSfc] = useState(false);
-  const [isFileSF, setIsFileSF] = useState(false);
   const [tokenView, setTokenView] = useState(false);
 
-  const openImage = (file: number | string, sfcc = false, isFileSfc = false, tokenViewV = false) => {
+  const openImage = (file: number | string, sfcc = false, tokenViewV = false) => {
     setSfc(sfcc);
-    setIsFileSF(isFileSfc);
     setTokenView(tokenViewV);
     if (typeof file === 'string') {
       setRawURL(file);

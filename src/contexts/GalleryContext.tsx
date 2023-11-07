@@ -11,7 +11,7 @@ import { useSelector } from '../redux/store';
 import { apiUrl } from '../config';
 
 export const GalleryContextC = createContext({
-  openImage: (file: number | string, sfc?: boolean, isFileSfc?: boolean) => {}
+  openImage: (file: number | string, sfc?: boolean, isFileSfc?: boolean, tokenView?: boolean) => {}
 });
 
 interface GalleryContextProps {
@@ -24,16 +24,19 @@ export default function GalleryContext({ children }: GalleryContextProps) {
   const { id } = useParams();
   const session = useSelector((state) => state.session);
   const sharedfile = useSelector((state) => state.sharedfile);
+  const tokenview = useSelector((state) => state.tokenview);
 
   const [open, setOpen] = useState(false);
   const [RawURL, setRawURL] = useState('');
   const [selected, setSelected] = useState(0);
   const [sfc, setSfc] = useState(false);
   const [isFileSF, setIsFileSF] = useState(false);
+  const [tokenView, setTokenView] = useState(false);
 
-  const openImage = (file: number | string, sfcc = false, isFileSfc = false) => {
+  const openImage = (file: number | string, sfcc = false, isFileSfc = false, tokenViewV = false) => {
     setSfc(sfcc);
     setIsFileSF(isFileSfc);
+    setTokenView(tokenViewV);
     if (typeof file === 'string') {
       setRawURL(file);
     } else {
@@ -45,12 +48,18 @@ export default function GalleryContext({ children }: GalleryContextProps) {
   const pathSelected = sfc ? sharedfile.path : session.path;
   const diagonal = pathSelected ? '/' : '';
 
-  const firstdiagonal = isFileSF ? '' : '/';
+  const pathFinal = tokenView ? tokenview.path : sharedfile.path;
+
+  const firstdiagonal = pathFinal !== '' ? '' : '/';
+
+  const tokenViewPrefix = tokenView ? 'tokens/user/' : '';
+
+  const access_token_toggle = tokenView ? `?t=${session.access_token}` : '';
 
   const urlComplete = sfc
-    ? `${apiUrl}/shared-file/content/${id}${firstdiagonal}${sharedfile.path}${diagonal}${
-        isFileSF ? '' : sharedfile.content[selected]?.name
-      }`
+    ? `${apiUrl}/shared-file/${tokenViewPrefix}content/${id}${firstdiagonal}${pathFinal}${diagonal}${
+        tokenView ? tokenview.content[selected]?.name : sharedfile.content[selected]?.name
+      }${access_token_toggle}`
     : `${apiUrl}/files/list/${session.path}${diagonal}${session.files[selected]?.name}?t=${session.access_token}`;
 
   const changeImage = (option: OptionImg) => {

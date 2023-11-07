@@ -107,6 +107,16 @@ export async function getTokenInfoByUser(id: string, token: string): Promise<SFI
   return response.data;
 }
 
+export async function getContentTokenPathByUser(id: string, path: string, token: string): Promise<{ list: FileI[] }> {
+  const response = await sfconn.get(`tokens/user/content/${id}/${path}?t=${token}`);
+  return response.data;
+}
+
+export async function getContentTokenByUser(id: string, token: string): Promise<{ list: FileI[] }> {
+  const response = await sfconn.get(`tokens/user/content/${id}?t=${token}`);
+  return response.data;
+}
+
 interface newTokenInfoProps {
   expire: boolean;
   publict: boolean;

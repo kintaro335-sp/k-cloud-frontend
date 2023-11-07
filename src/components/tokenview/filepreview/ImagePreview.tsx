@@ -1,12 +1,17 @@
 import { Box } from '@mui/material';
 import useGallery from '../../../hooks/useGallery';
 
-export default function ImagePreview({ url }: { url: string }) {
-  const { openImage } = useGallery()
+interface ImagePreviewProps {
+  url: string;
+  arrayIndex: number;
+}
+
+export default function ImagePreview({ url, arrayIndex }: ImagePreviewProps) {
+  const { openImage } = useGallery();
   return (
     <Box
       onClick={() => {
-        openImage(0, true, true)
+        openImage(arrayIndex, true, true);
       }}
       component="img"
       src={url}

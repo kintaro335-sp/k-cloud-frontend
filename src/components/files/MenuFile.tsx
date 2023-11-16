@@ -3,6 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { TokensMenu } from './tokens';
 import { OptionsMove } from './movefilemenu';
+import { RenameFile } from './rename';
 import { useSnackbar } from 'notistack';
 // icons
 import { Icon } from '@iconify/react';
@@ -13,18 +14,16 @@ import shareIcon from '@iconify/icons-material-symbols/share';
 import zipfolderIcon from '@iconify/icons-material-symbols/folder-zip';
 
 // redux
-import { useSelector, useDispatch } from '../../redux/store';
-import { setFiles } from '../../redux/slices/session';
+import { useSelector } from '../../redux/store';
 
 // api
-import { deleteFile, getListFiles } from '../../api/files';
+import { deleteFile } from '../../api/files';
 import { shareFile } from '../../api/sharedfiles';
 import { FileI } from '../../@types/files';
 import { apiUrl } from '../../config';
 
 export default function MenuFile({ file, url, urlComplete }: { file: FileI; url: string; urlComplete: string }) {
   const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
   const { access_token, path } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -68,6 +67,7 @@ export default function MenuFile({ file, url, urlComplete }: { file: FileI; url:
         </MenuItem>
         <TokensMenu url={url} onClose={clickClose} />
         <OptionsMove menuItem pathFrom={path} filesToMove={[file.name]} onClose={clickClose} />
+        <RenameFile url={url} fileName={file.name} onClose={clickClose} />
         <MenuItem
           onClick={() => {
             if (window.confirm(`desea eliminar ${file.name}?`)) {

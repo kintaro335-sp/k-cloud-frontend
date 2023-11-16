@@ -175,6 +175,11 @@ export async function moveFile(
   });
 }
 
+export async function renameFile(url: string, newName: string, token: string) {
+  const result = await connFiles.post(`rename/${url}?t=${token}`, { newName });
+  return result.data;
+}
+
 // funciones creadas a partir de las anteriores
 
 export async function deleteSelectedFiles(path: string, fileNames: string[], token: string) {

@@ -182,21 +182,7 @@ export async function renameFile(url: string, newName: string, token: string) {
 
 // funciones creadas a partir de las anteriores
 
-export async function deleteSelectedFiles(path: string, fileNames: string[], token: string) {
-  const results = fileNames.map(async (file, i): Promise<1 | 0> => {
-    return new Promise((res) => {
-      setTimeout(() => {
-        deleteFile(`${path}/${file}`, token)
-          .then(() => {
-            res(1);
-          })
-          .catch((err) => {
-            console.error(err);
-            res(0);
-          });
-      }, i * 12);
-    });
-  });
-
-  return await Promise.all(results);
+export async function deleteSelectedFiles(path: string, fileNames: string[], token: string): Promise<{ message:string, files: number }> {
+  const result = await connFiles.patch(`deletemp/${path}?t=${token}`, { files: fileNames });
+  return result.data;
 }

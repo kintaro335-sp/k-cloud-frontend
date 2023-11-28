@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { RouteBar } from '../components/files/routebar';
 import { Box, Grid, Stack, Card, CardContent, Button } from '@mui/material';
 import FileElement from '../components/files/FileElement';
@@ -13,10 +13,12 @@ import { setFiles, setTree, setPath } from '../redux/slices/session';
 // api
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
+import { createNewSocket } from '../api/websocket';
 import { FileI } from '../@types/files';
 import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
+  const socketClient = useRef(createNewSocket());
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { showOptions } = useFileSelect();
@@ -27,27 +29,39 @@ export default function Files() {
     setShowQ((prev) => prev + 12);
   };
 
-  useEffect(() => {
-    async function getFiles() {
-      const { list } = await getListFiles(path, access_token).catch((err) => {
-        if (isAxiosError(err)) {
-          if (err.response?.status === 404) {
-            dispatch(setPath(''));
-            enqueueSnackbar('No Encontrado', { variant: 'error' });
-          }
-        } else {
-          enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
+  async function getFiles() {
+    const { list } = await getListFiles(path, access_token).catch((err) => {
+      if (isAxiosError(err)) {
+        if (err.response?.status === 404) {
+          dispatch(setPath(''));
+          enqueueSnackbar('No Encontrado', { variant: 'error' });
         }
-        dispatch(setFiles([]));
-        return { list: [] };
-      });
-      dispatch(setFiles(list));
-      const tree = await getTreeAPI('', access_token).catch((err) => {
+      } else {
+        enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
+      }
+      dispatch(setFiles([]));
+      return { list: [] };
+    });
+    dispatch(setFiles(list));
+    getTreeAPI('', access_token)
+      .then((tree) => {
+        dispatch(setTree(tree));
+      })
+      .catch((err) => {
         console.error(err);
         return [];
       });
-      dispatch(setTree(tree));
-    }
+  }
+
+  useEffect(() => {
+    const newSocket = createNewSocket();
+    newSocket.auth = { access_token };
+    newSocket.on('file-change', (data) => {
+      console.log(data);
+      getFiles();
+    });
+    newSocket.connect();
+    socketClient.current = newSocket;
     getFiles();
     setShowQ(24);
   }, [access_token, path]);

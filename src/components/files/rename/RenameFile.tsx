@@ -42,7 +42,7 @@ export default function RenameFile({ fileName, url, onClose }: RenameFileProps) 
     }
   };
 
-  const validationSchema = Yup.object().shape({ newName: Yup.string().required().min(1) });
+  const validationSchema = Yup.object().shape({ newName: Yup.string().required().min(1).max(100) });
 
   const {
     formState: { isSubmitting },
@@ -69,7 +69,7 @@ export default function RenameFile({ fileName, url, onClose }: RenameFileProps) 
       <MenuItem onClick={clickOpen}><Icon icon={renameIcon} width="25px" height="25px" /> Renombrar</MenuItem>
       <Dialog open={open} onClose={clickClose}>
         <DialogContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField {...register('newName')} fullWidth label="Nombre" />

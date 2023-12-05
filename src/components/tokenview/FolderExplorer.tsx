@@ -3,27 +3,29 @@ import { useParams } from 'react-router-dom';
 // mui
 import { Grid, Box, Stack, Typography } from '@mui/material';
 import { RouteBar } from '../files/routebar';
-import FileElement from '../files/FileElement';
+import FileElement from './FileElement';
+import {  } from '../tokens'
 // redux
 import { useSelector } from '../../redux/store';
-import { setPath, setContent } from '../../redux/slices/sharedfile';
+import { setPath, setContent } from '../../redux/slices/tokenview';
 // api
-import { getContentToken, getContentTokenPath } from '../../api/sharedfiles';
+import { getContentTokenByUser, getContentTokenPathByUser } from '../../api/sharedfiles';
 // utils
 import { fullDateFormat } from '../../utils/dateformat';
 
 export default function FolderExplorer() {
   const { id } = useParams();
-  const { path, content, info } = useSelector((state) => state.sharedfile);
-
+  const { path, content, info } = useSelector((state) => state.tokenview);
+  const { access_token } = useSelector((state) => state.session);
+  
   useEffect(() => {
     async function getContentEffect() {
       if (id === undefined) return;
       if (path === '') {
-        const content = await getContentToken(id);
+        const content = await getContentTokenByUser(id, access_token);
         setContent(content.list);
       } else {
-        const content = await getContentTokenPath(id, path);
+        const content = await getContentTokenPathByUser(id, path, access_token);
         setContent(content.list);
       }
     }

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 // componenets
-import { Card, Box, CardContent, Typography, CardHeader, Tooltip, Stack } from '@mui/material';
+import { Card, Box, CardContent, Typography, CardHeader, Tooltip, Stack, Checkbox } from '@mui/material';
 import TokenMenu from './TokenMenu';
 import { TokenIcon } from '../atoms';
 // icons
@@ -15,7 +15,9 @@ import { useSelector } from '../../redux/store';
 import { apiUrl } from '../../config';
 // utils
 import { fullDateFormat } from '../../utils/dateformat';
-
+//css
+import '../files/css/fileelement.css';
+import useFileSelect from '../../hooks/useFileSelect';
 interface TokenUElementProps {
   token: TokenElement;
 }
@@ -26,9 +28,22 @@ export default function TokenUElement({ token }: TokenUElementProps) {
   const urlRaw = `${apiUrl}/shared-file/tokens/user/content/${id}?t=${access_token}`;
   const urlRawDownload = `${urlRaw}?d=1&t=${access_token}`;
   const urlNormal = `${window.origin}/shared-files/id/${id}`;
+  const { files, deselect, select } = useFileSelect();
+  const selected = files.includes(token.id);
   return (
-    <Card>
+    <Card className="cardfile">
       <CardContent>
+        <Box
+          sx={{ display: selected ? 'block !important' : undefined, top: '20px', zIndex: 100 }}
+          className="checkfile"
+        >
+          <Checkbox
+            checked={selected}
+            onClick={() => {
+              selected ? deselect(token.id) : select(token.id);
+            }}
+          />
+        </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
           <TokenIcon type={type} mime_type={mime_type} url={urlRaw} />
         </Box>

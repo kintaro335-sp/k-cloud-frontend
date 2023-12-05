@@ -28,7 +28,7 @@ export default function Systemcontext({ children }: SystemcontextProps) {
 
   useEffect(() => {
     clearSelect();
-  }, [path]);
+  }, [path, pathname]);
 
   useBeforeunload(filesDir.length !== 0 ? (e) => e.preventDefault() : undefined);
 

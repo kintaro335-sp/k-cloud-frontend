@@ -15,8 +15,7 @@ export default function DeleteButton() {
   const handleDeleteFiles = () => {
     if (window.confirm(`desea eliminar ${files.length} archivos`)) {
       deleteSelectedFiles(path, files, access_token).then((result) => {
-        const count = result.filter((n) => n === 1).length;
-        enqueueSnackbar(`Eliminados ${count} de ${result.length} Archivos`, { variant: 'success' });
+        enqueueSnackbar(`Eliminando Archivos`, { variant: 'success' });
         clearSelect();
       });
     }

@@ -11,7 +11,7 @@ import {
   setWrittenProgress
 } from '../redux/slices/fileUploader';
 import { setFiles } from '../redux/slices/session';
-import { initializeFileAPI, uploadBlobAPI, statusFileAPI, getListFiles } from '../api/files';
+import { initializeFileAPI, uploadBlobAPI, statusFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { timeOutIf } from '../utils/promises';
 import { isAxiosError } from 'axios';
@@ -127,8 +127,6 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       await sendBlobs(path);
     }
     await closeFile(path);
-    const listFiles = await getListFiles(path, access_token);
-    dispatch(setFiles(listFiles.list));
   };
 
   useEffect(() => {

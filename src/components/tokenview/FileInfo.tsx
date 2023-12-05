@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { Box, Card, CardHeader, CardContent, Button, Stack, Typography } from '@mui/material';
-import { ImagePreview, CommonFile, VideoPreview } from './filepreview';
+import { CommonFile, VideoPreview } from './filepreview';
+import ImagePreview from '../atoms/filespreview/ImagePreview';
 // config
 import { apiUrl } from '../../config';
 // redux
@@ -10,7 +11,7 @@ import moment from 'moment';
 
 function FilePreview({ mime, url }: { mime: string; url: string }) {
   if (mime.includes('image/')) {
-    return <ImagePreview url={url} />;
+    return <ImagePreview url={url} arrayIndex={url} />;
   }
 
   if (mime.includes('video')) {

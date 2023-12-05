@@ -28,6 +28,11 @@ export async function deleteToken(id: string, token: string): Promise<{ message:
   return response.data;
 }
 
+export async function deleteTokens(ids: string[], token: string): Promise<{ message: string }> {
+  const response = await sfconn.patch(`token/delete?t=${token}`, { ids });
+  return response.data;
+}
+
 export async function getContentTokenPath(id: string, path: string): Promise<{ list: FileI[] }> {
   const response = await sfconn.get(`content/${id}/${path}`);
   return response.data;
@@ -99,6 +104,16 @@ export async function getTokenPagesByUser(token: string): Promise<{ pages: numbe
 
 export async function getTokenInfoByUser(id: string, token: string): Promise<SFInfoResponse> {
   const response = await sfconn.get(`tokens/user/info/${id}?t=${token}`);
+  return response.data;
+}
+
+export async function getContentTokenPathByUser(id: string, path: string, token: string): Promise<{ list: FileI[] }> {
+  const response = await sfconn.get(`tokens/user/content/${id}/${path}?t=${token}`);
+  return response.data;
+}
+
+export async function getContentTokenByUser(id: string, token: string): Promise<{ list: FileI[] }> {
+  const response = await sfconn.get(`tokens/user/content/${id}?t=${token}`);
   return response.data;
 }
 

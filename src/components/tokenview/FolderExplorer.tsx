@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // mui
-import { Grid, Box, Stack, Typography } from '@mui/material';
+import { Grid, Box, Stack, Typography, Button } from '@mui/material';
 import { RouteBar } from '../files/routebar';
 import FileElement from './FileElement';
 // redux
@@ -16,6 +16,11 @@ export default function FolderExplorer() {
   const { id } = useParams();
   const { path, content, info } = useSelector((state) => state.tokenview);
   const { access_token } = useSelector((state) => state.session);
+  const [showQ, setShowQ] = useState<number>(48);
+
+  const handleShowMore = () => {
+    setShowQ((prev) => prev + 12);
+  };
 
   useEffect(() => {
     async function getContentEffect() {
@@ -51,11 +56,18 @@ export default function FolderExplorer() {
       </Box>
       <Box sx={{ height: '74vh', overflowY: 'scroll' }}>
         <Grid container spacing={2}>
-          {content.map((file, i) => (
+          {content.slice(0, showQ).map((file, i) => (
             <Grid key={`${file.name}-${i}`} item xs={12} md={4} lg={3}>
               <FileElement file={file} arrayIndex={i} context="tokenView" />
             </Grid>
           ))}
+          {content.length > showQ && (
+            <Grid item xs={12}>
+              <Button variant="contained" fullWidth onClick={handleShowMore}>
+                Mostar mas
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Box>
     </Box>

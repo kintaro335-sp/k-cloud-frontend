@@ -118,7 +118,7 @@ export default function FileElement({ file, sf = false, arrayIndex }: FileElemen
     if (mime_type.includes('image/')) {
       return (
         <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
-          <ImgFile url={urlComplete} arrayIndex={arrayIndex} sfc={sf} />
+          <ImgFile url={urlComplete} arrayIndex={arrayIndex} context={sf ? 'sharedFile' : 'default'} />
         </FileInfo>
       );
     }

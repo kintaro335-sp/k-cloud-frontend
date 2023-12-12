@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dialog, Box, Stack, IconButton } from '@mui/material';
 // icon
@@ -9,9 +9,10 @@ import iconLeft from '@iconify/icons-material-symbols/arrow-left-rounded';
 import { useSelector } from '../redux/store';
 // config
 import { apiUrl } from '../config';
+import { explorerContext } from '../@types/general';
 
 export const GalleryContextC = createContext({
-  openImage: (file: number | string, sfc?: boolean, tokenView?: boolean) => {}
+  openImage: (file: number | string, context: explorerContext) => {}
 });
 
 interface GalleryContextProps {
@@ -22,47 +23,53 @@ type OptionImg = 'next' | 'before';
 
 export default function GalleryContext({ children }: GalleryContextProps) {
   const { id } = useParams();
-  const session = useSelector((state) => state.session);
-  const sharedfile = useSelector((state) => state.sharedfile);
-  const tokenview = useSelector((state) => state.tokenview);
-
   const [open, setOpen] = useState(false);
   const [RawURL, setRawURL] = useState('');
   const [selected, setSelected] = useState(0);
-  const [sfc, setSfc] = useState(false);
-  const [tokenView, setTokenView] = useState(false);
+  const [contextExplorer, setContextExplorer] = useState<explorerContext>('default');
+  const session = useSelector((state) => state.session);
+  const sharedFile = useSelector((state) => state.sharedfile);
+  const tokenView = useSelector((state) => state.tokenview);
 
-  const openImage = (file: number | string, sfcc = false, tokenViewV = false) => {
-    setSfc(sfcc);
-    setTokenView(tokenViewV);
-    if (typeof file === 'string') {
-      setRawURL(file);
-    } else {
-      setRawURL('');
-      setSelected(file);
+  const paths = useMemo(
+    () => ({
+      default: session.path,
+      sharedFile: sharedFile.path,
+      tokenView: tokenView.path
+    }),
+    [session, sharedFile, tokenView]
+  );
+  const contents = useMemo(
+    () => ({
+      default: session.files,
+      sharedFile: sharedFile.content,
+      tokenView: tokenView.content
+    }),
+    [session, sharedFile, tokenView]
+  );
+  const urlPrefixes = {
+    default: '/files/list',
+    sharedFile: '/shared-file/content',
+    tokenView: '/shared-file/tokens/user/content'
+  };
+
+  const openImage = (file: number | string, context: explorerContext) => {
+    switch (typeof file) {
+      case 'string':
+        setRawURL(file);
+        break;
+      case 'number':
+        setRawURL('');
+        setSelected(file);
+        setContextExplorer(context);
+        break;
     }
     setOpen(true);
   };
-  const pathSelected = sfc ? sharedfile.path : session.path;
-  const diagonal = pathSelected ? '/' : '';
-
-  const pathFinal = tokenView ? tokenview.path : sharedfile.path;
-
-  const firstdiagonal = pathFinal !== '' ? '' : '/';
-
-  const tokenViewPrefix = tokenView ? 'tokens/user/' : '';
-
-  const access_token_toggle = tokenView ? `?t=${session.access_token}` : '';
-
-  const urlComplete = sfc
-    ? `${apiUrl}/shared-file/${tokenViewPrefix}content/${id}${firstdiagonal}${pathFinal}${diagonal}${
-        tokenView ? tokenview.content[selected]?.name : sharedfile.content[selected]?.name
-      }${access_token_toggle}`
-    : `${apiUrl}/files/list/${session.path}${diagonal}${session.files[selected]?.name}?t=${session.access_token}`;
 
   const changeImage = (option: OptionImg) => {
-    const listFiles = sfc ? sharedfile.content : session.files;
     let newSelected = selected;
+    const listFiles = contents[contextExplorer];
     switch (option) {
       case 'before':
         newSelected--;
@@ -83,6 +90,20 @@ export default function GalleryContext({ children }: GalleryContextProps) {
     }
   };
 
+  const urlFinal = useMemo(() => {
+    if (RawURL !== '') {
+      return RawURL;
+    }
+    const PathFinal = paths[contextExplorer];
+    const contentFinal = contents[contextExplorer];
+    const access_token = ['default', 'tokenView'].includes(contextExplorer) ? `?t=${session.access_token}` : '';
+    const urlPrefix = urlPrefixes[contextExplorer];
+    const nameFile = contentFinal[selected]?.name;
+    const diagonal = PathFinal === '' ? '' : '/';
+    console.log(PathFinal)
+    return `${apiUrl}${urlPrefix}/${id}${diagonal}${PathFinal}/${nameFile}${access_token}`;
+  }, [RawURL, paths, contents, contextExplorer, selected, id]);
+
   return (
     <GalleryContextC.Provider value={{ openImage }}>
       <Dialog
@@ -98,7 +119,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
               <Icon icon={iconLeft} width="25px" height="25px" />
             </IconButton>
           )}
-          <Box component="img" src={RawURL === '' ? urlComplete : RawURL} height="auto" width="700px" />
+          <Box component="img" src={urlFinal} height="auto" width="700px" />
           {RawURL === '' && (
             <IconButton onClick={() => changeImage('next')}>
               <Icon icon={iconRight} width="25px" height="25px" />

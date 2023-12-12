@@ -11,6 +11,7 @@ import { apiUrl } from '../../config';
 // redux
 import { useSelector, useDispatch } from '../../redux/store';
 import { setPath as setPathSF } from '../../redux/slices/tokenview';
+import { explorerContext } from '../../@types/general';
 
 interface FileInfoProps {
   file: FileI;
@@ -63,17 +64,17 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
 interface FileElementProps {
   file: FileI;
   arrayIndex: number;
-  sf?: boolean;
+  context?: explorerContext;
 }
 
-export default function FileElement({ file, arrayIndex }: FileElementProps) {
+export default function FileElement({ file, arrayIndex, context = 'default' }: FileElementProps) {
   const { name, size, type, mime_type, extension, tokens } = file;
   const { id } = useParams();
   const session = useSelector((state) => state.session);
-  const sharedfile = useSelector((state) => state.sharedfile);
+  const sharedfile = useSelector((state) => state.tokenview);
   const pathSelected = sharedfile.path;
 
-  const diagonal = pathSelected ? '/' : '';
+  const diagonal = pathSelected === '' ? '' : '/';
 
   const url = `${sharedfile.path}${diagonal}${name}`;
   const urlComplete = `${apiUrl}/shared-file/tokens/user/content/${id}/${sharedfile.path}${diagonal}${name}?t=${session.access_token}`;
@@ -86,7 +87,7 @@ export default function FileElement({ file, arrayIndex }: FileElementProps) {
     if (mime_type.includes('image/')) {
       return (
         <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf>
-          <ImagePreview url={urlComplete} arrayIndex={arrayIndex} tokenView />
+          <ImagePreview url={urlComplete} arrayIndex={arrayIndex} context={context} />
         </FileInfo>
       );
     }

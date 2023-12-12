@@ -15,7 +15,7 @@ export default function ImgFile({ url }: ImgFileProps) {
       width="220px"
       height="220px"
       onClick={() => {
-        openImage(url);
+        openImage(url, 'sharedFile');
       }}
       sx={{ objectFit: 'cover', objectPosition: '80% 0%' }}
     />

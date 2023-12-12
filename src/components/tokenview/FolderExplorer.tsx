@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { Grid, Box, Stack, Typography } from '@mui/material';
 import { RouteBar } from '../files/routebar';
 import FileElement from './FileElement';
-import {  } from '../tokens'
 // redux
 import { useSelector } from '../../redux/store';
 import { setPath, setContent } from '../../redux/slices/tokenview';
@@ -17,7 +16,7 @@ export default function FolderExplorer() {
   const { id } = useParams();
   const { path, content, info } = useSelector((state) => state.tokenview);
   const { access_token } = useSelector((state) => state.session);
-  
+
   useEffect(() => {
     async function getContentEffect() {
       if (id === undefined) return;
@@ -54,7 +53,7 @@ export default function FolderExplorer() {
         <Grid container spacing={2}>
           {content.map((file, i) => (
             <Grid key={`${file.name}-${i}`} item xs={12} md={4} lg={3}>
-              <FileElement file={file} arrayIndex={i} sf />
+              <FileElement file={file} arrayIndex={i} context="tokenView" />
             </Grid>
           ))}
         </Grid>

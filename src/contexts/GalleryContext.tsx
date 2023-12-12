@@ -99,9 +99,9 @@ export default function GalleryContext({ children }: GalleryContextProps) {
     const access_token = ['default', 'tokenView'].includes(contextExplorer) ? `?t=${session.access_token}` : '';
     const urlPrefix = urlPrefixes[contextExplorer];
     const nameFile = contentFinal[selected]?.name;
-    const diagonal = PathFinal === '' ? '' : '/';
-    console.log(PathFinal)
-    return `${apiUrl}${urlPrefix}/${id}${diagonal}${PathFinal}/${nameFile}${access_token}`;
+    const diagonal = PathFinal === '' && contextExplorer !== 'default' ? '' : '/';
+    const idFinal = contextExplorer !== 'default' ? id : '';
+    return `${apiUrl}${urlPrefix}/${idFinal}${diagonal}${PathFinal}/${nameFile}${access_token}`;
   }, [RawURL, paths, contents, contextExplorer, selected, id]);
 
   return (

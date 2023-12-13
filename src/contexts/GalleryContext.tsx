@@ -1,6 +1,6 @@
-import { createContext, useState, useMemo } from 'react';
+import { createContext, useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Dialog, Box, Stack, IconButton } from '@mui/material';
+import { Dialog, DialogContent, Box, Stack, IconButton, Toolbar, AppBar } from '@mui/material';
 // icon
 import { Icon } from '@iconify/react';
 import iconRight from '@iconify/icons-material-symbols/arrow-right-alt-rounded';
@@ -24,6 +24,7 @@ type OptionImg = 'next' | 'before';
 export default function GalleryContext({ children }: GalleryContextProps) {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
+  const [fullScreen, setFullScreen] = useState(false);
   const [RawURL, setRawURL] = useState('');
   const [selected, setSelected] = useState(0);
   const [contextExplorer, setContextExplorer] = useState<explorerContext>('default');
@@ -104,28 +105,65 @@ export default function GalleryContext({ children }: GalleryContextProps) {
     return `${apiUrl}${urlPrefix}/${idFinal}${diagonal}${PathFinal}/${nameFile}${access_token}`;
   }, [RawURL, paths, contents, contextExplorer, selected, id]);
 
+  const nameFileFinal = useMemo(() => {
+    if (RawURL !== '') {
+      const pathArr = RawURL.split('/');
+      return pathArr[pathArr.length - 1] as string;
+    }
+    const contentFinal = contents[contextExplorer];
+    const nameFile = contentFinal[selected]?.name || '';
+    return nameFile;
+  }, [RawURL, contents, contextExplorer, selected]);
+
+  const clickClose = () => {
+    setOpen(false);
+  };
+
+  const isImage = useMemo(() => {
+    const uuidRegex = new RegExp(/[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}/);
+    if (nameFileFinal.match(uuidRegex)?.length !== 0) {
+      return true;
+    }
+    const imageNameRegex = new RegExp(/.+(.png|.gif|.jpg)/);
+    return nameFileFinal.match(imageNameRegex)?.length !== 0;
+  }, [nameFileFinal]);
+
+  useEffect(() => {
+    if (RawURL === '') {
+      window.onkeydown = (event) => {
+        switch (event.key) {
+          case 'ArrowLeft':
+            changeImage('before');
+            break;
+          case 'ArrowRight':
+            changeImage('next');
+            break;
+        }
+      };
+    }
+  });
+
   return (
     <GalleryContextC.Provider value={{ openImage }}>
-      <Dialog
-        open={open}
-        maxWidth="md"
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
-        <Stack direction="row">
-          {RawURL === '' && (
-            <IconButton onClick={() => changeImage('before')}>
-              <Icon icon={iconLeft} width="25px" height="25px" />
-            </IconButton>
-          )}
-          <Box component="img" src={urlFinal} height="auto" width="700px" />
-          {RawURL === '' && (
-            <IconButton onClick={() => changeImage('next')}>
-              <Icon icon={iconRight} width="25px" height="25px" />
-            </IconButton>
-          )}
-        </Stack>
+      <Dialog open={open} maxWidth="lg" onClose={clickClose} fullScreen={fullScreen}>
+        <AppBar position="relative">
+          <Toolbar>{nameFileFinal}</Toolbar>
+        </AppBar>
+        <DialogContent>
+          <Stack direction="row" height="100%">
+            {RawURL === '' && (
+              <IconButton onClick={() => changeImage('before')}>
+                <Icon icon={iconLeft} width="25px" height="25px" />
+              </IconButton>
+            )}
+            <img src={urlFinal} height="auto" width="100%" />
+            {RawURL === '' && (
+              <IconButton onClick={() => changeImage('next')}>
+                <Icon icon={iconRight} width="25px" height="25px" />
+              </IconButton>
+            )}
+          </Stack>
+        </DialogContent>
       </Dialog>
       {children}
     </GalleryContextC.Provider>

@@ -168,7 +168,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
             <Box>{nameFileFinal}</Box>
           </Toolbar>
         </AppBar>
-        <DialogContent>
+        <DialogContent sx={{ padding: '17px 0px' }}>
           <Stack direction="row">
             {RawURL === '' && (
               <IconButton onClick={() => changeImage('before')}>

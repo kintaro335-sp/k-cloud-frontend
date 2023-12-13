@@ -1,6 +1,6 @@
 import { createContext, useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Dialog, DialogContent, Box, Stack, IconButton, Toolbar, AppBar } from '@mui/material';
+import { Dialog, DialogContent, Box, Stack, IconButton, Toolbar, AppBar, Tooltip } from '@mui/material';
 // icon
 import { Icon } from '@iconify/react';
 import iconRight from '@iconify/icons-material-symbols/arrow-right-alt-rounded';
@@ -10,6 +10,10 @@ import { useSelector } from '../redux/store';
 // config
 import { apiUrl } from '../config';
 import { explorerContext } from '../@types/general';
+
+import closeIcon from '@iconify/icons-material-symbols/close';
+import fullScreenIcon from '@iconify/icons-material-symbols/fullscreen';
+import fullScreenExitIcon from '@iconify/icons-material-symbols/fullscreen-exit';
 
 export const GalleryContextC = createContext({
   openImage: (file: number | string, context: explorerContext) => {}
@@ -117,6 +121,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
 
   const clickClose = () => {
     setOpen(false);
+    setFullScreen(false);
   };
 
   const isImage = useMemo(() => {
@@ -147,10 +152,24 @@ export default function GalleryContext({ children }: GalleryContextProps) {
     <GalleryContextC.Provider value={{ openImage }}>
       <Dialog open={open} maxWidth="lg" onClose={clickClose} fullScreen={fullScreen}>
         <AppBar position="relative">
-          <Toolbar>{nameFileFinal}</Toolbar>
+          <Toolbar>
+            <IconButton onClick={clickClose}>
+              <Icon icon={closeIcon} width="25px" height="25px" />
+            </IconButton>
+            <Tooltip title={fullScreen ? 'salir pantalla completa' : 'pantalla completa'}>
+              <IconButton
+                onClick={() => {
+                  setFullScreen((s) => !s);
+                }}
+              >
+                <Icon icon={!fullScreen ? fullScreenIcon : fullScreenExitIcon} width="25px" height="25px" />
+              </IconButton>
+            </Tooltip>
+            <Box>{nameFileFinal}</Box>
+          </Toolbar>
         </AppBar>
         <DialogContent>
-          <Stack direction="row" height="100%">
+          <Stack direction="row">
             {RawURL === '' && (
               <IconButton onClick={() => changeImage('before')}>
                 <Icon icon={iconLeft} width="25px" height="25px" />

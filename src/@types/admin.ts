@@ -12,6 +12,7 @@ export interface User {
 }
 
 export interface AdminState {
+  owner: string | null
   users: User[];
 }
 

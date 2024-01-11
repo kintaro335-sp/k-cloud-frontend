@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import { IconButton, Menu, MenuItem, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { CustomDialog } from '../molecules';
 import NewTokenForm from '../files/tokens/NewTokenForm';
 import { TokenElement } from '../../@types/sharedfiles';
@@ -23,6 +24,8 @@ export default function TokenMenu({ token }: TokenMenuProps) {
   const anchorRef = useRef<HTMLButtonElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const { access_token } = useSelector((state) => state.session);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const clickOpen = () => {
     setOpen(true);
@@ -42,13 +45,19 @@ export default function TokenMenu({ token }: TokenMenuProps) {
   return (
     <>
       <IconButton onClick={clickOpen} ref={anchorRef}>
-        <Icon icon={iconMoreOptions} width="25px" height="height" />
+        <Icon
+          icon={iconMoreOptions}
+          color={theme.palette.text.primary}
+          width={isMobile ? '33px' : '25px'}
+          height={isMobile ? '33px' : '25px'}
+        />
       </IconButton>
       <Menu open={open} onClose={clickClose} anchorEl={anchorRef.current}>
         <CustomDialog
           Button={(onlcickB) => (
             <MenuItem onClick={onlcickB}>
-              <Icon icon={iconEdit} width="25px" height="25px" /> Editar
+              <Icon icon={iconEdit} width="25px" height="height" />
+              Editar
             </MenuItem>
           )}
           onClose={clickClose}

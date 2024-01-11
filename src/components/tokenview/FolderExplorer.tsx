@@ -54,20 +54,21 @@ export default function FolderExplorer() {
           />
         </Stack>
       </Box>
-      <Box sx={{ height: '74vh', overflowY: 'scroll' }}>
+      <Box
+        sx={{ height: '74vh', overflowY: 'scroll' }}
+        onScroll={(e) => {
+          const { scrollTop, scrollHeight } = e.currentTarget;
+          if (scrollTop / scrollHeight >= 0.82) {
+            handleShowMore();
+          }
+        }}
+      >
         <Grid container spacing={2}>
           {content.slice(0, showQ).map((file, i) => (
             <Grid key={`${file.name}-${i}`} item xs={12} md={4} lg={3}>
               <FileElement file={file} arrayIndex={i} context="tokenView" />
             </Grid>
           ))}
-          {content.length > showQ && (
-            <Grid item xs={12}>
-              <Button variant="contained" fullWidth onClick={handleShowMore}>
-                Mostar mas
-              </Button>
-            </Grid>
-          )}
         </Grid>
       </Box>
     </Box>

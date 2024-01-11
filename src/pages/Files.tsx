@@ -111,7 +111,7 @@ export default function Files() {
           sx={{ width: '100%', height: '68%', marginTop: '1ex', overflowY: 'scroll' }}
           onScroll={(e) => {
             const { scrollTop, scrollHeight } = e.currentTarget;
-            if (scrollTop / scrollHeight >= 0.82) {
+            if (scrollTop / scrollHeight >= 0.77) {
               handleShowMore();
             }
           }}

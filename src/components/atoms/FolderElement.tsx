@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, Tooltip, Box, Typography } from '@mui/material';
-import { Folder } from '../filetypes';
-import { FileI } from '../../../@types/files';
+import { Folder } from '../files/filetypes';
+import { FileI } from '../../@types/files';
 
 interface FolderElementProps {
   file: FileI;

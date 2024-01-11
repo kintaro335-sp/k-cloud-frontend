@@ -165,7 +165,7 @@ export async function moveFile(
 
   return new Promise((resolve, reject) => {
     connFiles
-      .post(`move/${pathComplete}?t=${token}`, { newpath: newPathComplete })
+      .post(`move/file/${pathComplete}?t=${token}`, { newpath: newPathComplete })
       .then((result) => {
         resolve(result.data);
       })
@@ -175,6 +175,26 @@ export async function moveFile(
   });
 }
 
+export async function moveFiles(
+  path: string,
+  newPath: string,
+  files: string[],
+  token: string
+): Promise<{ message: string }> {
+  const pathComplete = `${path}`;
+  const newPathComplete = `${newPath}`;
+
+  return new Promise((resolve, reject) => {
+    connFiles
+      .post(`move/files/${pathComplete}?t=${token}`, { newPath: newPathComplete, files })
+      .then((result) => {
+        resolve(result.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
 export async function renameFile(url: string, newName: string, token: string) {
   const result = await connFiles.post(`rename/${url}?t=${token}`, { newName });
   return result.data;
@@ -182,7 +202,11 @@ export async function renameFile(url: string, newName: string, token: string) {
 
 // funciones creadas a partir de las anteriores
 
-export async function deleteSelectedFiles(path: string, fileNames: string[], token: string): Promise<{ message:string, files: number }> {
+export async function deleteSelectedFiles(
+  path: string,
+  fileNames: string[],
+  token: string
+): Promise<{ message: string; files: number }> {
   const result = await connFiles.patch(`deletemp/${path}?t=${token}`, { files: fileNames });
   return result.data;
 }

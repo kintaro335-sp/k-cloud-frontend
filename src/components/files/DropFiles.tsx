@@ -22,7 +22,7 @@ export default function DropFiles() {
       onDrop={(e) => {
         e.preventDefault();
         const files = e.dataTransfer.files;
-        [...new Array(files.length).map((_, i) => i)].forEach((_e, i) => {
+        [...new Array(files.length).slice(0, 100).map((_, i) => i)].forEach((_e, i) => {
           uploadFile(path, files[i]);
         });
       }}

@@ -130,11 +130,11 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   // effect to init files
   useEffect(() => {
     filesDir.forEach((dir) => {
-      const files = getFilesState();
-      const fileM = files.files[dir];
+      const state = getFilesState();
+      const fileM = state.files[dir];
       if (fileM === null) return;
       if (fileM === undefined) return;
-      if (!fileM.inicializado) {
+      if (fileM.inicializado && !fileM.uploading && state.uploading < 5) {
         initializeFile(dir).then((r) => {
           if (r) {
             sendBlobs(dir).then(() => {

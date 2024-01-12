@@ -125,7 +125,6 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       }
     });
     setBlock(false);
-    console.log('slow')
   }, [block]);
 
   useEffect(() => {

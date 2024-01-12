@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef } from 'react';
+import React, { createContext, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector, getState } from '../redux/store';
 import {
   addFile,
@@ -17,6 +17,7 @@ import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
 import { createNewSocket } from '../api/websocket';
 
+const getFilesState = () => getState().files;
 export const FileUploadContext = createContext({ uploadFile: (path: string, file: File | null) => {} });
 
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
@@ -30,11 +31,9 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     addFile(path, file);
   };
 
-  const getFilesState = () => getState().files;
-
   const initializeFile = async (path: string): Promise<boolean> => {
-    const files = getFilesState();
-    const fileM = files.files[path];
+    const state = getFilesState();
+    const fileM = state.files[path];
     if (fileM === null) return false;
     if (fileM === undefined) return false;
     return new Promise((resolve) => {
@@ -47,17 +46,20 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
           if (isAxiosError(err)) {
             if (err.response?.status === 400) {
               // enqueueSnackbar('archivo ya existe', { variant: 'error' });
+              removeFileUploading(path);
+            }
+            if (err.response?.status === 403) {
+              setInitializedFile(path);
             }
           }
-          removeFileUploading(path)
           resolve(false);
         });
     });
   };
 
   const sendBlob = async (path: string, position: number, size: number): Promise<void> => {
-    const files = getFilesState();
-    const fileM = files.files[path];
+    const state = getFilesState();
+    const fileM = state.files[path];
     if (fileM === null) return;
     if (fileM === undefined) return;
     const blob = fileM.file.slice(position, position + size);
@@ -79,13 +81,13 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   };
 
   const sendBlobs = async (path: string): Promise<void> => {
-    const files = getFilesState();
-    const fileM = files.files[path];
+    setUploadingFile(path);
+    const state = getFilesState();
+    const fileM = state.files[path];
     if (fileM === null) return;
     if (fileM === undefined) return;
     const blobs = getNumberBlobs(fileM.size);
     setTotalBlobs(path, blobs);
-    setUploadingFile(path);
     for (let i = 0; i < blobs; i++) {
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
@@ -100,28 +102,26 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   const closeFile = async (path: string) => {
     try {
       removeFileUploading(path);
-      if (getState().files.filesDir.length > 0) {
-        startUpload();
-      }
     } catch (err) {
       console.error(err);
     }
     return;
   };
 
-  function startUpload() {
-    getState().files.filesDir.forEach((dir) => {
-      const files = getFilesState();
-      const fileM = files.files[dir];
+  const startUpload = () => {
+    const state = getFilesState();
+    state.filesDir.forEach((dir) => {
+      const fileM = state.files[dir];
       if (fileM === null) return;
       if (fileM === undefined) return;
-      if (fileM.inicializado && !fileM.uploading && getState().files.uploading < 10) {
+      if (fileM.inicializado && !fileM.uploading && state.uploading < 10) {
+        console.log('send', dir);
         sendBlobs(dir).then(() => {
           closeFile(dir);
         });
       }
     });
-  }
+  };
 
   // effect to init files
   useEffect(() => {
@@ -143,7 +143,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       setWrittenProgress(data.path, data.fileStatus.saved);
     });
     newSocket.on('file-upload', () => {
-      if (getState().files.filesDir.length !== 0) startUpload();
+      startUpload();
+      //if (getState().files.filesDir.length !== 0)
     });
     newSocket.connect();
     socketClient.current = newSocket;

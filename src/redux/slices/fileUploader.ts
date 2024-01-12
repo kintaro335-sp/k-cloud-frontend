@@ -74,6 +74,7 @@ const slice = createSlice({
       if (fileM === null) return;
       if (fileM === undefined) return;
       fileM.blobsSended = sendedB;
+      fileM.blobProgress = 0;
     },
     removeFileUploading(state, action) {
       const path = action.payload as string;
@@ -96,7 +97,8 @@ const slice = createSlice({
       const { path, progress } = action.payload as { path: string; progress: number };
       const fileM = state.files[path];
       if (fileM === null || fileM === undefined) return;
-      fileM.blobProgress = progress;
+      if(fileM.blobProgress > progress) return;
+      fileM.blobProgress = progress > fileM.size  ? fileM.size : progress;
     },
     setWrittenProgress(state, action) {
       const { path, progress } = action.payload as { path: string; progress: number };

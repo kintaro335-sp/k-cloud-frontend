@@ -10,12 +10,12 @@ import { ContextualMenuSelect } from '../components/files/menuselect';
 import Loading from './Loading';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { setFiles, setTree, setPath } from '../redux/slices/session';
+import { setFiles, setTree, setPath, addFile, substituteFile } from '../redux/slices/session';
 // api
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
 import { createNewSocket } from '../api/websocket';
-import { FileI } from '../@types/files';
+import { FileI, UpdateFileEvent } from '../@types/files';
 import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
@@ -28,7 +28,7 @@ export default function Files() {
   const [loading, setLoading] = useState(false);
 
   const handleShowMore = () => {
-    if(files.length < showQ) return;
+    if (files.length < showQ) return;
     setShowQ((prev) => prev + 12);
   };
 
@@ -60,8 +60,20 @@ export default function Files() {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
     newSocket.on('file-change', (data) => {
-      console.log(data);
-      getFiles();
+      if (path !== data.path) getFiles();
+    });
+    newSocket.on('file-update', (event) => {
+      const { type, content } = event as UpdateFileEvent;
+      console.log(event, path);
+      if (event.path !== path) return;
+      switch (type) {
+        case 'add':
+          addFile(content);
+          break;
+        case 'substitute':
+          substituteFile(content);
+          break;
+      }
     });
     newSocket.connect();
     socketClient.current = newSocket;

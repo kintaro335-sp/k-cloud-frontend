@@ -46,6 +46,9 @@ export default function Files() {
       return { list: [] };
     });
     dispatch(setFiles(list));
+  }
+
+  function getTree() {
     getTreeAPI('', access_token)
       .then((tree) => {
         dispatch(setTree(tree));
@@ -59,11 +62,15 @@ export default function Files() {
   useEffect(() => {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
+    newSocket.on('tree-update', () => {
+      getTree();
+    });
     newSocket.on('file-change', (data) => {
       if (path === data.path) getFiles();
     });
     newSocket.on('file-update', (event) => {
       const { type, content } = event as UpdateFileEvent;
+      console.log(event);
       if (event.path !== path) return;
       switch (type) {
         case 'add':

@@ -51,6 +51,7 @@ const slice = createSlice({
       const fileM = state.files[path];
       if (fileM === null) return;
       if (fileM === undefined) return;
+      state.uploading += 1;
       fileM.inicializado = true;
     },
     uploadingFile(state, action) {
@@ -59,7 +60,6 @@ const slice = createSlice({
       if (fileM === null) return;
       if (fileM === undefined) return;
       fileM.uploading = true;
-      state.uploading += 1;
     },
     setTotalBlobs(state, action) {
       const { path, total } = action.payload as { path: string; total: number };
@@ -78,7 +78,7 @@ const slice = createSlice({
     removeFileUploading(state, action) {
       const path = action.payload as string;
       state.filesDir = state.filesDir.filter((f) => f !== path);
-      state.files[path] = null;
+      delete state.files[path];
       state.uploading -= 1;
       if (state.uploading < 0) state.uploading = 0;
     },

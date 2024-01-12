@@ -57,6 +57,13 @@ export interface FileI {
   mime_type: string;
 }
 
+export interface UpdateFileEvent {
+  userid: string;
+  path: string;
+  type: 'add' | 'substitute';
+  content: FileI
+} 
+
 export interface Folder {
   type: 'Folder';
   name: string;

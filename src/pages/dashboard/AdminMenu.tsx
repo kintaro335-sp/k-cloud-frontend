@@ -41,7 +41,7 @@ export default function AdminMenu() {
     <Box>
       <Grid container spacing={3} sx={{ display: 'flex' }}>
         {options.map((opt) => (
-          <Grid item xs={12} md={6} lg={6} key={opt.title}>
+          <Grid item xs={12} md={3} lg={3} key={opt.title}>
             <Box component={Link} to={opt.link} sx={{ textDecoration: 'none', display: 'flex', width: '100%' }}>
               <Card sx={{ width: '100%' }}>
                 <CardContent sx={{ display: 'flex' }}>{opt.icon}</CardContent>

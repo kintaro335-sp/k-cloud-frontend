@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useEffect, useRef } from 'react';
 import { useSelector, getState, useDispatch } from '../redux/store';
 import {
   addFile,
@@ -16,11 +16,13 @@ import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { timeOutIf } from '../utils/promises';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
+import { createNewSocket } from '../api/websocket';
 
 export const FileUploadContext = createContext({ uploadFile: (path: string, file: File | null) => {} });
 
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
   const { enqueueSnackbar } = useSnackbar();
+  const socketClient = useRef(createNewSocket());
   const dispatch = useDispatch();
   const { access_token, path } = useSelector((state) => state.session);
   const { filesDir } = useSelector((state) => state.files);
@@ -85,27 +87,10 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     const blobs = getNumberBlobs(fileM.size);
     setTotalBlobs(path, blobs);
     for (let i = 0; i < blobs; i++) {
-      let pass = false;
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
       const n = await sendBlob(path, positionfrom, positionto - positionfrom);
       setBlobsSended(path, i + 1);
-      const backendStatus = await statusFileAPI(path, access_token);
-      if (backendStatus !== null) {
-        setWrittenProgress(path, backendStatus.saved);
-        pass = backendStatus.blobsNum <= 3;
-      }
-      while (!pass) {
-        const backendStatus = await statusFileAPI(path, access_token);
-        if (backendStatus !== null) {
-          setWrittenProgress(path, backendStatus.saved);
-          const applyTimeout = backendStatus.blobsNum === 0;
-          await timeOutIf(1000, () => !applyTimeout);
-          pass = applyTimeout;
-        } else {
-          break;
-        }
-      }
     }
     return new Promise((res) => {
       res();
@@ -140,6 +125,16 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       }
     });
   }, [filesDir]);
+
+  useEffect(() => {
+    const newSocket = createNewSocket();
+    newSocket.auth = { access_token };
+    newSocket.on('upload-update', (data) => {
+      setWrittenProgress(data.path, data.fileStatus.saved);
+    });
+    newSocket.connect();
+    socketClient.current = newSocket;
+  }, [access_token, path]);
 
   return <FileUploadContext.Provider value={{ uploadFile }}>{children}</FileUploadContext.Provider>;
 }

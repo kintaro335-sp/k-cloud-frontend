@@ -11,6 +11,7 @@ import { apiUrl } from '../../config';
 // redux
 import { useSelector } from '../../redux/store';
 import { setPath as setPathSF } from '../../redux/slices/sharedfile';
+import { explorerContext } from '../../@types/general';
 
 interface FileInfoProps {
   file: FileI;
@@ -62,9 +63,10 @@ function FileInfo({ file, children, url, urlComplete }: FileInfoProps) {
 interface FileElementProps {
   file: FileI;
   arrayIndex: number;
+  context?: explorerContext;
 }
 
-export default function FileElement({ file, arrayIndex }: FileElementProps) {
+export default function FileElement({ file, arrayIndex, context = 'sharedFile' }: FileElementProps) {
   const { name, size, type, mime_type, extension, tokens } = file;
   const { id } = useParams();
   const session = useSelector((state) => state.session);
@@ -84,7 +86,7 @@ export default function FileElement({ file, arrayIndex }: FileElementProps) {
     if (mime_type.includes('image/')) {
       return (
         <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
-          <ImagePreview url={urlComplete} arrayIndex={arrayIndex} />
+          <ImagePreview url={urlComplete} arrayIndex={arrayIndex} context={context} />
         </FileInfo>
       );
     }

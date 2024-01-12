@@ -40,7 +40,7 @@ export default function TokensUList() {
       </Box>
       <Grid container spacing={2} sx={{ width: '100%', overflowY: 'scroll', height: '78vh' }}>
         {tokens.map((t, i) => (
-          <Grid key={i} item xs={6} md={4} lg={3}>
+          <Grid key={i} item xs={12} md={4} lg={3}>
             <TokenUElement token={t} />
           </Grid>
         ))}

@@ -29,6 +29,16 @@ export async function createAccount(token: string, username: string, password: s
   return result.data;
 }
 
+export async function getOwner(token: string): Promise<{ id: string }> {
+  const result = await conn.get(`users/owner?t=${token}`);
+  return result.data;
+}
+
+export async function setOwner(token: string, userId: string) {
+  const result = await conn.patch(`users/owner/${userId}?t=${token}`);
+  return result.data;
+}
+
 export async function getusedSpace(token: string, update: boolean): Promise<SpaceUsed> {
   if (update) {
     const result = await conn.get(`used-space/update?t=${token}`);

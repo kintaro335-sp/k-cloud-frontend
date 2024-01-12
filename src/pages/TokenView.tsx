@@ -10,10 +10,12 @@ import { setInfo } from '../redux/slices/tokenview';
 import { getTokenInfoByUser } from '../api/sharedfiles';
 import { isAxiosError } from 'axios';
 import Loading from './Loading';
+import { BackButton } from '../components/atoms';
 
 function ContainerSF({ children }: { children: JSX.Element }) {
   return (
     <Card>
+      <BackButton to='/tokens' />
       <CardContent>{children}</CardContent>
     </Card>
   );

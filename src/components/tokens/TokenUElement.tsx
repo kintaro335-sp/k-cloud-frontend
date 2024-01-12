@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 // componenets
-import { Card, Box, CardContent, Typography, CardHeader, Tooltip, Stack, Checkbox } from '@mui/material';
+import { Card, Box, CardContent, Typography, CardHeader, Tooltip, Stack, Checkbox, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import TokenMenu from './TokenMenu';
 import { TokenIcon } from '../atoms';
 // icons
@@ -30,6 +31,9 @@ export default function TokenUElement({ token }: TokenUElementProps) {
   const urlNormal = `${window.origin}/shared-files/id/${id}`;
   const { files, deselect, select } = useFileSelect();
   const selected = files.includes(token.id);
+  const theme = useTheme();
+  const ismobile = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
     <Card className="cardfile">
       <CardContent>
@@ -52,12 +56,12 @@ export default function TokenUElement({ token }: TokenUElementProps) {
         title={
           <Box component={Link} to={`/tokens/id/${id}`} sx={{ color: 'secondary.main' }}>
             <Tooltip title={<Typography>{name}</Typography>}>
-              <Box sx={{ width: { xs: '14ex', md: '16ex', lg: '17ex' } }}>
+              <Box sx={{ width: { xs: '12ex', md: '16ex', lg: '17ex' } }}>
                 <Box
                   sx={{
                     whiteSpace: 'nowrap',
                     textOverflow: 'ellipsis',
-                    fontSize: '1.6ex',
+                    fontSize: ismobile ? '1.4ex' : '1.6ex',
                     width: '100%',
                     overflow: 'hidden'
                   }}

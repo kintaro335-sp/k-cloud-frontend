@@ -7,14 +7,15 @@ import UploadSingleFile from '../components/files/UploadSingleFile';
 import { useSnackbar } from 'notistack';
 import DropFiles from '../components/files/DropFiles';
 import { ContextualMenuSelect } from '../components/files/menuselect';
+import Loading from './Loading';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { setFiles, setTree, setPath } from '../redux/slices/session';
+import { setFiles, setTree, setPath, addFile, substituteFile } from '../redux/slices/session';
 // api
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
 import { createNewSocket } from '../api/websocket';
-import { FileI } from '../@types/files';
+import { FileI, UpdateFileEvent } from '../@types/files';
 import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
@@ -24,8 +25,10 @@ export default function Files() {
   const { showOptions } = useFileSelect();
   const { access_token, path, files } = useSelector((state) => state.session);
   const [showQ, setShowQ] = useState<number>(48);
+  const [loading, setLoading] = useState(false);
 
   const handleShowMore = () => {
+    if (files.length < showQ) return;
     setShowQ((prev) => prev + 12);
   };
 
@@ -57,12 +60,27 @@ export default function Files() {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
     newSocket.on('file-change', (data) => {
-      console.log(data);
-      getFiles();
+      if (path === data.path) getFiles();
+    });
+    newSocket.on('file-update', (event) => {
+      const { type, content } = event as UpdateFileEvent;
+      console.log(event, path);
+      if (event.path !== path) return;
+      switch (type) {
+        case 'add':
+          addFile(content);
+          break;
+        case 'substitute':
+          substituteFile(content);
+          break;
+      }
     });
     newSocket.connect();
     socketClient.current = newSocket;
-    getFiles();
+    setLoading(true);
+    getFiles().then(() => {
+      setLoading(false);
+    });
     setShowQ(24);
   }, [access_token, path]);
 
@@ -98,22 +116,27 @@ export default function Files() {
           )}
         </CardContent>
       </Card>
-      <Box sx={{ width: '100%', height: '68%', marginTop: '2ex', overflowY: 'scroll' }}>
-        <Grid container spacing={2}>
-          {filesMemo.slice(0, showQ).map((file: FileI, i) => (
-            <Grid item key={file.name + i} xs={6} md={4} lg={3}>
-              <FileElement file={file} arrayIndex={i} />
-            </Grid>
-          ))}
-          {files.length > showQ && (
-            <Grid item xs={12}>
-              <Button variant="contained" fullWidth onClick={handleShowMore}>
-                Mostar mas
-              </Button>
-            </Grid>
-          )}
-        </Grid>
-      </Box>
+      {loading ? (
+        <Loading />
+      ) : (
+        <Box
+          sx={{ width: '100%', height: '68%', marginTop: '1ex', overflowY: 'scroll' }}
+          onScroll={(e) => {
+            const { scrollTop, scrollHeight } = e.currentTarget;
+            if (scrollTop / scrollHeight >= 0.77) {
+              handleShowMore();
+            }
+          }}
+        >
+          <Grid container spacing={2}>
+            {filesMemo.slice(0, showQ).map((file: FileI, i) => (
+              <Grid item key={file.name + i} xs={12} md={4} lg={3}>
+                <FileElement file={file} arrayIndex={i} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      )}
     </>
   );
 }

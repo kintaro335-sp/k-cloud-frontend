@@ -60,7 +60,7 @@ export default function Files() {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
     newSocket.on('file-change', (data) => {
-      if (path !== data.path) getFiles();
+      if (path === data.path) getFiles();
     });
     newSocket.on('file-update', (event) => {
       const { type, content } = event as UpdateFileEvent;

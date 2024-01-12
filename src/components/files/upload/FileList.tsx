@@ -7,7 +7,7 @@ export default function FilesList() {
 
   return (
     <List>
-      {filesDir.map((dir, i) => {
+      {filesDir.slice(0,5).map((dir, i) => {
         const FD = files[dir];
         return <FileItem key={i} path={dir} fileP={FD} />;
       })}

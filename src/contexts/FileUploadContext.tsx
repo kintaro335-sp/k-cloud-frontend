@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { createContext, useEffect, useRef, useState, useCallback } from 'react';
 import { useSelector, getState } from '../redux/store';
 import {
   addFile,
@@ -16,6 +16,7 @@ import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { isAxiosError } from 'axios';
 // import { useSnackbar } from 'notistack';
 import { createNewSocket } from '../api/websocket';
+import { FileToUpload } from '../@types/files';
 
 const getFilesState = () => getState().files;
 export const FileUploadContext = createContext({ uploadFile: (path: string, file: File | null) => {} });
@@ -25,6 +26,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   const socketClient = useRef(createNewSocket());
   const { access_token, path } = useSelector((state) => state.session);
   const { filesDir } = useSelector((state) => state.files);
+  const [block, setBlock] = useState(false);
 
   const uploadFile = (path: string, file: File | null) => {
     if (file === null) return;
@@ -58,14 +60,13 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     });
   };
 
-  const sendBlob = async (path: string, position: number, size: number): Promise<void> => {
-    const state = getFilesState();
-    const fileM = state.files[path];
+  const sendBlob = async (path: string, position: number, size: number, fileM: FileToUpload): Promise<void> => {
     if (fileM === null) return;
     if (fileM === undefined) return;
     const blob = fileM.file.slice(position, position + size);
     return new Promise((resolve) => {
       uploadBlobAPI(path, position, blob, access_token, (p) => {
+        console.log('uploaded')
         setBlobProgress(path, p);
       })
         .catch((err) => {
@@ -81,10 +82,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     });
   };
 
-  const sendBlobs = async (path: string): Promise<void> => {
-    setUploadingFile(path);
-    const state = getFilesState();
-    const fileM = state.files[path];
+  const sendBlobs = async (dir: string, fileM: FileToUpload): Promise<void> => {
+    setUploadingFile(dir);
     if (fileM === null) return;
     if (fileM === undefined) return;
     const blobs = getNumberBlobs(fileM.size);
@@ -92,8 +91,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     for (let i = 0; i < blobs; i++) {
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
-      await sendBlob(path, positionfrom, positionto - positionfrom);
-      setBlobsSended(path, i + 1);
+      await sendBlob(dir, positionfrom, positionto - positionfrom, fileM);
+      setBlobsSended(dir, i + 1);
     }
     return new Promise((res) => {
       res();
@@ -109,42 +108,34 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     return;
   };
 
-  const startUpload = () => {
+  const startUpload = useCallback(() => {
+    if (block) return;
+    setBlock(true);
     const state = getFilesState();
     state.filesDir.forEach((dir) => {
       const fileM = state.files[dir];
-      if (fileM === null) return;
-      if (fileM === undefined) return;
-      if (fileM.inicializado && !fileM.uploading && state.uploading < 5) {
+      const typef = typeof fileM
+      if (typef === 'undefined' || fileM === null) return;
+      if (!fileM.inicializado && !fileM.uploading && state.uploading < 5) {
         initializeFile(dir).then((r) => {
           if (r) {
-            sendBlobs(dir).then(() => {
+            sendBlobs(dir, fileM).then(() => {
               closeFile(dir);
             });
           }
         });
       }
     });
-  };
+    setBlock(false);
+  }, [block]);
 
-  // effect to init files
   useEffect(() => {
-    filesDir.forEach((dir) => {
+    socketClient.current.removeListener('file-upload');
+    socketClient.current.on('file-upload', () => {
       const state = getFilesState();
-      const fileM = state.files[dir];
-      if (fileM === null) return;
-      if (fileM === undefined) return;
-      if (fileM.inicializado && !fileM.uploading && state.uploading < 5) {
-        initializeFile(dir).then((r) => {
-          if (r) {
-            sendBlobs(dir).then(() => {
-              closeFile(dir);
-            });
-          }
-        });
-      }
+      if (state.filesDir.length !== 0 && state.uploading < 5) startUpload();
     });
-  }, [filesDir]);
+  }, [startUpload]);
 
   useEffect(() => {
     const newSocket = createNewSocket();
@@ -153,7 +144,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       setWrittenProgress(data.path, data.fileStatus.saved);
     });
     newSocket.on('file-upload', () => {
-      const state = getFilesState()
+      const state = getFilesState();
       if (state.filesDir.length !== 0 && state.uploading < 5) startUpload();
     });
     newSocket.connect();

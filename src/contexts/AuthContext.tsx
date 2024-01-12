@@ -49,9 +49,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
-    newSocket.on('message', (data) => {
-      console.log(data);
-    });
     newSocket.connect();
     socketClient.current = newSocket;
   }, [access_token]);

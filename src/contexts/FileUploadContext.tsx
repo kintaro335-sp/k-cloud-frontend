@@ -114,19 +114,13 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       const fileM = files.files[dir];
       if (fileM === null) return;
       if (fileM === undefined) return;
-      if (fileM.inicializado && !fileM.uploading && getState().files.uploading < 7) {
+      if (fileM.inicializado && !fileM.uploading && getState().files.uploading < 10) {
         sendBlobs(dir).then(() => {
-
           closeFile(dir);
         });
       }
     });
   }
-
-  // effect to upload files
-  useEffect(() => {
-    startUpload();
-  }, [files]);
 
   // effect to init files
   useEffect(() => {
@@ -136,7 +130,6 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       if (fileM === null) return;
       if (fileM === undefined) return;
       if (!fileM.inicializado) {
-        console.log('init file', dir);
         initializeFile(dir);
       }
     });
@@ -147,6 +140,9 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     newSocket.auth = { access_token };
     newSocket.on('upload-update', (data) => {
       setWrittenProgress(data.path, data.fileStatus.saved);
+    });
+    newSocket.on('file-upload', () => {
+      if (getState().files.filesDir.length !== 0) startUpload();
     });
     newSocket.connect();
     socketClient.current = newSocket;

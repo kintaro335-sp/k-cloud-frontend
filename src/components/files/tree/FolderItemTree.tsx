@@ -25,7 +25,6 @@ export default function FolderItemTree({ folder, index, level, path = '' }: Fold
       label={
         <Typography
           onClick={() => {
-            console.log(`${path}/${name}`);
             dispatch(setPath(`${path}/${name}`));
           }}
           variant="body2"

@@ -14,14 +14,14 @@ import {
 import { initializeFileAPI, uploadBlobAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { isAxiosError } from 'axios';
-import { useSnackbar } from 'notistack';
+// import { useSnackbar } from 'notistack';
 import { createNewSocket } from '../api/websocket';
 
 const getFilesState = () => getState().files;
 export const FileUploadContext = createContext({ uploadFile: (path: string, file: File | null) => {} });
 
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
   const socketClient = useRef(createNewSocket());
   const { access_token, path } = useSelector((state) => state.session);
   const { filesDir } = useSelector((state) => state.files);
@@ -45,7 +45,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
         .catch((err) => {
           if (isAxiosError(err)) {
             if (err.response?.status === 400) {
-              enqueueSnackbar('archivo ya existe', { variant: 'error' });
+              //enqueueSnackbar('archivo ya existe', { variant: 'error' });
               removeFileUploading(path);
             }
             if (err.response?.status === 403) {

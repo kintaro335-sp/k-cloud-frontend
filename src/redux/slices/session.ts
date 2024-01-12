@@ -38,7 +38,6 @@ const slice = createSlice({
         return;
       }
       state.files.push(action.payload as FileI);
-      state.files = orderBy(state.files, ['type', 'name'], ['desc', 'asc']);
     },
     substituteFile(state, action) {
       const file = action.payload as FileI;

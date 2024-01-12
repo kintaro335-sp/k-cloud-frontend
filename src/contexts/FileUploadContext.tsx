@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useRef } from 'react';
-import { useSelector, getState, useDispatch } from '../redux/store';
+import { useSelector, getState } from '../redux/store';
 import {
   addFile,
   onWriteBlob,
@@ -11,7 +11,7 @@ import {
   setWrittenProgress,
   setUploadingFile
 } from '../redux/slices/fileUploader';
-import { initializeFileAPI, uploadBlobAPI, statusFileAPI } from '../api/files';
+import { initializeFileAPI, uploadBlobAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
@@ -22,9 +22,8 @@ export const FileUploadContext = createContext({ uploadFile: (path: string, file
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
   const { enqueueSnackbar } = useSnackbar();
   const socketClient = useRef(createNewSocket());
-  const dispatch = useDispatch();
   const { access_token, path } = useSelector((state) => state.session);
-  const { filesDir, uploading, files } = useSelector((state) => state.files);
+  const { filesDir, files } = useSelector((state) => state.files);
 
   const uploadFile = (path: string, file: File | null) => {
     if (file === null) return;
@@ -90,7 +89,6 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
       await sendBlob(path, positionfrom, positionto - positionfrom);
-      console.log(i, blobs);
       setBlobsSended(path, i + 1);
     }
     return new Promise((res) => {
@@ -112,16 +110,12 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
 
   function startUpload() {
     getState().files.filesDir.forEach((dir) => {
-      console.log('effect', dir);
       const files = getFilesState();
       const fileM = files.files[dir];
       if (fileM === null) return;
       if (fileM === undefined) return;
-      console.log(fileM);
       if (fileM.inicializado && !fileM.uploading && getState().files.uploading < 7) {
-        console.log('upload file', dir);
         sendBlobs(dir).then(() => {
-          console.log('close file', dir);
 
           closeFile(dir);
         });

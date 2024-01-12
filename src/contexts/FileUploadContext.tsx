@@ -8,12 +8,11 @@ import {
   setBlobsSended,
   removeFileUploading,
   setBlobProgress,
-  setWrittenProgress
+  setWrittenProgress,
+  setUploadingFile
 } from '../redux/slices/fileUploader';
-import { setFiles } from '../redux/slices/session';
 import { initializeFileAPI, uploadBlobAPI, statusFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
-import { timeOutIf } from '../utils/promises';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
 import { createNewSocket } from '../api/websocket';
@@ -25,7 +24,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   const socketClient = useRef(createNewSocket());
   const dispatch = useDispatch();
   const { access_token, path } = useSelector((state) => state.session);
-  const { filesDir } = useSelector((state) => state.files);
+  const { filesDir, uploading, files } = useSelector((state) => state.files);
 
   const uploadFile = (path: string, file: File | null) => {
     if (file === null) return;
@@ -42,17 +41,17 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     return new Promise((resolve) => {
       initializeFileAPI(path, fileM.size, access_token)
         .then(() => {
+          setInitializedFile(path);
           resolve(true);
         })
         .catch((err) => {
           if (isAxiosError(err)) {
             if (err.response?.status === 400) {
-              enqueueSnackbar('Espacio Insuficiente', { variant: 'error' });
+              enqueueSnackbar('archivo ya existe', { variant: 'error' });
             }
           }
           resolve(false);
         });
-      setInitializedFile(path);
     });
   };
 
@@ -86,10 +85,12 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === undefined) return;
     const blobs = getNumberBlobs(fileM.size);
     setTotalBlobs(path, blobs);
+    setUploadingFile(path);
     for (let i = 0; i < blobs; i++) {
       const positionfrom = BLOB_SIZE * i;
       const positionto = BLOB_SIZE * (i + 1);
-      const n = await sendBlob(path, positionfrom, positionto - positionfrom);
+      await sendBlob(path, positionfrom, positionto - positionfrom);
+      console.log(i, blobs);
       setBlobsSended(path, i + 1);
     }
     return new Promise((res) => {
@@ -100,20 +101,40 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   const closeFile = async (path: string) => {
     try {
       removeFileUploading(path);
+      if (getState().files.filesDir.length > 0) {
+        startUpload();
+      }
     } catch (err) {
       console.error(err);
     }
     return;
   };
 
-  const uploadFileStart = async (path: string) => {
-    const startWrite = await initializeFile(path);
-    if (startWrite) {
-      await sendBlobs(path);
-    }
-    await closeFile(path);
-  };
+  function startUpload() {
+    getState().files.filesDir.forEach((dir) => {
+      console.log('effect', dir);
+      const files = getFilesState();
+      const fileM = files.files[dir];
+      if (fileM === null) return;
+      if (fileM === undefined) return;
+      console.log(fileM);
+      if (fileM.inicializado && !fileM.uploading && getState().files.uploading < 7) {
+        console.log('upload file', dir);
+        sendBlobs(dir).then(() => {
+          console.log('close file', dir);
 
+          closeFile(dir);
+        });
+      }
+    });
+  }
+
+  // effect to upload files
+  useEffect(() => {
+    startUpload();
+  }, [files]);
+
+  // effect to init files
   useEffect(() => {
     filesDir.forEach((dir) => {
       const files = getFilesState();
@@ -121,7 +142,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       if (fileM === null) return;
       if (fileM === undefined) return;
       if (!fileM.inicializado) {
-        uploadFileStart(dir);
+        console.log('init file', dir);
+        initializeFile(dir);
       }
     });
   }, [filesDir]);

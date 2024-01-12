@@ -24,7 +24,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   const { enqueueSnackbar } = useSnackbar();
   const socketClient = useRef(createNewSocket());
   const { access_token, path } = useSelector((state) => state.session);
-  const { filesDir, files } = useSelector((state) => state.files);
+  const { filesDir } = useSelector((state) => state.files);
 
   const uploadFile = (path: string, file: File | null) => {
     if (file === null) return;
@@ -45,7 +45,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
         .catch((err) => {
           if (isAxiosError(err)) {
             if (err.response?.status === 400) {
-              // enqueueSnackbar('archivo ya existe', { variant: 'error' });
+              enqueueSnackbar('archivo ya existe', { variant: 'error' });
               removeFileUploading(path);
             }
             if (err.response?.status === 403) {
@@ -115,7 +115,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       const fileM = state.files[dir];
       if (fileM === null) return;
       if (fileM === undefined) return;
-      if (fileM.inicializado && !fileM.uploading && state.uploading < 10) {
+      if (fileM.inicializado && !fileM.uploading && state.uploading < 5) {
         initializeFile(dir).then((r) => {
           if (r) {
             sendBlobs(dir).then(() => {
@@ -153,8 +153,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       setWrittenProgress(data.path, data.fileStatus.saved);
     });
     newSocket.on('file-upload', () => {
-      startUpload();
-      //if (getState().files.filesDir.length !== 0)
+      const state = getFilesState()
+      if (state.filesDir.length !== 0 && state.uploading < 5) startUpload();
     });
     newSocket.connect();
     socketClient.current = newSocket;

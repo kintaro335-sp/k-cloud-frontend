@@ -50,6 +50,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
             }
             if (err.response?.status === 403) {
               setInitializedFile(path);
+              resolve(true);
             }
           }
           resolve(false);
@@ -115,9 +116,12 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       if (fileM === null) return;
       if (fileM === undefined) return;
       if (fileM.inicializado && !fileM.uploading && state.uploading < 10) {
-        console.log('send', dir);
-        sendBlobs(dir).then(() => {
-          closeFile(dir);
+        initializeFile(dir).then((r) => {
+          if (r) {
+            sendBlobs(dir).then(() => {
+              closeFile(dir);
+            });
+          }
         });
       }
     });
@@ -131,7 +135,13 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       if (fileM === null) return;
       if (fileM === undefined) return;
       if (!fileM.inicializado) {
-        initializeFile(dir);
+        initializeFile(dir).then((r) => {
+          if (r) {
+            sendBlobs(dir).then(() => {
+              closeFile(dir);
+            });
+          }
+        });
       }
     });
   }, [filesDir]);

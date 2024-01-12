@@ -46,9 +46,10 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
         .catch((err) => {
           if (isAxiosError(err)) {
             if (err.response?.status === 400) {
-              enqueueSnackbar('archivo ya existe', { variant: 'error' });
+              // enqueueSnackbar('archivo ya existe', { variant: 'error' });
             }
           }
+          removeFileUploading(path)
           resolve(false);
         });
     });

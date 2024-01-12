@@ -6,12 +6,14 @@ interface initialStateT {
   filesDir: string[];
   files: Record<string, FileToUpload | null>;
   blobSize: number;
+  uploading: number;
 }
 
 const initialState: initialStateT = {
   filesDir: [],
   files: {},
-  blobSize: 1024
+  blobSize: 1024,
+  uploading: 0
 };
 
 const slice = createSlice({
@@ -57,6 +59,7 @@ const slice = createSlice({
       if (fileM === null) return;
       if (fileM === undefined) return;
       fileM.uploading = true;
+      state.uploading += 1;
     },
     setTotalBlobs(state, action) {
       const { path, total } = action.payload as { path: string; total: number };
@@ -74,16 +77,17 @@ const slice = createSlice({
     },
     removeFileUploading(state, action) {
       const path = action.payload as string;
-      console.log('finalizado')
       state.filesDir = state.filesDir.filter((f) => f !== path);
       state.files[path] = null;
+      state.uploading -= 1;
+      if (state.uploading < 0) state.uploading = 0;
     },
     deleteCompletedFiles(state) {
       state.filesDir.forEach((dir) => {
         const fileT = state.files[dir];
         if (fileT === null || fileT === undefined) return;
         if (fileT.sended >= fileT.size && fileT.uploading === false) {
-          state.files[dir] = null;
+          delete state.files[dir];
           state.filesDir = state.filesDir.filter((d) => d !== dir);
         }
       });

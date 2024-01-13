@@ -25,6 +25,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   // const { enqueueSnackbar } = useSnackbar();
   const socketClient = useRef(createNewSocket());
   const { access_token, path } = useSelector((state) => state.session);
+  const { filesDir } = useSelector((state) => state.files);
   const [block, setBlock] = useState(false);
 
   const uploadFile = (path: string, file: File | null) => {
@@ -126,6 +127,10 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     });
     setBlock(false);
   }, [block]);
+
+  useEffect(() => {
+    socketClient.current.emit('new-file');
+  }, [filesDir]);
 
   useEffect(() => {
     socketClient.current.removeListener('file-upload');

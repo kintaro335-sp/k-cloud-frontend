@@ -25,7 +25,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   // const { enqueueSnackbar } = useSnackbar();
   const socketClient = useRef(createNewSocket());
   const { access_token, path } = useSelector((state) => state.session);
-  const { filesDir } = useSelector((state) => state.files);
+  const { filesDir, uploading } = useSelector((state) => state.files);
   const [block, setBlock] = useState(false);
 
   const uploadFile = (path: string, file: File | null) => {
@@ -55,7 +55,6 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
               resolve(true);
             }
           }
-          socketClient.current.emit('new-file');
           resolve(false);
         });
     });
@@ -99,7 +98,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     });
   };
 
-  const closeFile = async (path: string) => {
+  const closeFile = (path: string) => {
     try {
       removeFileUploading(path);
     } catch (err) {
@@ -108,46 +107,46 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     return;
   };
 
-  const startUpload = useCallback(() => {
-    if (block) return;
-    setBlock(true);
+  const startUpload = () => {
     const state = getFilesState();
-    state.filesDir.slice(0, 5).forEach((dir) => {
-      const fileM = state.files[dir];
-      const typef = typeof fileM;
-      if (typef === 'undefined' || fileM === null) return;
-      if (!fileM.inicializado && !fileM.uploading) {
-        initializeFile(dir).then((r) => {
-          if (r) {
-            sendBlobs(dir, fileM).then(() => {
-              closeFile(dir);
-            });
-          }
-        });
-      }
-    });
-    setBlock(false);
-  }, [block]);
+    if (state.uploading > 5) return;
+    const filesS = state.filesDir.slice(0, 5);
 
-  useEffect(() => {
-    socketClient.current.emit('new-file');
-  }, [filesDir]);
+    return new Promise((res) => {
+      filesS.forEach((dir, i) => {
+        const fileM = state.files[dir];
+        if (fileM === undefined || fileM === null) return;
+        if (!fileM.inicializado) {
+          console.log('init');
+          initializeFile(dir).then((r) => {
+            if (r) {
+              sendBlobs(dir, fileM).then(() => {
+                closeFile(dir);
+                if (i === 4) {
+                  res(1);
+                }
+              });
+            }
+          });
+        }
+      });
+    });
+  };
 
   useEffect(() => {
     socketClient.current.removeListener('file-upload');
     socketClient.current.on('file-upload', () => {
-      const state = getFilesState();
-      if (state.filesDir.length !== 0 && state.uploading < 5) startUpload();
+      startUpload();
     });
-  }, [startUpload, socketClient.current]);
+  }, [socketClient.current, uploading]);
 
   useEffect(() => {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
+    newSocket.connect();
     newSocket.on('upload-update', (data) => {
       setWrittenProgress(data.path, data.fileStatus.saved);
     });
-    newSocket.connect();
     socketClient.current = newSocket;
   }, [access_token, path]);
 

@@ -49,6 +49,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
             if (err.response?.status === 400) {
               //enqueueSnackbar('archivo ya existe', { variant: 'error' });
               removeFileUploading(path);
+              socketClient.current.emit('new-file');
             }
             if (err.response?.status === 403) {
               setInitializedFile(path);

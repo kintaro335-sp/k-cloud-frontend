@@ -51,6 +51,7 @@ const slice = createSlice({
       const fileM = state.files[path];
       if (fileM === null) return;
       if (fileM === undefined) return;
+      if (fileM.inicializado) return;
       state.uploading++;
       fileM.inicializado = true;
     },
@@ -97,8 +98,8 @@ const slice = createSlice({
       const { path, progress } = action.payload as { path: string; progress: number };
       const fileM = state.files[path];
       if (fileM === null || fileM === undefined) return;
-      if(fileM.blobProgress > progress) return;
-      fileM.blobProgress = progress > fileM.size  ? fileM.size : progress;
+      if (fileM.blobProgress > progress) return;
+      fileM.blobProgress = progress > fileM.size ? fileM.size : progress;
     },
     setWrittenProgress(state, action) {
       const { path, progress } = action.payload as { path: string; progress: number };

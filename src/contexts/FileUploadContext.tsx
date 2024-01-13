@@ -55,6 +55,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
               resolve(true);
             }
           }
+          socketClient.current.emit('new-file');
           resolve(false);
         });
     });
@@ -115,7 +116,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       const fileM = state.files[dir];
       const typef = typeof fileM;
       if (typef === 'undefined' || fileM === null) return;
-      if (!fileM.inicializado && !fileM.uploading && state.uploading < 5) {
+      if (!fileM.inicializado && !fileM.uploading) {
         initializeFile(dir).then((r) => {
           if (r) {
             sendBlobs(dir, fileM).then(() => {

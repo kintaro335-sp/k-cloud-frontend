@@ -49,13 +49,13 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
             if (err.response?.status === 400) {
               //enqueueSnackbar('archivo ya existe', { variant: 'error' });
               removeFileUploading(path);
-              socketClient.current.emit('new-file');
             }
             if (err.response?.status === 403) {
               setInitializedFile(path);
               resolve(true);
             }
           }
+          socketClient.current.emit('new-file');
           resolve(false);
         });
     });
@@ -116,7 +116,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       const fileM = state.files[dir];
       const typef = typeof fileM;
       if (typef === 'undefined' || fileM === null) return;
-      if (!fileM.inicializado && !fileM.uploading && state.uploading < 5) {
+      if (!fileM.inicializado && !fileM.uploading) {
         initializeFile(dir).then((r) => {
           if (r) {
             sendBlobs(dir, fileM).then(() => {

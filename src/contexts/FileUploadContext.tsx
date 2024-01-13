@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef, useState, useCallback } from 'react';
+import React, { createContext, useEffect, useRef } from 'react';
 import { useSelector, getState } from '../redux/store';
 import {
   addFile,
@@ -11,7 +11,7 @@ import {
   setWrittenProgress,
   setUploadingFile
 } from '../redux/slices/fileUploader';
-import { initializeFileAPI, uploadBlobAPI } from '../api/files';
+import { initializeFileAPI, uploadBlobAPI, uploadFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { isAxiosError } from 'axios';
 // import { useSnackbar } from 'notistack';
@@ -24,9 +24,8 @@ export const FileUploadContext = createContext({ uploadFile: (path: string, file
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
   // const { enqueueSnackbar } = useSnackbar();
   const socketClient = useRef(createNewSocket());
-  const { access_token, path } = useSelector((state) => state.session);
-  const { filesDir, uploading } = useSelector((state) => state.files);
-  const [block, setBlock] = useState(false);
+  const { access_token } = useSelector((state) => state.session);
+  const { uploading } = useSelector((state) => state.files);
 
   const uploadFile = (path: string, file: File | null) => {
     if (file === null) return;
@@ -39,24 +38,28 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === null) return false;
     if (fileM === undefined) return false;
     return new Promise((resolve) => {
-      initializeFileAPI(path, fileM.size, access_token)
-        .then(() => {
-          setInitializedFile(path);
-          resolve(true);
-        })
-        .catch((err) => {
-          if (isAxiosError(err)) {
-            if (err.response?.status === 400) {
-              //enqueueSnackbar('archivo ya existe', { variant: 'error' });
-              removeFileUploading(path);
+      if (fileM.size > BLOB_SIZE) {
+        initializeFileAPI(path, fileM.size, access_token)
+          .then(() => {
+            setInitializedFile(path);
+            resolve(true);
+          })
+          .catch((err) => {
+            if (isAxiosError(err)) {
+              if (err.response?.status === 400) {
+                //enqueueSnackbar('archivo ya existe', { variant: 'error' });
+                removeFileUploading(path);
+              }
+              if (err.response?.status === 403) {
+                setInitializedFile(path);
+                resolve(true);
+              }
             }
-            if (err.response?.status === 403) {
-              setInitializedFile(path);
-              resolve(true);
-            }
-          }
-          resolve(false);
-        });
+            resolve(false);
+          });
+      } else {
+        resolve(true);
+      }
     });
   };
 
@@ -87,11 +90,15 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     if (fileM === undefined) return;
     const blobs = getNumberBlobs(fileM.size);
     setTotalBlobs(dir, blobs);
-    for (let i = 0; i < blobs; i++) {
-      const positionfrom = BLOB_SIZE * i;
-      const positionto = BLOB_SIZE * (i + 1);
-      const t = await sendBlob(dir, positionfrom, positionto - positionfrom, fileM);
-      setBlobsSended(dir, i + 1);
+    if (blobs === 1) {
+      const b = await uploadFileAPI(dir, fileM.file, access_token);
+    } else {
+      for (let i = 0; i < blobs; i++) {
+        const positionfrom = BLOB_SIZE * i;
+        const positionto = BLOB_SIZE * (i + 1);
+        const t = await sendBlob(dir, positionfrom, positionto - positionfrom, fileM);
+        setBlobsSended(dir, i + 1);
+      }
     }
     return new Promise((res) => {
       res();
@@ -148,7 +155,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
       setWrittenProgress(data.path, data.fileStatus.saved);
     });
     socketClient.current = newSocket;
-  }, [access_token, path]);
+  }, [access_token]);
 
   return <FileUploadContext.Provider value={{ uploadFile }}>{children}</FileUploadContext.Provider>;
 }

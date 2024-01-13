@@ -51,7 +51,7 @@ const slice = createSlice({
       const fileM = state.files[path];
       if (fileM === null) return;
       if (fileM === undefined) return;
-      state.uploading += 1;
+      state.uploading++;
       fileM.inicializado = true;
     },
     uploadingFile(state, action) {
@@ -80,7 +80,7 @@ const slice = createSlice({
       const path = action.payload as string;
       state.filesDir = state.filesDir.filter((f) => f !== path);
       delete state.files[path];
-      state.uploading -= 1;
+      state.uploading--;
       if (state.uploading < 0) state.uploading = 0;
     },
     deleteCompletedFiles(state) {

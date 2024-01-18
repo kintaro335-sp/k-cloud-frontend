@@ -30,16 +30,31 @@ export async function createFolder(path: string, token: string): Promise<{ messa
   return response.data;
 }
 
-export async function uploadFile(
+export async function uploadFileAPI(
   path: string,
   file: File,
   token: string,
-  onUploadProgress?: (progressEvent: any) => void
-): Promise<any> {
+  cb?: (progressEvent: any) => void
+): Promise<number> {
   const formData = new FormData();
   formData.append(`file`, file);
-  await connFiles.post(`/upload/${path}?t=${token}`, formData, {
-    onUploadProgress
+
+  return new Promise((res) => {
+    connFiles
+      .post(`/upload/${path}?t=${token}`, formData, {
+        onUploadProgress: (progressEvent) => {
+          if (typeof cb === 'function') {
+            if (progressEvent.progress === undefined) return;
+            cb(progressEvent.progress);
+          }
+        }
+      })
+      .then(() => {
+        res(1);
+      })
+      .catch((err) => {
+        res(0);
+      });
   });
 }
 

@@ -19,7 +19,7 @@ export default function SetOwner({ userid }: SetOwnerProps) {
           variant="contained"
           onClick={() => {
             if (!window.confirm('¿Estás seguro de que quieres establecer este usuario como dueño?')) return;
-            setOwner(userid, access_token).then(() => {
+            setOwner(access_token, userid).then(() => {
               enqueueSnackbar('Usuario con id ' + userid + ' establecido como dueño', {
                 variant: 'success'
               });

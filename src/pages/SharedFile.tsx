@@ -34,7 +34,7 @@ export default function SharedFile() {
         .catch((err) => {
           if (isAxiosError(err)) {
             if (err.response?.status === 404) {
-              navigate('/404');
+              navigate('/shared-files');
             }
           }
         });

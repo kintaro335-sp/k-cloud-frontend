@@ -36,6 +36,7 @@ export default function Tokens() {
 
   useEffect(() => {
     const newSocket = createNewSocket();
+    newSocket.removeAllListeners()
     newSocket.auth = { access_token };
     newSocket.on('token-change', async () => {
       const { pages } = await getTokenPagesByUser(access_token);

@@ -8,4 +8,9 @@ function createNewSocket() {
   return socket;
 }
 
-export { createNewSocket };
+function createAuthSocket() {
+  const socket = manager.socket('/');
+  return socket;
+}
+
+export { createNewSocket, createAuthSocket };

@@ -28,6 +28,7 @@ export default function Accounts() {
 
   useEffect(() => {
     const newSocket = createNewSocket();
+    newSocket.removeAllListeners();
     newSocket.auth = { access_token };
     newSocket.on('users-update', () => {
       setUserClock((val) => !val);

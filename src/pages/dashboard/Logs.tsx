@@ -27,6 +27,7 @@ export default function Logs(): JSX.Element {
 
   useEffect(() => {
     const newSocket = createNewSocket();
+    newSocket.removeAllListeners()
     newSocket.auth = { access_token };
     newSocket.on('stats-update', () => {
       setStatUpdate((val) => !val);

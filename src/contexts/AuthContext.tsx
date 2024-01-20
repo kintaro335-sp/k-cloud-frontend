@@ -5,7 +5,7 @@ import { setFiles } from '../redux/slices/session';
 // api
 import { verifyAuth } from '../api/auth';
 import { getListFiles } from '../api/files';
-import { createNewSocket } from '../api/websocket';
+import { createAuthSocket } from '../api/websocket';
 
 export const AuthContext = createContext({
   isAdmin: false,
@@ -17,7 +17,7 @@ export const AuthContext = createContext({
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const [init, setInit] = useState(false);
-  const socketClient = useRef(createNewSocket());
+  const socketClient = useRef(createAuthSocket());
   const { access_token, path } = useSelector((state) => state.session);
   const [username, setUsername] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,25 +47,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }, [access_token]);
 
   useEffect(() => {
-    const newSocket = createNewSocket();
+    const newSocket = createAuthSocket();
     newSocket.auth = { access_token };
     newSocket.connect();
     socketClient.current = newSocket;
   }, [access_token]);
-
-  useEffect(() => {
-    socketClient.current.removeListener('file-change');
-    socketClient.current.removeListener('token-change');
-    const listener = async (msg: { path: string }) => {
-      if (msg.path !== path) {
-        return;
-      }
-      const listFiles = await getListFiles(path, access_token);
-      dispatch(setFiles(listFiles.list));
-    };
-    socketClient.current.on('file-change', listener);
-    socketClient.current.on('token-change', listener);
-  }, [socketClient.current, access_token, path]);
 
   const value = useMemo(
     () => ({ isAuthenticated, init, isAdmin, username }),

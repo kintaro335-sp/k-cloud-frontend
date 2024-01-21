@@ -61,6 +61,7 @@ export default function Files() {
 
   useEffect(() => {
     const newSocket = createNewSocket();
+    newSocket.removeAllListeners()
     newSocket.auth = { access_token };
     newSocket.on('tree-update', () => {
       getTree();

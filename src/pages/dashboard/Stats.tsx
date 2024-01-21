@@ -88,6 +88,7 @@ export default function Stats() {
 
   useEffect(() => {
     const newSocket = createNewSocket();
+    newSocket.removeAllListeners()
     newSocket.auth = { access_token };
     newSocket.on('memory-usage-update', () => {
       getMemoryUsageHEffect();

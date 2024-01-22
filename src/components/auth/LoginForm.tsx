@@ -92,7 +92,7 @@ export default function LoginForm({ ...props }: CardProps) {
               />
             </Grid>
             <Grid item xs={12}>
-              <LoadingButton type="submit" variant="contained" color="primary" loading={isSubmitting}>
+              <LoadingButton type="submit" variant="contained" color="primary" fullWidth loading={isSubmitting}>
                 Login
               </LoadingButton>
             </Grid>

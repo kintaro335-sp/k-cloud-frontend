@@ -17,6 +17,7 @@ import { isAxiosError } from 'axios';
 import { createNewSocket } from '../api/websocket';
 import { FileI, UpdateFileEvent } from '../@types/files';
 import useFileSelect from '../hooks/useFileSelect';
+import { get } from 'lodash';
 
 export default function Files() {
   const socketClient = useRef(createNewSocket());
@@ -61,7 +62,7 @@ export default function Files() {
 
   useEffect(() => {
     const newSocket = createNewSocket();
-    newSocket.removeAllListeners()
+    newSocket.removeAllListeners();
     newSocket.auth = { access_token };
     newSocket.on('tree-update', () => {
       getTree();
@@ -82,9 +83,9 @@ export default function Files() {
           break;
       }
     });
-    newSocket.connect();
     socketClient.current = newSocket;
     setLoading(true);
+    getTree();
     getFiles().then(() => {
       setLoading(false);
     });

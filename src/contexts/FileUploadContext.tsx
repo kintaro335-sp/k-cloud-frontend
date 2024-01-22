@@ -24,13 +24,8 @@ export const FileUploadContext = createContext({ uploadFile: (path: string, file
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
   // const { enqueueSnackbar } = useSnackbar();
   const socketClient = useRef(createNewSocket());
-  const { access_token } = useSelector((state) => state.session);
+  const { access_token, path } = useSelector((state) => state.session);
   const { uploading } = useSelector((state) => state.files);
-
-  const uploadFile = (path: string, file: File | null) => {
-    if (file === null) return;
-    addFile(path, file);
-  };
 
   const initializeFile = async (path: string): Promise<boolean> => {
     const state = getFilesState();
@@ -118,6 +113,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     const state = getFilesState();
     if (state.uploading > 5) return;
     const filesS = state.filesDir.slice(0, 5);
+    console.log(filesS);
 
     return new Promise((res) => {
       filesS.forEach((dir, i) => {
@@ -140,22 +136,20 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     });
   };
 
-  useEffect(() => {
-    socketClient.current.removeListener('file-upload');
-    socketClient.current.on('file-upload', () => {
-      startUpload();
-    });
-  }, [socketClient.current, uploading]);
+  const uploadFile = (path: string, file: File | null) => {
+    if (file === null) return;
+    addFile(path, file);
+    startUpload();
+  };
 
   useEffect(() => {
     const newSocket = createNewSocket();
-    newSocket.auth = { access_token };
-    newSocket.connect();
+    newSocket.removeListener('upload-update');
     newSocket.on('upload-update', (data) => {
       setWrittenProgress(data.path, data.fileStatus.saved);
     });
     socketClient.current = newSocket;
-  }, [access_token]);
+  }, [uploading, path]);
 
   return <FileUploadContext.Provider value={{ uploadFile }}>{children}</FileUploadContext.Provider>;
 }

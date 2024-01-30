@@ -37,7 +37,7 @@ export default function Tokens() {
   useEffect(() => {
     const newSocket = createNewSocket();
     newSocket.removeAllListeners()
-    newSocket.auth = { access_token };
+    // newSocket.auth = { access_token };
     newSocket.on('token-change', async () => {
       const { pages } = await getTokenPagesByUser(access_token);
       setPagesU(pages);
@@ -46,7 +46,7 @@ export default function Tokens() {
     });
     newSocket.connect();
     socketClient.current = newSocket;
-  }, [access_token]);
+  }, [access_token, page]);
 
   return (
     <Box>

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box } from '@mui/material';
+import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box, Tab } from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/atoms';
 import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie } from '../../components/dashboard/stats';
@@ -37,6 +38,11 @@ export default function Stats() {
   const { access_token } = useSelector((state) => state.session);
   const { activityActions, activityReason, activityStatus, memoryUsageH } = useSelector((state) => state.stats);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
+  const [tabValue, setTabValue] = useState('0');
+
+  const handleChange = (event: React.SyntheticEvent, newV: string) => {
+    setTabValue(newV);
+  };
 
   const processdata = (arr: SerieLineChart | undefined): SerieLineChart => {
     if (arr === undefined) {
@@ -88,7 +94,7 @@ export default function Stats() {
 
   useEffect(() => {
     const newSocket = createNewSocket();
-    newSocket.removeAllListeners()
+    newSocket.removeAllListeners();
     newSocket.auth = { access_token };
     newSocket.on('memory-usage-update', () => {
       getMemoryUsageHEffect();
@@ -105,76 +111,82 @@ export default function Stats() {
       <Toolbar>
         <BackButton to="/admin" />
       </Toolbar>
-      <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>
-        Uso de Espacio
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6} lg={4}>
-          <UsedSpacePie />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <UsedSpaceUserPie />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <UsedSpaceFileTPie />
-        </Grid>
-      </Grid>
-      <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>
-        Actividad
-      </Typography>
-      <Toolbar>
-        <RadioGroup
-          row
-          value={time}
-          onChange={(_, val) => {
-            //@ts-ignore
-            setTime(val);
-          }}
-        >
-          <FormControlLabel
-            value={TIMEOPTION.TODAY}
-            control={<Radio />}
-            label={<Box sx={{ color: theme.palette.text.primary }}>hoy</Box>}
-          />
-          <FormControlLabel
-            value={TIMEOPTION.LAST7DAYS}
-            control={<Radio />}
-            label={<Box sx={{ color: theme.palette.text.primary }}>ultimos 7 dias</Box>}
-          />
-          <FormControlLabel
-            value={TIMEOPTION.THISMONTH}
-            control={<Radio />}
-            label={<Box sx={{ color: theme.palette.text.primary }}>este mes</Box>}
-          />
-          <FormControlLabel
-            value={TIMEOPTION.LAST30DAYS}
-            control={<Radio />}
-            label={<Box sx={{ color: theme.palette.text.primary }}>ultimos 30 dias</Box>}
-          />
-        </RadioGroup>
-      </Toolbar>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <LineChartGeneral title="Action" data={activityActions} />
-        </Grid>
-        <Grid item xs={12}>
-          <LineChartGeneral title="Status Code" data={activityStatus} />
-        </Grid>
-        <Grid item xs={12}>
-          <LineChartGeneral title="Reason" data={activityReason} />
-        </Grid>
-      </Grid>
-      <Typography variant="h4" sx={{ color: theme.palette.text.primary, textAlign: 'center' }}>
-        Uso de Memoria
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <LineChartGeneral title="Total" data={[total]} yFormat={(val) => bytesFormat(Number(val))} />
-        </Grid>
-        <Grid item xs={12}>
-          <LineChartGeneral title="Buffers" data={[buffer_info]} yFormat={(val) => bytesFormat(Number(val))} />
-        </Grid>
-      </Grid>
+      <TabContext value={tabValue}>
+        <TabList onChange={handleChange}>
+          <Tab sx={{ color: theme.palette.text.primary }} label="Use de Espacio" value="0" />
+          <Tab sx={{ color: theme.palette.text.primary }} label="Actividad" value="1" />
+          <Tab sx={{ color: theme.palette.text.primary }} label="Use De Memoria" value="2" />
+        </TabList>
+        <Box>
+          <TabPanel value="0">
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6} lg={4}>
+                <UsedSpacePie />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <UsedSpaceUserPie />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <UsedSpaceFileTPie />
+              </Grid>
+            </Grid>
+          </TabPanel>
+          <TabPanel value="1">
+            <Toolbar>
+              <RadioGroup
+                row
+                value={time}
+                onChange={(_, val) => {
+                  //@ts-ignore
+                  setTime(val);
+                }}
+              >
+                <FormControlLabel
+                  value={TIMEOPTION.TODAY}
+                  control={<Radio />}
+                  label={<Box sx={{ color: theme.palette.text.primary }}>hoy</Box>}
+                />
+                <FormControlLabel
+                  value={TIMEOPTION.LAST7DAYS}
+                  control={<Radio />}
+                  label={<Box sx={{ color: theme.palette.text.primary }}>ultimos 7 dias</Box>}
+                />
+                <FormControlLabel
+                  value={TIMEOPTION.THISMONTH}
+                  control={<Radio />}
+                  label={<Box sx={{ color: theme.palette.text.primary }}>este mes</Box>}
+                />
+                <FormControlLabel
+                  value={TIMEOPTION.LAST30DAYS}
+                  control={<Radio />}
+                  label={<Box sx={{ color: theme.palette.text.primary }}>ultimos 30 dias</Box>}
+                />
+              </RadioGroup>
+            </Toolbar>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <LineChartGeneral title="Action" data={activityActions} />
+              </Grid>
+              <Grid item xs={12}>
+                <LineChartGeneral title="Status Code" data={activityStatus} />
+              </Grid>
+              <Grid item xs={12}>
+                <LineChartGeneral title="Reason" data={activityReason} />
+              </Grid>
+            </Grid>
+          </TabPanel>
+          <TabPanel value="2">
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <LineChartGeneral title="Total" data={[total]} yFormat={(val) => bytesFormat(Number(val))} />
+              </Grid>
+              <Grid item xs={12}>
+                <LineChartGeneral title="Buffers" data={[buffer_info]} yFormat={(val) => bytesFormat(Number(val))} />
+              </Grid>
+            </Grid>
+          </TabPanel>
+        </Box>
+      </TabContext>
     </>
   );
 }

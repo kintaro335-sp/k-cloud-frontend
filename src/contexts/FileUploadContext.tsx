@@ -121,7 +121,6 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
         const fileM = state.files[dir];
         if (fileM === undefined || fileM === null) return;
         if (!fileM.inicializado) {
-          console.log('init:', fileM.file.name);
           initializeFile(dir).then((r) => {
             if (r) {
               sendBlobs(dir, fileM).then(() => {

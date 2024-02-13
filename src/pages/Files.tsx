@@ -72,7 +72,6 @@ export default function Files() {
     });
     newSocket.on('file-update', (event) => {
       const { type, content } = event as UpdateFileEvent;
-      console.log(event);
       if (event.path !== path) return;
       switch (type) {
         case 'add':

@@ -1,14 +1,19 @@
 import { Box, CircularProgress } from '@mui/material';
 
-export default function Loading() {
+interface LoadingProps {
+  width?: number | string;
+  height?: number | string;
+}
+
+export default function Loading({ width, height }: LoadingProps) {
   return (
     <Box
       sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100vw',
-        height: '100vh'
+        width: width || '100vw',
+        height: height || '100vh'
       }}
     >
       <CircularProgress />

@@ -19,7 +19,7 @@ export default function FolderExplorer() {
   const [showQ, setShowQ] = useState<number>(48);
 
   const handleShowMore = () => {
-    setShowQ((prev) => prev + 12);
+    setShowQ((prev) => prev + 4);
   };
 
   useEffect(() => {

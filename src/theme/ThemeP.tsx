@@ -52,7 +52,10 @@ const theme = createTheme({
     MuiLink: {
       styleOverrides: {
         root: {
-          fontFamily: 'Montserrat'
+          fontFamily: 'noto-sans-bold',
+          fontWeight: 600,
+          fontStyle: 'inherit',
+          textDecoration: 'underline'
         }
       }
     }

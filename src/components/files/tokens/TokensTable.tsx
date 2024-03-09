@@ -41,8 +41,6 @@ export default function TokensTable({ url }: TokensTableProps) {
     const newSocket = createNewSocket();
     newSocket.auth = { access_token };
     newSocket.on('token-change', async (data) => {
-      console.log(data);
-      console.log(url);
       if (data.path !== url) {
         return;
       }

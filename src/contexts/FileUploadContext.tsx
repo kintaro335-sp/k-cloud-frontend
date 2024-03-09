@@ -30,6 +30,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   const initializeFile = async (path: string): Promise<boolean> => {
     const state = getFilesState();
     const fileM = state.files[path];
+    console.log(path)
     if (fileM === null) return false;
     if (fileM === undefined) return false;
     return new Promise((resolve) => {
@@ -47,7 +48,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
               }
               if (err.response?.status === 403) {
                 setInitializedFile(path);
-                resolve(true);
+                resolve(false);
               }
             }
             resolve(false);
@@ -121,7 +122,6 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
         const fileM = state.files[dir];
         if (fileM === undefined || fileM === null) return;
         if (!fileM.inicializado) {
-          console.log('init:', fileM.file.name);
           initializeFile(dir).then((r) => {
             if (r) {
               sendBlobs(dir, fileM).then(() => {

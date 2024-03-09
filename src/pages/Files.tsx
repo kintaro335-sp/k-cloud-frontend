@@ -17,7 +17,6 @@ import { isAxiosError } from 'axios';
 import { createNewSocket } from '../api/websocket';
 import { FileI, UpdateFileEvent } from '../@types/files';
 import useFileSelect from '../hooks/useFileSelect';
-import { get } from 'lodash';
 
 export default function Files() {
   const socketClient = useRef(createNewSocket());
@@ -30,7 +29,7 @@ export default function Files() {
 
   const handleShowMore = () => {
     if (files.length < showQ) return;
-    setShowQ((prev) => prev + 12);
+    setShowQ((prev) => prev + 4);
   };
 
   async function getFiles() {
@@ -72,7 +71,6 @@ export default function Files() {
     });
     newSocket.on('file-update', (event) => {
       const { type, content } = event as UpdateFileEvent;
-      console.log(event);
       if (event.path !== path) return;
       switch (type) {
         case 'add':
@@ -125,13 +123,13 @@ export default function Files() {
         </CardContent>
       </Card>
       {loading ? (
-        <Loading />
+        <Loading width="100%" height="68%" />
       ) : (
         <Box
           sx={{ width: '100%', height: '68%', marginTop: '1ex', overflowY: 'scroll' }}
           onScroll={(e) => {
             const { scrollTop, scrollHeight } = e.currentTarget;
-            if (scrollTop / scrollHeight >= 0.77) {
+            if (scrollTop / scrollHeight >= 0.70) {
               handleShowMore();
             }
           }}

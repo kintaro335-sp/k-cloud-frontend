@@ -20,16 +20,44 @@ import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
   const socketClient = useRef(createNewSocket());
+  const scrollElement = useRef<HTMLDivElement>(null)
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { showOptions } = useFileSelect();
   const { access_token, path, files } = useSelector((state) => state.session);
+  const [start, setStart] = useState<number>(0);
   const [showQ, setShowQ] = useState<number>(48);
   const [loading, setLoading] = useState(false);
 
   const handleShowMore = () => {
     if (files.length < showQ) return;
-    setShowQ((prev) => prev + 4);
+    if (showQ > 96) return;
+    setShowQ((prev) => prev + 8);
+  };
+
+  const handleChangeStart = (direction: 'back' | 'go') => {
+    if (direction === 'back') {
+      setStart((st) => {
+        const scrollHeight = scrollElement.current?.scrollHeight as number
+        scrollElement.current?.scroll({ top: scrollHeight * 0.85 })
+        const newVal = st - 20;
+        if (newVal < 0) {
+          return 0;
+        }
+        return newVal;
+      });
+    }
+    if (direction === 'go' && showQ >= 96) {
+      setStart((st) => {
+        const scrollHeight = scrollElement.current?.scrollHeight as number
+        scrollElement.current?.scroll({ top: scrollHeight * 0.01 })
+        const newVal = st + 20;
+        if (newVal > files.length) {
+          return files.length;
+        }
+        return newVal;
+      });
+    }
   };
 
   async function getFiles() {
@@ -87,7 +115,8 @@ export default function Files() {
     getFiles().then(() => {
       setLoading(false);
     });
-    setShowQ(24);
+    setShowQ(32);
+    setStart(0)
   }, [access_token, path]);
 
   const filesMemo = useMemo(() => files, [files]);
@@ -127,15 +156,23 @@ export default function Files() {
       ) : (
         <Box
           sx={{ width: '100%', height: '68%', marginTop: '1ex', overflowY: 'scroll' }}
+          ref={scrollElement}
           onScroll={(e) => {
             const { scrollTop, scrollHeight } = e.currentTarget;
-            if (scrollTop / scrollHeight >= 0.70) {
+            const scrollH = scrollTop / scrollHeight;
+            if (scrollH === 0) {
+              handleChangeStart('back');
+            }
+            if (scrollH >= 0.7) {
               handleShowMore();
+            }
+            if (scrollH >= 0.9) {
+              handleChangeStart('go');
             }
           }}
         >
           <Grid container spacing={2}>
-            {filesMemo.slice(0, showQ).map((file: FileI, i) => (
+            {filesMemo.slice(start, start + showQ).map((file: FileI, i) => (
               <Grid item key={file.name + i} xs={12} md={4} lg={3}>
                 <FileElement file={file} arrayIndex={i} />
               </Grid>

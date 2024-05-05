@@ -31,7 +31,7 @@ export default function Files() {
 
   const handleShowMore = () => {
     if (files.length < showQ) return;
-    if (showQ > 96) return;
+    if (showQ >= 96) return;
     setShowQ((prev) => prev + 8);
   };
 
@@ -39,8 +39,8 @@ export default function Files() {
     if (direction === 'back') {
       setStart((st) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number
-        scrollElement.current?.scroll({ top: scrollHeight * 0.85 })
-        const newVal = st - 20;
+        scrollElement.current?.scroll({ top: scrollHeight * 0.93 })
+        const newVal = st - 96;
         if (newVal < 0) {
           return 0;
         }
@@ -50,8 +50,8 @@ export default function Files() {
     if (direction === 'go' && showQ >= 96) {
       setStart((st) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number
-        scrollElement.current?.scroll({ top: scrollHeight * 0.01 })
-        const newVal = st + 20;
+        scrollElement.current?.scroll({ top: scrollHeight * 0.001 })
+        const newVal = st + 96;
         if (newVal > files.length) {
           return files.length;
         }
@@ -115,7 +115,7 @@ export default function Files() {
     getFiles().then(() => {
       setLoading(false);
     });
-    setShowQ(32);
+    setShowQ(48);
     setStart(0)
   }, [access_token, path]);
 
@@ -160,13 +160,14 @@ export default function Files() {
           onScroll={(e) => {
             const { scrollTop, scrollHeight } = e.currentTarget;
             const scrollH = scrollTop / scrollHeight;
+            console.log(scrollH)
             if (scrollH === 0) {
               handleChangeStart('back');
             }
             if (scrollH >= 0.7) {
               handleShowMore();
             }
-            if (scrollH >= 0.9) {
+            if (scrollH >= 0.945) {
               handleChangeStart('go');
             }
           }}
@@ -177,6 +178,9 @@ export default function Files() {
                 <FileElement file={file} arrayIndex={i} />
               </Grid>
             ))}
+            <Grid item xs={12}>
+              <Box sx={{ padding: '100px' }} />
+            </Grid>
           </Grid>
         </Box>
       )}

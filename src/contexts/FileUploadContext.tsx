@@ -30,7 +30,6 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   const initializeFile = async (path: string): Promise<boolean> => {
     const state = getFilesState();
     const fileM = state.files[path];
-    console.log(path)
     if (fileM === null) return false;
     if (fileM === undefined) return false;
     return new Promise((resolve) => {
@@ -60,10 +59,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     });
   };
 
-  const sendBlob = async (path: string, position: number, size: number, fileM: FileToUpload): Promise<number> => {
-    if (fileM === null) return 0;
-    if (fileM === undefined) return 0;
-    const blob = fileM.file.slice(position, position + size);
+  const sendBlob = async (path: string, position: number, size: number, file: File): Promise<number> => {
+    const blob = file.slice(position, position + size);
     return new Promise((resolve) => {
       uploadBlobAPI(path, position, blob, access_token, (p) => {
         setBlobProgress(path, p);
@@ -81,19 +78,19 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     });
   };
 
-  const sendBlobs = async (dir: string, fileM: FileToUpload): Promise<void> => {
+  const sendBlobs = async (dir: string, fileM: FileToUpload, file: File): Promise<void> => {
     setUploadingFile(dir);
-    if (fileM === null) return;
-    if (fileM === undefined) return;
     const blobs = getNumberBlobs(fileM.size);
     setTotalBlobs(dir, blobs);
     if (blobs === 1) {
-      const b = await uploadFileAPI(dir, fileM.file, access_token);
+      const b = await uploadFileAPI(dir, file, access_token, (p) => {
+        setBlobProgress(dir, p)
+      });
     } else {
       for (let i = 0; i < blobs; i++) {
         const positionfrom = BLOB_SIZE * i;
         const positionto = BLOB_SIZE * (i + 1);
-        const t = await sendBlob(dir, positionfrom, positionto - positionfrom, fileM);
+        const t = await sendBlob(dir, positionfrom, positionto - positionfrom, file);
         setBlobsSended(dir, i + 1);
       }
     }
@@ -105,42 +102,29 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   const closeFile = (path: string) => {
     try {
       removeFileUploading(path);
-      startUpload();
     } catch (err) {
       console.error(err);
     }
     return;
   };
 
-  const startUpload = () => {
-    const state = getFilesState();
-    if (state.uploading > 5) return;
-    const filesS = state.filesDir.slice(0, 5);
-
-    return new Promise((res) => {
-      filesS.forEach((dir, i) => {
-        const fileM = state.files[dir];
-        if (fileM === undefined || fileM === null) return;
-        if (!fileM.inicializado) {
-          initializeFile(dir).then((r) => {
-            if (r) {
-              sendBlobs(dir, fileM).then(() => {
-                closeFile(dir);
-                if (i === 4) {
-                  res(1);
-                }
-              });
-            }
-          });
-        }
-      });
+  const startUpload = (path: string, file: File) => {
+    initializeFile(path).then((r) => {
+      if (r) {
+        const fileM = getState().files.files[path];
+        // @ts-ignore
+        sendBlobs(path, fileM, file).then(() => {
+          closeFile(path);
+        });
+      }
     });
   };
 
   const uploadFile = (path: string, file: File | null) => {
     if (file === null) return;
     addFile(path, file);
-    startUpload();
+    const filePath = `${path}/${file.name}`;
+    startUpload(filePath, file);
   };
 
   useEffect(() => {

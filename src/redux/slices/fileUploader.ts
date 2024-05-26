@@ -26,7 +26,6 @@ const slice = createSlice({
       const fileDir = `${path}/${file.name}`;
       state.files[fileDir] = {
         uploading: false,
-        file,
         size: file.size,
         blobSended: [],
         sended: 0,

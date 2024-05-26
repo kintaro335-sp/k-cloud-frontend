@@ -11,7 +11,7 @@ export default function RouteBar({ title = 'Cloud', path, onChangePath }: RouteB
   const pathArr = path.split('/');
 
   return (
-    <Box sx={{ display: 'flex', border: '3px solid #2D2D2D', borderRadius: '5px', width: '100%' }}>
+    <Box sx={{ display: 'flex', border: '3px solid #2D2D2D', borderRadius: '5px', width: '100%', overflowX: 'scroll' }}>
       <ButtonBar name={title} to="" index={-1} onChangePath={onChangePath} />
       {pathArr.map((n, i) => {
         if (n === '') return;

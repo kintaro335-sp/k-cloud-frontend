@@ -18,7 +18,7 @@
     "@iconify/icons-material-symbols": "^1.2.30",
     "@iconify/react": "^3.2.2",
     "@mui/lab": "^5.0.0-alpha.94",
-    "@mui/material": "^5.10.0",
+    "@mui/material": "^5.15.18",
     "@mui/x-date-pickers": "^6.0.1",
     "@nivo/line": "^0.83.0",
     "@nivo/pie": "^0.83.0",

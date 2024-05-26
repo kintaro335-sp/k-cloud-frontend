@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { RouteBar } from '../components/files/routebar';
-import { Box, Grid, Stack, Card, CardContent, Button } from '@mui/material';
+import { Box, Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import FileElement from '../components/files/FileElement';
 import AddFolder from '../components/files/AddFolder';
 import UploadSingleFile from '../components/files/UploadSingleFile';
@@ -19,17 +20,53 @@ import { FileI, UpdateFileEvent } from '../@types/files';
 import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const scrollLimit = isMobile ? 0.978 : 0.945;
   const socketClient = useRef(createNewSocket());
+  const scrollElement = useRef<HTMLDivElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { showOptions } = useFileSelect();
   const { access_token, path, files } = useSelector((state) => state.session);
+  const [start, setStart] = useState<number>(0);
   const [showQ, setShowQ] = useState<number>(48);
   const [loading, setLoading] = useState(false);
 
   const handleShowMore = () => {
     if (files.length < showQ) return;
-    setShowQ((prev) => prev + 4);
+    if (showQ >= 96) {
+      setShowQ(96);
+      return;
+    }
+    setShowQ((prev) => prev + 8);
+  };
+
+  const handleChangeStart = (direction: 'back' | 'go') => {
+    if (direction === 'back') {
+      if (start === 0) return;
+      setStart((st) => {
+        const scrollHeight = scrollElement.current?.scrollHeight as number;
+        const multiplier = isMobile ? 0.975 : 0.93;
+        scrollElement.current?.scroll({ top: scrollHeight * multiplier });
+        const newVal = st - 96;
+        if (newVal < 0) {
+          return 0;
+        }
+        return newVal;
+      });
+    }
+    if (direction === 'go' && showQ >= 96) {
+      setStart((st) => {
+        const scrollHeight = scrollElement.current?.scrollHeight as number;
+        scrollElement.current?.scroll({ top: scrollHeight * 0.001 });
+        const newVal = st + 96;
+        if (newVal > files.length - 96) {
+          return files.length - 96;
+        }
+        return newVal;
+      });
+    }
   };
 
   async function getFiles() {
@@ -87,7 +124,8 @@ export default function Files() {
     getFiles().then(() => {
       setLoading(false);
     });
-    setShowQ(24);
+    setShowQ(48);
+    setStart(0);
   }, [access_token, path]);
 
   const filesMemo = useMemo(() => files, [files]);
@@ -127,19 +165,31 @@ export default function Files() {
       ) : (
         <Box
           sx={{ width: '100%', height: '68%', marginTop: '1ex', overflowY: 'scroll' }}
+          ref={scrollElement}
           onScroll={(e) => {
             const { scrollTop, scrollHeight } = e.currentTarget;
-            if (scrollTop / scrollHeight >= 0.70) {
+            const scrollH = scrollTop / scrollHeight;
+            console.log(scrollH);
+            if (scrollH === 0) {
+              handleChangeStart('back');
+            }
+            if (scrollH >= 0.7) {
               handleShowMore();
+            }
+            if (scrollH >= scrollLimit) {
+              handleChangeStart('go');
             }
           }}
         >
           <Grid container spacing={2}>
-            {filesMemo.slice(0, showQ).map((file: FileI, i) => (
+            {filesMemo.slice(start, start + showQ).map((file: FileI, i) => (
               <Grid item key={file.name + i} xs={12} md={4} lg={3}>
                 <FileElement file={file} arrayIndex={i} />
               </Grid>
             ))}
+            <Grid item xs={12}>
+              <Box sx={{ padding: isMobile ? '200px' : '100px' }} />
+            </Grid>
           </Grid>
         </Box>
       )}

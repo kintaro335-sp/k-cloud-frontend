@@ -13,7 +13,6 @@ export interface FilePTempResponse {
 }
 
 export interface FileToUpload {
-  file: File;
   inicializado: boolean;
   uploading: boolean;
   size: number;

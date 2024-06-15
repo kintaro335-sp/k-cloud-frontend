@@ -19,12 +19,13 @@ export default function ImgFile({ url, context, index }: ImgFileProps) {
       height="220px"
       onClick={() => {
         if (context === 'sharedFile' || context === 'default') {
-          if (index === undefined) return
+          if (index === undefined) {
+              openImage(url, context);
+            return}
           openImage(index, context);
         } else {
           openImage(url, context);
         }
-        openImage(url, context);
       }}
       sx={{ objectFit: 'cover', objectPosition: '80% 0%' }}
     />

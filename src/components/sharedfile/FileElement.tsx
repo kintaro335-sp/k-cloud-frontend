@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack } from '@mui/material';
-import { VideoFile, OtherFile, Folder } from '../files/filetypes';
-import ImagePreview from '../atoms/filespreview/ImagePreview';
+import { Folder } from '../files/filetypes';
 import { DownloadButton, FileIcon } from '../atoms/';
 import { bytesFormat } from '../../utils/files';
 import { FileI } from '../../@types/files';

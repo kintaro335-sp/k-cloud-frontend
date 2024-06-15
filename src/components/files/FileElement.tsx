@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack, Checkbox } from '@mui/material';
-import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
+import { Folder } from './filetypes';
 import MenuFile from './MenuFile';
 import { DownloadButton, FileIcon } from '../atoms/';
 import { bytesFormat } from '../../utils/files';
@@ -117,7 +117,7 @@ export default function FileElement({ file, sf = false, arrayIndex }: FileElemen
   if (type === 'file') {
     return (
       <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
-        <FileIcon type={type} mime_type={mime_type} url={urlComplete} context={sf ? 'sharedFile' : 'default'} />
+        <FileIcon type={type} mime_type={mime_type} url={urlComplete} context={sf ? 'sharedFile' : 'default'} arrayIndex={arrayIndex} />
       </FileInfo>
     )
   }

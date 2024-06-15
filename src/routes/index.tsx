@@ -12,7 +12,7 @@ import {
   Tokens,
   TokenView
 } from '../pages';
-import { Accounts, Stats, AdminMenu, SystemSettings, Logs } from '../pages/dashboard';
+import { Accounts, Stats, AdminMenu, SystemSettings, Logs, About } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
 import GalleryContext from '../contexts/GalleryContext';
 
@@ -81,6 +81,14 @@ export default function Routes() {
       element: <AdminMenu />
     },
     {
+      path: '/admin/about',
+      element: (
+        <Authguard admin redirect redirectTo="/login">
+          <About />
+        </Authguard>
+      )
+    },
+    {
       path: '/admin/accounts',
       element: (
         <Authguard admin redirect redirectTo="/login">
@@ -135,6 +143,10 @@ export default function Routes() {
     {
       path: '/404',
       element: <Page404 />
+    },
+    {
+      path: '/about',
+      element: <About />
     }
   ]);
 }

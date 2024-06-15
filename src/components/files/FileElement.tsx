@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack, Checkbox } from '@mui/material';
 import { ImgFile, VideoFile, OtherFile, Folder } from './filetypes';
 import MenuFile from './MenuFile';
-import { DownloadButton } from '../atoms/';
+import { DownloadButton, FileIcon } from '../atoms/';
 import { bytesFormat } from '../../utils/files';
 import { FileI } from '../../@types/files';
 // hooks
@@ -115,25 +115,11 @@ export default function FileElement({ file, sf = false, arrayIndex }: FileElemen
   };
 
   if (type === 'file') {
-    if (mime_type.includes('image/')) {
-      return (
-        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
-          <ImgFile url={urlComplete} arrayIndex={arrayIndex} context={sf ? 'sharedFile' : 'default'} />
-        </FileInfo>
-      );
-    }
-    if (mime_type.includes('video')) {
-      return (
-        <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
-          <VideoFile url={urlComplete} nameFile={name} />
-        </FileInfo>
-      );
-    }
     return (
       <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
-        <OtherFile url={urlComplete} />
+        <FileIcon type={type} mime_type={mime_type} url={urlComplete} context={sf ? 'sharedFile' : 'default'} />
       </FileInfo>
-    );
+    )
   }
 
   return (

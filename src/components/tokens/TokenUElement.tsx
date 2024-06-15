@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, Box, CardContent, Typography, CardHeader, Tooltip, Stack, Checkbox, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import TokenMenu from './TokenMenu';
-import { TokenIcon } from '../atoms';
+import { FileIcon } from '../atoms';
 // icons
 import { Icon } from '@iconify/react';
 import publicIcon from '@iconify/icons-material-symbols/public';
@@ -49,7 +49,7 @@ export default function TokenUElement({ token }: TokenUElementProps) {
           />
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-          <TokenIcon type={type} mime_type={mime_type} url={urlRaw} />
+          <FileIcon type={type} mime_type={mime_type} url={urlRaw} context='tokenView' />
         </Box>
       </CardContent>
       <CardHeader

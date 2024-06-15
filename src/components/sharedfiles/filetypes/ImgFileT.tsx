@@ -1,11 +1,14 @@
 import { Box } from '@mui/material';
 import useGallery from '../../../hooks/useGallery';
+import { explorerContext } from '../../../@types/general';
 
 interface ImgFileProps {
   url: string;
+  context: explorerContext;
+  index?: number;
 }
 
-export default function ImgFile({ url }: ImgFileProps) {
+export default function ImgFile({ url, context, index }: ImgFileProps) {
   const { openImage } = useGallery();
   return (
     <Box
@@ -15,7 +18,13 @@ export default function ImgFile({ url }: ImgFileProps) {
       width="220px"
       height="220px"
       onClick={() => {
-        openImage(url, 'sharedFile');
+        if (context === 'sharedFile' || context === 'default') {
+          if (index === undefined) return
+          openImage(index, context);
+        } else {
+          openImage(url, context);
+        }
+        openImage(url, context);
       }}
       sx={{ objectFit: 'cover', objectPosition: '80% 0%' }}
     />

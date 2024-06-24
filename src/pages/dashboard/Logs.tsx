@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Grid, Box } from '@mui/material';
+import { Grid, Box, Toolbar } from '@mui/material';
 import { PaginationT } from '../../components/atoms';
 import { LogsTable } from '../../components/dashboard/logs';
+import { BackButton } from '../../components/atoms';
 // redux
 import { useSelector } from '../../redux/store';
 import { setLogs, setPage, setPages } from '../../redux/slices/logs';
@@ -38,6 +39,9 @@ export default function Logs(): JSX.Element {
 
   return (
     <Box>
+      <Toolbar>
+        <BackButton to="/admin" />
+      </Toolbar>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <LogsTable />

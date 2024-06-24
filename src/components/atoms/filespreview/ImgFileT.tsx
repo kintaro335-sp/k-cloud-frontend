@@ -4,11 +4,11 @@ import { explorerContext } from '../../../@types/general';
 
 interface ImgFileProps {
   url: string;
-  arrayIndex: number;
-  context?: explorerContext;
+  context: explorerContext;
+  index?: number;
 }
 
-export default function ImgFile({ url, arrayIndex, context = 'default' }: ImgFileProps) {
+export default function ImgFile({ url, context, index }: ImgFileProps) {
   const { openImage } = useGallery();
   return (
     <Box
@@ -18,7 +18,15 @@ export default function ImgFile({ url, arrayIndex, context = 'default' }: ImgFil
       width="220px"
       height="220px"
       onClick={() => {
-        openImage(arrayIndex, context);
+        if (context === 'sharedFile' || context === 'tokenView' || context === 'default') {
+          if (index === undefined) {
+            openImage(url, context);
+            return;
+          }
+          openImage(index, context);
+        } else {
+          openImage(url, context);
+        }
       }}
       sx={{ objectFit: 'cover', objectPosition: '80% 0%' }}
     />

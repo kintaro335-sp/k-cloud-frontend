@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
-import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box, Tab } from '@mui/material';
+import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box, Tab, Button } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/atoms';
 import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie } from '../../components/dashboard/stats';
 import { LineChartGeneral } from '../../components/dashboard/stats/logs';
+import { useSnackbar } from 'notistack';
 // redux
 import { useSelector } from '../../redux/store';
 import {
@@ -23,7 +24,8 @@ import {
   getUsedSpaceUser,
   getUsedSpaceByFileType,
   getLineChartData,
-  getMemoryUsageData
+  getMemoryUsageData,
+  updateUsersTrees
 } from '../../api/admin';
 import { createNewSocket } from '../../api/websocket';
 // types
@@ -33,10 +35,12 @@ import { bytesFormat } from '../../utils/files';
 import { SerieLineChart } from '../../@types/stats';
 
 export default function Stats() {
+  const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const socketClient = useRef(createNewSocket());
   const { access_token } = useSelector((state) => state.session);
   const { activityActions, activityReason, activityStatus, memoryUsageH } = useSelector((state) => state.stats);
+  const [updating, setUpdating] = useState(false);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
   const [tabValue, setTabValue] = useState('0');
 
@@ -54,16 +58,17 @@ export default function Stats() {
   const total = processdata(memoryUsageH[0]);
   const buffer_info = processdata(memoryUsageH[1]);
 
+  async function getusedSpaceEffect() {
+    const resultSpace = await getusedSpace(access_token, true);
+    setTotal(resultSpace.total);
+    setUsed(resultSpace.used);
+    const resultSpaceUser = await getUsedSpaceUser(access_token);
+    setUsedSpaceUsers(resultSpaceUser);
+    const resultSpaceFile = await getUsedSpaceByFileType(access_token);
+    setUsedSpaceFiles(resultSpaceFile);
+  }
+
   useEffect(() => {
-    async function getusedSpaceEffect() {
-      const resultSpace = await getusedSpace(access_token, true);
-      setTotal(resultSpace.total);
-      setUsed(resultSpace.used);
-      const resultSpaceUser = await getUsedSpaceUser(access_token);
-      setUsedSpaceUsers(resultSpaceUser);
-      const resultSpaceFile = await getUsedSpaceByFileType(access_token);
-      setUsedSpaceFiles(resultSpaceFile);
-    }
     getusedSpaceEffect();
   }, [access_token]);
 
@@ -106,6 +111,18 @@ export default function Stats() {
     socketClient.current = newSocket;
   }, [access_token]);
 
+  const handleUpdate = () => {
+    setUpdating(true);
+    enqueueSnackbar('Actualizando...', { variant: 'info' });
+    updateUsersTrees(access_token).then((resp) => {
+      getusedSpaceEffect();
+      setUpdating(false);
+      enqueueSnackbar(resp.message, { variant: 'success' });
+    }).catch((err) => {
+      setUpdating(false);
+    })
+  };
+
   return (
     <>
       <Toolbar>
@@ -119,6 +136,17 @@ export default function Stats() {
         </TabList>
         <Box>
           <TabPanel value="0">
+            <Toolbar>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleUpdate}
+                disabled={updating}
+                sx={{ mr: 2 }}
+              >
+                {updating ? 'Actualizando...' : 'Actualizar'}
+              </Button>
+            </Toolbar>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} lg={4}>
                 <UsedSpacePie />

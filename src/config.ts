@@ -8,3 +8,5 @@ const wsUrlR = noPortUrl.split('://')[1];
 
 export const apiUrl = rawAuto ? `${noPortUrl}${uPort}` : url;
 export const wsUrl = `ws://${wsUrlR}:5001`;
+
+export const version = 'v0.9.0';

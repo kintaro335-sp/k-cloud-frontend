@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import { TokensList } from '../components/sharedfiles';
 import { PaginationT } from '../components/atoms';
@@ -7,26 +7,47 @@ import { useSelector } from '../redux/store';
 import { setPages, setTokens, setPage } from '../redux/slices/sharedfiles';
 // api
 import { getTokensList, getPagesTokens } from '../api/sharedfiles';
+import { createNewSocket } from '../api/websocket'
 // import { isAxiosError } from 'axios';
 
 export default function ShareFiles() {
+  const socketClient = useRef(createNewSocket());
+  const { access_token } = useSelector((state) => state.session);
   const { page, pages } = useSelector((state) => state.sharedfiles);
 
-  useEffect(() => {
-    async function PagesEffect() {
-      const { pages } = await getPagesTokens();
-      setPages(pages);
-    }
-    PagesEffect();
-  }, []);
+
+  const PagesEffect = useCallback(async () => {
+    const { pages } = await getPagesTokens();
+    setPages(pages);
+  }, [pages]);
 
   useEffect(() => {
-    async function TokensEffect() {
-      const resp = await getTokensList(page);
-      setTokens(resp);
-    }
-    TokensEffect();
+    PagesEffect();
+  }, [PagesEffect]);
+
+
+  const TokensEffect = useCallback(async () => {
+    const resp = await getTokensList(page);
+    setTokens(resp);
   }, [page]);
+
+  useEffect(() => {
+    TokensEffect();
+  }, [TokensEffect]);
+
+  useEffect(() => {
+    const newSocket = createNewSocket();
+    newSocket.removeAllListeners()
+    newSocket.auth = { access_token };
+    newSocket.on('token-change', async () => {
+      console.log('evant called change');
+      PagesEffect();
+      TokensEffect();
+    });
+    newSocket.connect();
+    socketClient.current = newSocket;
+  }, [])  
+
 
   return (
     <Box>

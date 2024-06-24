@@ -1,4 +1,4 @@
-import { createContext, useState, useMemo, useEffect } from 'react';
+import { createContext, useState, useMemo, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dialog, DialogContent, Box, Stack, IconButton, Toolbar, AppBar, Tooltip } from '@mui/material';
 // icon
@@ -26,6 +26,7 @@ interface GalleryContextProps {
 type OptionImg = 'next' | 'before';
 
 export default function GalleryContext({ children }: GalleryContextProps) {
+  const galleryRef = useRef<HTMLDivElement>(null);
   const { id } = useParams();
   const [open, setOpen] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
@@ -93,6 +94,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
         }
         break;
     }
+    galleryRef.current?.scroll({ top: 0 });
   };
 
   const urlFinal = useMemo(() => {
@@ -145,6 +147,8 @@ export default function GalleryContext({ children }: GalleryContextProps) {
             break;
         }
       };
+    } else {
+      window.onkeydown = null;
     }
   });
 
@@ -168,7 +172,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
             <Box>{nameFileFinal}</Box>
           </Toolbar>
         </AppBar>
-        <DialogContent sx={{ padding: '17px 0px' }}>
+        <DialogContent ref={galleryRef} sx={{ padding: '17px 0px' }}>
           <Stack direction="row">
             {RawURL === '' && (
               <IconButton onClick={() => changeImage('before')}>

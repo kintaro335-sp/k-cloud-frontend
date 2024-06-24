@@ -98,3 +98,13 @@ export async function getPagesLogs(token: string): Promise<{ pages: number }> {
   const result = await conn.get(`logs/pages?t=${token}`);
   return result.data;
 }
+
+export async function updateUsersTrees(token: string): Promise<MessageResponse> {
+  const result = await conn.patch(`/update-users-trees?t=${token}`);
+  return result.data;
+}
+
+export async function getAbout(): Promise<{ app: string; version: string }> {
+  const result = await axios.get(`${apiUrl}`);
+  return result.data; 
+}

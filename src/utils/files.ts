@@ -1,4 +1,4 @@
-export const BLOB_SIZE = 1048576 * 60;
+export const BLOB_SIZE = 1048576 * 100;
 import Numeral from 'numeral';
 
 export function bytesFormat(bytes: number) {

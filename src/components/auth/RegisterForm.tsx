@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Card, CardProps, CardContent, Grid, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -29,6 +29,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
   const { isAuthenticated } = useAuth();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();  
 
   const validationSchema = yup.object().shape({
     username: yup.string().required(),
@@ -57,6 +58,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
           const resultLogin = await loginApi(username, password);
           dispatch(setAccessToken(resultLogin.access_token));
           enqueueSnackbar('Primer usuario agregado con exito', { variant: 'success' });
+          navigate('/files');          
         } else {
           const { access_token } = await registerApi(username, password);
           enqueueSnackbar('Register success', { variant: 'success' });

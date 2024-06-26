@@ -6,7 +6,7 @@ import { Box, Typography, Button, Stack } from '@mui/material';
 import { getIsConfigured } from '../api/setup';
 
 export default function LandingPage() {
-  const [configured, setConfigured] = useState(false);
+  const [configured, setConfigured] = useState(true);
 
   useEffect(() => {
     getIsConfigured().then((result) => {

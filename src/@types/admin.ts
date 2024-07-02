@@ -3,6 +3,7 @@ export type UnitByte = 'MB' | 'GB';
 export interface SpaceConfig {
   dedicatedSpace: number;
   unitType: UnitByte;
+  usedSpaceBytes: number;
 }
 
 export interface User {

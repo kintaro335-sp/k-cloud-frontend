@@ -1,6 +1,6 @@
 import { Toolbar, Box } from '@mui/material';
 import { BackButton } from '../../components/atoms';
-import { DedcatedSpaceForm } from '../../components/dashboard/system';
+import { DedicatedSpaceForm } from '../../components/dashboard/system';
 
 export default function SystemConfig() {
   return (
@@ -9,7 +9,7 @@ export default function SystemConfig() {
         <BackButton to="/admin" />
       </Toolbar>
       <Box>
-        <DedcatedSpaceForm />
+        <DedicatedSpaceForm />
       </Box>
     </>
   );

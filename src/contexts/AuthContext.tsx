@@ -1,11 +1,11 @@
 import { createContext, useState, useMemo, useEffect, useRef } from 'react';
 // redux
 import { useSelector, useDispatch } from '../redux/store';
-import { setFiles } from '../redux/slices/session';
+import { setAccessToken } from '../redux/slices/session';
 // api
 import { verifyAuth } from '../api/auth';
-import { getListFiles } from '../api/files';
 import { createAuthSocket } from '../api/websocket';
+import { isAxiosError } from 'axios';
 
 export const AuthContext = createContext({
   isAdmin: false,
@@ -36,7 +36,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             setIsAuthenticated(true);
             setInit(true);
           })
-          .catch(() => {
+          .catch((err) => {
+            if (isAxiosError(err)) {
+              if (err.response?.status === 401) {
+                dispatch(setAccessToken(''));
+              }
+            }
             setIsAuthenticated(false);
             setInit(true);
           });

@@ -11,5 +11,6 @@ export const SharedFile = lazy(() => import('./SharedFile'));
 export const SetupUser = lazy(() => import('./SetupUser'));
 export const Tokens = lazy(() => import('./Tokens'));
 export const TokenView = lazy(() => import('./TokenView'));
+export const ApiKeysPage = lazy(() => import('./ApiKeysPage'));
 
 export { default as Loading } from './Loading';

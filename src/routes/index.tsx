@@ -10,7 +10,8 @@ import {
   SharedFile,
   SetupUser,
   Tokens,
-  TokenView
+  TokenView,
+  ApiKeysPage
 } from '../pages';
 import { Accounts, Stats, AdminMenu, SystemSettings, Logs, About } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
@@ -73,6 +74,14 @@ export default function Routes() {
           <ContextsR>
             <TokenView />
           </ContextsR>
+        </Authguard>
+      )
+    },
+    {
+      path: '/api-keys',
+      element: (
+        <Authguard redirect redirectTo="/login">
+          <ApiKeysPage />
         </Authguard>
       )
     },

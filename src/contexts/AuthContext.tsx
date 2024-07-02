@@ -11,7 +11,8 @@ export const AuthContext = createContext({
   isAdmin: false,
   isAuthenticated: false,
   init: false,
-  username: ''
+  username: '',
+  sessionId: '',
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -19,6 +20,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const [init, setInit] = useState(false);
   const socketClient = useRef(createAuthSocket());
   const { access_token, path } = useSelector((state) => state.session);
+  const [sessionId, setSessionId] = useState<string>('');
   const [username, setUsername] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -29,6 +31,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         verifyAuth(access_token)
           .then((u) => {
             setIsAdmin(u.isadmin);
+            setSessionId(u.sessionId);
             setUsername(u.username);
             setIsAuthenticated(true);
             setInit(true);
@@ -54,8 +57,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }, [access_token]);
 
   const value = useMemo(
-    () => ({ isAuthenticated, init, isAdmin, username }),
-    [isAuthenticated, init, isAdmin, username]
+    () => ({ isAuthenticated, init, isAdmin, sessionId, username }),
+    [isAuthenticated, init, isAdmin, username, sessionId]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,20 +1,30 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // mui
-import { Grid, Box, Stack, Typography } from '@mui/material';
+import { Grid, Box, Stack, Typography, Button } from '@mui/material';
+import { DownloadButton } from '../atoms';
 import { RouteBar } from '../files/routebar';
-import FileElement from '../files/FileElement';
+import FileElement from './FileElement';
 // redux
 import { useSelector } from '../../redux/store';
 import { setPath, setContent } from '../../redux/slices/sharedfile';
 // api
 import { getContentToken, getContentTokenPath } from '../../api/sharedfiles';
-// moment
-import moment from 'moment';
+// utils
+import { fullDateFormat } from '../../utils/dateformat';
+// config
+import { apiUrl } from '../../config';
 
 export default function FolderExplorer() {
   const { id } = useParams();
   const { path, content, info } = useSelector((state) => state.sharedfile);
+  const diagonal = path !== '' ? '/' : '';
+  const urlZipDownload = `${apiUrl}/shared-file/zip/${id}${diagonal}${path}`;
+  const [showQ, setShowQ] = useState<number>(48);
+
+  const handleShowMore = () => {
+    setShowQ((prev) => prev + 4);
+  };
 
   useEffect(() => {
     async function getContentEffect() {
@@ -35,11 +45,11 @@ export default function FolderExplorer() {
       <Box sx={{ margin: '5px' }}>
         <Stack spacing={2} direction="column">
           <Stack spacing={1} direction="row">
-            <Typography variant="h5">{info?.name}</Typography>
-            <Typography variant="body1">Creado: {moment(info?.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
-            {info?.expire && (
-              <Typography variant="body1">expira: {moment(info?.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>
-            )}
+            <Typography variant="h5">
+              {info?.name} <DownloadButton url={urlZipDownload} name="Descargar" variant="zip" />{' '}
+            </Typography>
+            <Typography variant="body1">Creado: {fullDateFormat(info?.createdAt || 0)}</Typography>
+            {info?.expire && <Typography variant="body1">expira: {fullDateFormat(info?.expires)}</Typography>}
           </Stack>
           <RouteBar
             title={info?.name}
@@ -50,11 +60,19 @@ export default function FolderExplorer() {
           />
         </Stack>
       </Box>
-      <Box sx={{ height: '74vh', overflowY: 'scroll' }}>
+      <Box
+        sx={{ height: '74vh', overflowY: 'scroll' }}
+        onScroll={(e) => {
+          const { scrollTop, scrollHeight } = e.currentTarget;
+          if (scrollTop / scrollHeight >= 0.82) {
+            handleShowMore();
+          }
+        }}
+      >
         <Grid container spacing={2}>
-          {content.map((file, i) => (
+          {content.slice(0, showQ).map((file, i) => (
             <Grid key={`${file.name}-${i}`} item xs={12} md={4} lg={3}>
-              <FileElement file={file} sf />
+              <FileElement file={file} arrayIndex={i} />
             </Grid>
           ))}
         </Grid>

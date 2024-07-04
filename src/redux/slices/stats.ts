@@ -9,9 +9,10 @@ interface StatsState {
   usedSpace: number;
   spaceUsedFiles: UsedSpaceType[];
   spaceUsedUsers: UsedSpaceUser[];
-  activityMethods: StatsLineChart;
-  activityStatuscode: StatsLineChart;
-  activityRoute: StatsLineChart;
+  activityActions: StatsLineChart;
+  activityStatus: StatsLineChart;
+  activityReason: StatsLineChart;
+  memoryUsageH: StatsLineChart;
 }
 
 const initialState: StatsState = {
@@ -19,9 +20,10 @@ const initialState: StatsState = {
   usedSpace: 0,
   spaceUsedFiles: [],
   spaceUsedUsers: [],
-  activityMethods: [],
-  activityRoute: [],
-  activityStatuscode: []
+  activityActions: [],
+  activityReason: [],
+  activityStatus: [],
+  memoryUsageH: []
 };
 
 const slice = createSlice({
@@ -40,14 +42,17 @@ const slice = createSlice({
     setUsedSpaceUsers(state, action) {
       state.spaceUsedUsers = action.payload as UsedSpaceUser[];
     },
-    setActivityMethods(state, action) {
-      state.activityMethods = action.payload as StatsLineChart;
+    setActivityActions(state, action) {
+      state.activityActions = action.payload as StatsLineChart;
     },
-    setActivityRoute(state, action) {
-      state.activityRoute = action.payload as StatsLineChart;
+    setActivityReason(state, action) {
+      state.activityReason = action.payload as StatsLineChart;
     },
-    setActivityStatuscode(state, action) {
-      state.activityStatuscode = action.payload as StatsLineChart;
+    setActivityStatus(state, action) {
+      state.activityStatus = action.payload as StatsLineChart;
+    },
+    setMemoryUsageH(state, action) {
+      state.memoryUsageH = action.payload as StatsLineChart;
     }
   }
 });
@@ -86,25 +91,33 @@ export function setUsedSpaceFiles(data: UsedSpaceType[]) {
   }
 }
 
-export function setActivityMethods(data: StatsLineChart) {
+export function setActivityActions(data: StatsLineChart) {
   try {
-    dispatch(slice.actions.setActivityMethods(data));
+    dispatch(slice.actions.setActivityActions(data));
   } catch (err) {
     console.error(err);
   }
 }
 
-export function setActivityRoute(data: StatsLineChart) {
+export function setActivityReason(data: StatsLineChart) {
   try {
-    dispatch(slice.actions.setActivityRoute(data));
+    dispatch(slice.actions.setActivityReason(data));
   } catch (err) {
     console.error(err);
   }
 }
 
-export function setActivityStatuscode(data: StatsLineChart) {
+export function setActivityStatus(data: StatsLineChart) {
   try {
-    dispatch(slice.actions.setActivityStatuscode(data));
+    dispatch(slice.actions.setActivityStatus(data));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setMemoryUsageH(data: StatsLineChart) {
+  try {
+    dispatch(slice.actions.setMemoryUsageH(data));
   } catch (err) {
     console.error(err);
   }

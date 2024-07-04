@@ -10,7 +10,7 @@ export default function TokensList() {
     <Box sx={{ width: '100vw' }}>
       <Grid container spacing={2} sx={{ width: '100%' }}>
         {tokens.map((t, i) => (
-          <Grid key={i} item xs={6} md={4} lg={3}>
+          <Grid key={i} item xs={12} md={4} lg={3}>
             <TokenElement token={t} />
           </Grid>
         ))}

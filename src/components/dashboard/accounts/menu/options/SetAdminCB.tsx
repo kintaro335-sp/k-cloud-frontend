@@ -11,12 +11,14 @@ interface SetAdminCBProps {
 
 export default function SetAdminCB({ userid, admin }: SetAdminCBProps) {
   const { enqueueSnackbar } = useSnackbar();
+  const { owner } = useSelector((state) => state.admin);
   const { access_token } = useSelector((state) => state.session);
   const [isAdmin, setIsAdmin] = useState(admin);
 
   return (
     <FormControlLabel
       checked={isAdmin}
+      disabled={owner === userid}
       onChange={async (_e, checked) => {
         try {
           const response = await setAdmin(access_token, userid, checked);

@@ -1,67 +1,137 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { RouteBar } from '../components/files/routebar';
-import { Box, Grid, Stack, Card, CardContent, Button } from '@mui/material';
+import { Box, Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import FileElement from '../components/files/FileElement';
 import AddFolder from '../components/files/AddFolder';
 import UploadSingleFile from '../components/files/UploadSingleFile';
 import { useSnackbar } from 'notistack';
 import DropFiles from '../components/files/DropFiles';
-
+import { ContextualMenuSelect } from '../components/files/menuselect';
+import Loading from './Loading';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { setFiles, setTree, onSetInterval, cancelFilesInterval, setPath } from '../redux/slices/session';
+import { setFiles, setTree, setPath, addFile, substituteFile } from '../redux/slices/session';
 // api
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
-import { FileI } from '../@types/files';
+import { createNewSocket } from '../api/websocket';
+import { FileI, UpdateFileEvent } from '../@types/files';
+import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const scrollLimit = isMobile ? 0.978 : 0.945;
+  const { access_token, path, files } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
+  const scrollElement = useRef<HTMLDivElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const { access_token, path, files } = useSelector((state) => state.session);
-  const [showQ, setShowQ] = useState<number>(24);
+  const { showOptions } = useFileSelect();
+  const [start, setStart] = useState<number>(0);
+  const [showQ, setShowQ] = useState<number>(48);
+  const [loading, setLoading] = useState(false);
 
   const handleShowMore = () => {
-    setShowQ((prev) => prev + 12);
+    if (files.length < showQ) return;
+    if (showQ >= 96) {
+      setShowQ(96);
+      return;
+    }
+    setShowQ((prev) => prev + 8);
   };
 
-  useEffect(() => {
-    cancelFilesInterval();
-    async function getFiles() {
-      const { list } = await getListFiles(path, access_token).catch((err) => {
-        if (isAxiosError(err)) {
-          if (err.response?.status === 404) {
-            dispatch(setPath(''));
-            enqueueSnackbar('No Encontrado', { variant: 'error' });
-          }
-        } else {
-          enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
+  const handleChangeStart = (direction: 'back' | 'go') => {
+    if (direction === 'back') {
+      if (start === 0) return;
+      setStart((st) => {
+        const scrollHeight = scrollElement.current?.scrollHeight as number;
+        const multiplier = isMobile ? 0.975 : 0.93;
+        scrollElement.current?.scroll({ top: scrollHeight * multiplier });
+        const newVal = st - 96;
+        if (newVal < 0) {
+          return 0;
         }
-        dispatch(setFiles([]));
-        return { list: [] };
+        return newVal;
       });
-      dispatch(setFiles(list));
-      const tree = await getTreeAPI('', access_token).catch((err) => {
+    }
+    if (direction === 'go' && showQ >= 96) {
+      setStart((st) => {
+        const scrollHeight = scrollElement.current?.scrollHeight as number;
+        scrollElement.current?.scroll({ top: scrollHeight * 0.001 });
+        const newVal = st + 96;
+        if (newVal > files.length - 96) {
+          return files.length - 96;
+        }
+        return newVal;
+      });
+    }
+  };
+
+  async function getFiles() {
+    const { list } = await getListFiles(path, access_token).catch((err) => {
+      if (isAxiosError(err)) {
+        if (err.response?.status === 404) {
+          dispatch(setPath(''));
+          enqueueSnackbar('No Encontrado', { variant: 'error' });
+        }
+      } else {
+        enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
+      }
+      dispatch(setFiles([]));
+      return { list: [] };
+    });
+    dispatch(setFiles(list));
+  }
+
+  function getTree() {
+    getTreeAPI('', access_token)
+      .then((tree) => {
+        dispatch(setTree(tree));
+      })
+      .catch((err) => {
         console.error(err);
         return [];
       });
-      dispatch(setTree(tree));
-    }
-    getFiles();
-    setShowQ(24);
-    onSetInterval(
-      // @ts-ignore
-      setInterval(() => {
-        getFiles();
-      }, 5000)
-    );
+  }
+
+  useEffect(() => {
+    const newSocket = createNewSocket(access_token);
+    newSocket.removeAllListeners();
+    newSocket.on('tree-update', () => {
+      getTree();
+    });
+    newSocket.on('file-change', (data) => {
+      if (path === data.path) getFiles();
+    });
+    newSocket.on('file-update', (event) => {
+      const { type, content } = event as UpdateFileEvent;
+      if (event.path !== path) return;
+      switch (type) {
+        case 'add':
+          addFile(content);
+          break;
+        case 'substitute':
+          substituteFile(content);
+          break;
+      }
+    });
+    socketClient.current = newSocket;
+    setLoading(true);
+    getTree();
+    getFiles().then(() => {
+      setLoading(false);
+    });
+    setShowQ(48);
+    setStart(0);
   }, [access_token, path]);
 
-  const filesMemo = useMemo(() => files, [files])
+  const filesMemo = useMemo(() => files, [files]);
 
   return (
     <>
-      <Card sx={{ margin: '1ex' }}>
+      <Card sx={{ margin: '2px' }}>
         <CardContent>
           <Grid container spacing={1}>
             <Grid item xs={9}>
@@ -82,24 +152,46 @@ export default function Files() {
               <DropFiles />
             </Grid>
           </Grid>
-        </CardContent>
-      </Card>
-      <Box sx={{ width: '100%', height: '68%', marginTop: '2ex', overflowY: 'scroll' }}>
-        <Grid container spacing={2}>
-          {filesMemo.slice(0, showQ).map((file: FileI, i) => (
-            <Grid item key={file.name + i} xs={6} md={4} lg={3}>
-              <FileElement file={file} />
-            </Grid>
-          ))}
-          {files.length > showQ && (
+          {showOptions && (
             <Grid item xs={12}>
-              <Button variant="contained" fullWidth onClick={handleShowMore}>
-                Mostar mas
-              </Button>
+              <ContextualMenuSelect />
             </Grid>
           )}
-        </Grid>
-      </Box>
+        </CardContent>
+      </Card>
+      {loading ? (
+        <Loading width="100%" height="68%" />
+      ) : (
+        <Box
+          sx={{ width: '100%', height: '68%', marginTop: '1ex', overflowY: 'scroll' }}
+          ref={scrollElement}
+          onScroll={(e) => {
+            const { scrollTop, scrollHeight } = e.currentTarget;
+            const scrollH = scrollTop / scrollHeight;
+            console.log(scrollH);
+            if (scrollH === 0) {
+              handleChangeStart('back');
+            }
+            if (scrollH >= 0.7) {
+              handleShowMore();
+            }
+            if (scrollH >= scrollLimit) {
+              handleChangeStart('go');
+            }
+          }}
+        >
+          <Grid container spacing={2}>
+            {filesMemo.slice(start, start + showQ).map((file: FileI, i) => (
+              <Grid item key={file.name + i} xs={12} md={4} lg={3}>
+                <FileElement file={file} arrayIndex={i} />
+              </Grid>
+            ))}
+            <Grid item xs={12}>
+              <Box sx={{ padding: isMobile ? '200px' : '100px' }} />
+            </Grid>
+          </Grid>
+        </Box>
+      )}
     </>
   );
 }

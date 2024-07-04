@@ -6,6 +6,7 @@ import folderAddIcon from '@iconify/icons-ant-design/folder-add-filled';
 import { useSnackbar } from 'notistack';
 
 // api
+import { isAxiosError } from 'axios';
 import { createFolder, getListFiles } from '../../api/files';
 
 // redux
@@ -57,12 +58,9 @@ export default function AddFolder() {
                     if (name !== '' && !['/'].includes(name)) {
                       createFolder(`${path}/${name}`, access_token).then((res) => {
                         enqueueSnackbar(res.message, { variant: 'success' });
-                        getListFiles(path, access_token).then((response) => {
-                          dispatch(setFiles(response.list));
-                          clickClose();
-                          setName('');
-                          setOpen(false);
-                        });
+                        clickClose();
+                        setName('');
+                        setOpen(false);
                       });
                     } else {
                       enqueueSnackbar('Nombre no valido', { variant: 'error' });
@@ -89,16 +87,22 @@ export default function AddFolder() {
                   onClick={() => {
                     if (name !== '' && !['/'].includes(name)) {
                       setLoading(true);
-                      createFolder(`${path}/${name}`, access_token).then((res) => {
-                        enqueueSnackbar(res.message, { variant: 'success' });
-                        getListFiles(path, access_token).then((response) => {
-                          dispatch(setFiles(response.list));
+                      createFolder(`${path}/${name}`, access_token)
+                        .then((res) => {
+                          enqueueSnackbar(res.message, { variant: 'success' });
                           clickClose();
                           setName('');
                           setOpen(false);
                           setLoading(false);
+                        })
+                        .catch((err) => {
+                          if (isAxiosError(err)) {
+                            if (err.response?.status === 500) {
+                              enqueueSnackbar('error del servidor', { variant: 'error' });
+                            }
+                          }
+                          setLoading(false);
                         });
-                      });
                     } else {
                       enqueueSnackbar('Nombre no valido', { variant: 'error' });
                     }

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Typography, Box, Tooltip, Stack } from '@mui/material';
 import { TokenElement } from '../../@types/sharedfiles';
-import TokenIcon from './TokenIcon';
+import { FileIcon } from '../atoms';
 import { CopyClipboard, DownloadButton } from '../atoms';
 // config
 import { apiUrl } from '../../config';
@@ -22,7 +22,7 @@ export default function TokenItem({ token }: TokenElementProps) {
     <Card>
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-          <TokenIcon type={type} mime_type={mime_type} url={urlRaw} />
+          <FileIcon type={type} mime_type={mime_type} url={urlRaw} context="sharedFile" />
         </Box>
       </CardContent>
       <CardHeader

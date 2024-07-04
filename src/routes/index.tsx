@@ -8,10 +8,18 @@ import {
   ChangePasswordPage,
   SharedFiles,
   SharedFile,
-  SetupUser
+  SetupUser,
+  Tokens,
+  TokenView,
+  ApiKeysPage
 } from '../pages';
-import { Accounts, Stats, AdminMenu, SystemSettings } from '../pages/dashboard';
+import { Accounts, Stats, AdminMenu, SystemSettings, Logs, About } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
+import GalleryContext from '../contexts/GalleryContext';
+
+function ContextsR({ children }: { children: JSX.Element }) {
+  return <GalleryContext>{children}</GalleryContext>;
+}
 
 export default function Routes() {
   return useRoutes([
@@ -43,13 +51,51 @@ export default function Routes() {
       path: '/files',
       element: (
         <Authguard redirect redirectTo="/login">
-          <FilesPage />
+          <ContextsR>
+            <FilesPage />
+          </ContextsR>
+        </Authguard>
+      )
+    },
+    {
+      path: '/tokens',
+      element: (
+        <Authguard redirect redirectTo="/login">
+          <ContextsR>
+            <Tokens />
+          </ContextsR>
+        </Authguard>
+      )
+    },
+    {
+      path: '/tokens/id/:id',
+      element: (
+        <Authguard redirect redirectTo="/login">
+          <ContextsR>
+            <TokenView />
+          </ContextsR>
+        </Authguard>
+      )
+    },
+    {
+      path: '/api-keys',
+      element: (
+        <Authguard redirect redirectTo="/login">
+          <ApiKeysPage />
         </Authguard>
       )
     },
     {
       path: '/admin',
       element: <AdminMenu />
+    },
+    {
+      path: '/admin/about',
+      element: (
+        <Authguard admin redirect redirectTo="/login">
+          <About />
+        </Authguard>
+      )
     },
     {
       path: '/admin/accounts',
@@ -76,12 +122,28 @@ export default function Routes() {
       )
     },
     {
+      path: '/admin/logs',
+      element: (
+        <Authguard admin redirect redirectTo="/login">
+          <Logs />
+        </Authguard>
+      )
+    },
+    {
       path: '/shared-files',
-      element: <SharedFiles />
+      element: (
+        <ContextsR>
+          <SharedFiles />
+        </ContextsR>
+      )
     },
     {
       path: '/shared-files/id/:id',
-      element: <SharedFile />
+      element: (
+        <ContextsR>
+          <SharedFile />
+        </ContextsR>
+      )
     },
     {
       path: '*',
@@ -90,6 +152,10 @@ export default function Routes() {
     {
       path: '/404',
       element: <Page404 />
+    },
+    {
+      path: '/about',
+      element: <About />
     }
   ]);
 }

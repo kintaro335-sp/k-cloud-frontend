@@ -1,1 +1,1 @@
-export { default as DedcatedSpaceForm } from './DedcatedSpaceform';
+export { default as DedicatedSpaceForm } from './DedicatedSpaceform';

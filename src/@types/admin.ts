@@ -3,6 +3,7 @@ export type UnitByte = 'MB' | 'GB';
 export interface SpaceConfig {
   dedicatedSpace: number;
   unitType: UnitByte;
+  usedSpaceBytes: number;
 }
 
 export interface User {
@@ -12,7 +13,7 @@ export interface User {
 }
 
 export interface AdminState {
-  userInterval: number | null;
+  owner: string | null
   users: User[];
 }
 
@@ -29,4 +30,28 @@ export interface UsedSpaceUser {
 
 export interface UsageG {
   usage: number;
+}
+
+export interface LogR {
+  date: number;
+  route: string;
+  statusCode: string;
+  method: string;
+}
+
+export type ActionT = 'CREATED' | 'READ' | 'DOWNLOAD' | 'DELETE' | 'DOWNLOAD_ZIP' | 'MODIFY';
+
+export type statusT = 'ALLOWED' | 'DENIED';
+
+export type reasonT = 'NOT_EXIST' | 'EXPIRED' | 'WRONG_OWNER' | 'NONE';
+
+export interface SharedFileActivity {
+  id: string;
+  date: Date;
+  action: ActionT;
+  status: statusT;
+  reason: reasonT;
+  user: string;
+  tokenid: string;
+  path: string;
 }

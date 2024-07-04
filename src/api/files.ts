@@ -30,16 +30,31 @@ export async function createFolder(path: string, token: string): Promise<{ messa
   return response.data;
 }
 
-export async function uploadFile(
+export async function uploadFileAPI(
   path: string,
   file: File,
   token: string,
-  onUploadProgress?: (progressEvent: any) => void
-): Promise<any> {
+  cb?: (progressEvent: any) => void
+): Promise<number> {
   const formData = new FormData();
   formData.append(`file`, file);
-  await connFiles.post(`/upload/${path}?t=${token}`, formData, {
-    onUploadProgress
+
+  return new Promise((res) => {
+    connFiles
+      .post(`/upload/${path}?t=${token}`, formData, {
+        onUploadProgress: (progressEvent) => {
+          if (typeof cb === 'function') {
+            if (progressEvent.progress === undefined) return;
+            cb(progressEvent.progress);
+          }
+        }
+      })
+      .then(() => {
+        res(1);
+      })
+      .catch((err) => {
+        res(0);
+      });
   });
 }
 
@@ -113,7 +128,7 @@ export async function uploadBlobAPI(
   });
 }
 
-export async function statusFileAPI(path: string, token: string): Promise<FilePTempResponse> {
+export async function statusFileAPI(path: string, token: string): Promise<FilePTempResponse | null> {
   return new Promise((resolve, reject) => {
     connFiles
       .get(`status/${path}?t=${token}`)
@@ -121,7 +136,7 @@ export async function statusFileAPI(path: string, token: string): Promise<FilePT
         resolve(res.data);
       })
       .catch((err) => {
-        reject(err);
+        resolve(null);
       });
   });
 }
@@ -150,4 +165,63 @@ export async function getTreeAPI(path: string, token: string): Promise<Array<Fol
         reject(err);
       });
   });
+}
+
+export async function moveFile(
+  path: string,
+  newPath: string,
+  fileName: string,
+  token: string
+): Promise<{ message: string }> {
+  const diagonalP = path === '' ? '' : '/';
+  const diagonalNP = newPath === '' ? '' : '/';
+  const pathComplete = `${path}${diagonalP}${fileName}`;
+  const newPathComplete = `${newPath}${diagonalNP}${fileName}`;
+
+  return new Promise((resolve, reject) => {
+    connFiles
+      .post(`move/file/${pathComplete}?t=${token}`, { newpath: newPathComplete })
+      .then((result) => {
+        resolve(result.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export async function moveFiles(
+  path: string,
+  newPath: string,
+  files: string[],
+  token: string
+): Promise<{ message: string }> {
+  const pathComplete = `${path}`;
+  const newPathComplete = `${newPath}`;
+
+  return new Promise((resolve, reject) => {
+    connFiles
+      .post(`move/files/${pathComplete}?t=${token}`, { newPath: newPathComplete, files })
+      .then((result) => {
+        resolve(result.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+export async function renameFile(url: string, newName: string, token: string) {
+  const result = await connFiles.post(`rename/${url}?t=${token}`, { newName });
+  return result.data;
+}
+
+// funciones creadas a partir de las anteriores
+
+export async function deleteSelectedFiles(
+  path: string,
+  fileNames: string[],
+  token: string
+): Promise<{ message: string; files: number }> {
+  const result = await connFiles.patch(`deletemp/${path}?t=${token}`, { files: fileNames });
+  return result.data;
 }

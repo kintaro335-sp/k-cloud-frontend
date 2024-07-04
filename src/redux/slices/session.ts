@@ -1,15 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { dispatch } from '../store';
 import { Folder, FileI } from '../../@types/files';
 import { TokenElement } from '../../@types/sharedfiles';
+import { orderBy } from 'lodash';
+import { dispatch } from '../store';
 
 export interface SessionState {
   access_token: string;
   path: string;
   files: FileI[];
   tree: Array<Folder | FileI>;
-  fileInterval: number | null;
-  tokenInterval: number | null;
   tokens: TokenElement[];
 }
 
@@ -18,8 +17,6 @@ const initialState: SessionState = {
   path: '',
   files: [],
   tree: [],
-  fileInterval: null,
-  tokenInterval: null,
   tokens: []
 };
 
@@ -36,29 +33,19 @@ const slice = createSlice({
     setFiles: (state, action) => {
       state.files = action.payload;
     },
+    addFile: (state, action) => {
+      if (state.files.find((f) => f.name === action.payload.name)) {
+        return;
+      }
+      state.files.push(action.payload as FileI);
+    },
+    substituteFile(state, action) {
+      const file = action.payload as FileI;
+      state.files = state.files.map((f) => (f.name === file.name ? file : f));
+    },
     setTree(state, action) {
       const treeL = action.payload as Array<Folder | FileI>;
       state.tree = treeL;
-    },
-    setIntervalId(state, action) {
-      const number = action.payload as number;
-      state.fileInterval = number;
-    },
-    clearIntervalFile(state) {
-      if (state.fileInterval !== null) {
-        clearInterval(state.fileInterval);
-        state.fileInterval = null;
-      }
-    },
-    setIntervalIdToken(state, action) {
-      const number = action.payload as number;
-      state.tokenInterval = number;
-    },
-    clearIntervalToken(state) {
-      if (state.tokenInterval !== null) {
-        clearInterval(state.tokenInterval);
-        state.fileInterval = null;
-      }
     },
     setTokens(state, action) {
       state.tokens = action.payload as TokenElement[];
@@ -70,33 +57,14 @@ export const { setAccessToken, setPath, setFiles, setTree, setTokens } = slice.a
 
 export default slice.reducer;
 
-export function onSetInterval(id: number) {
+export function addFile(file: FileI) {
   try {
-    dispatch(slice.actions.setIntervalId(id));
-  } catch (err) {
-    console.error;
-  }
+    dispatch(slice.actions.addFile(file));
+  } catch (e) {}
 }
 
-export function cancelFilesInterval() {
+export function substituteFile(file: FileI) {
   try {
-    dispatch(slice.actions.clearIntervalFile());
-  } catch (err) {
-    console.error(err);
-  }
-}
-export function onSetTokenInterval(id: number) {
-  try {
-    dispatch(slice.actions.setIntervalIdToken(id));
-  } catch (err) {
-    console.error;
-  }
-}
-
-export function cancelTokenInterval() {
-  try {
-    dispatch(slice.actions.clearIntervalToken());
-  } catch (err) {
-    console.error(err);
-  }
+    dispatch(slice.actions.substituteFile(file));
+  } catch (e) {}
 }

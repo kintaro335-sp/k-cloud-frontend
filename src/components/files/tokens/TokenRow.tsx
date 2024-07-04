@@ -1,13 +1,13 @@
 import { TableRow, TableCell, Typography, Link } from '@mui/material';
 import TokenActions from './TokenActions';
 import { TokenElement } from '../../../@types/sharedfiles';
-import moment from 'moment';
+import { fullDateFormat } from '../../../utils/dateformat';
 interface TokenRowProps {
   token: TokenElement;
 }
 
 export default function TokenRow({ token }: TokenRowProps) {
-  const { id, expires, expire } = token;
+  const { id, expires, expire, publict } = token;
   return (
     <TableRow>
       <TableCell>
@@ -18,9 +18,10 @@ export default function TokenRow({ token }: TokenRowProps) {
         </Typography>
       </TableCell>
       <TableCell>{expire ? 'si' : 'no'}</TableCell>
-      <TableCell>{expire ? moment(expires).format('DD-MM-YYYY hh:mm a') : '-'}</TableCell>
+      <TableCell>{publict ? 'si' : 'no'}</TableCell>
+      <TableCell>{expire ? fullDateFormat(expires) : '-'}</TableCell>
       <TableCell>
-        <TokenActions id={id} />
+        <TokenActions id={id} token={token} />
       </TableCell>
     </TableRow>
   );

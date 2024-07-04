@@ -13,7 +13,6 @@ export interface FilePTempResponse {
 }
 
 export interface FileToUpload {
-  file: File;
   inicializado: boolean;
   uploading: boolean;
   size: number;
@@ -56,6 +55,13 @@ export interface FileI {
   extension: string;
   mime_type: string;
 }
+
+export interface UpdateFileEvent {
+  userid: string;
+  path: string;
+  type: 'add' | 'substitute';
+  content: FileI
+} 
 
 export interface Folder {
   type: 'Folder';

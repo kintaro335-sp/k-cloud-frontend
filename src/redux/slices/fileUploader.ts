@@ -6,12 +6,14 @@ interface initialStateT {
   filesDir: string[];
   files: Record<string, FileToUpload | null>;
   blobSize: number;
+  uploading: number;
 }
 
 const initialState: initialStateT = {
   filesDir: [],
   files: {},
-  blobSize: 1024
+  blobSize: 1024,
+  uploading: 0
 };
 
 const slice = createSlice({
@@ -24,7 +26,6 @@ const slice = createSlice({
       const fileDir = `${path}/${file.name}`;
       state.files[fileDir] = {
         uploading: false,
-        file,
         size: file.size,
         blobSended: [],
         sended: 0,
@@ -49,6 +50,8 @@ const slice = createSlice({
       const fileM = state.files[path];
       if (fileM === null) return;
       if (fileM === undefined) return;
+      if (fileM.inicializado) return;
+      state.uploading++;
       fileM.inicializado = true;
     },
     uploadingFile(state, action) {
@@ -71,19 +74,21 @@ const slice = createSlice({
       if (fileM === null) return;
       if (fileM === undefined) return;
       fileM.blobsSended = sendedB;
+      fileM.blobProgress = 0;
     },
     removeFileUploading(state, action) {
       const path = action.payload as string;
-      console.log('finalizado')
       state.filesDir = state.filesDir.filter((f) => f !== path);
-      state.files[path] = null;
+      delete state.files[path];
+      state.uploading--;
+      if (state.uploading < 0) state.uploading = 0;
     },
     deleteCompletedFiles(state) {
       state.filesDir.forEach((dir) => {
         const fileT = state.files[dir];
         if (fileT === null || fileT === undefined) return;
         if (fileT.sended >= fileT.size && fileT.uploading === false) {
-          state.files[dir] = null;
+          delete state.files[dir];
           state.filesDir = state.filesDir.filter((d) => d !== dir);
         }
       });
@@ -92,7 +97,8 @@ const slice = createSlice({
       const { path, progress } = action.payload as { path: string; progress: number };
       const fileM = state.files[path];
       if (fileM === null || fileM === undefined) return;
-      fileM.blobProgress = progress;
+      if (fileM.blobProgress > progress) return;
+      fileM.blobProgress = progress > fileM.size ? fileM.size : progress;
     },
     setWrittenProgress(state, action) {
       const { path, progress } = action.payload as { path: string; progress: number };

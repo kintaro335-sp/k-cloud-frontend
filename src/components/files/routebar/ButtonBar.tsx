@@ -24,7 +24,7 @@ export default function ButtonBar({ name, to, index, onChangePath }: ButtonBarPr
           <Icon icon={rightC} width="16px" height="16px" color={theme.palette.text.secondary} />
         </Box>
       )}
-      <Box sx={{ padding: '3px', fontWeight: 600, textAlign: 'center', cursor: 'pointer' }} onClick={sendToPath}>
+      <Box component='span' sx={{ padding: '3px', fontWeight: 600, textAlign: 'center', cursor: 'pointer' }} onClick={sendToPath}>
         {name}
       </Box>
     </Stack>

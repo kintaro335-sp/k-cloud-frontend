@@ -9,8 +9,10 @@ interface FileItemProps {
 
 export default function FileItem({ path, fileP }: FileItemProps) {
   if (fileP === null) return <></>;
-  const { size, sended, totalBlobs, blobsSended, file, blobProgress, written } = fileP;
+  const { size, sended, totalBlobs, blobsSended, blobProgress, written } = fileP;
   const blobSizeReal = size < BLOB_SIZE ? size : BLOB_SIZE;
+
+  const fileName = path.split('/').reverse()[0]
 
   return (
     <ListItem>
@@ -18,7 +20,7 @@ export default function FileItem({ path, fileP }: FileItemProps) {
         primary={
           <Stack spacing={1}>
             <Box>
-              {file.name} Total: {bytesFormat(size)}
+              {fileName} Total: {bytesFormat(size)}
             </Box>
             <Box>
               {blobsSended}/{totalBlobs}

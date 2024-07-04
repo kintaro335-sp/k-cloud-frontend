@@ -5,6 +5,8 @@ import { Icon } from '@iconify/react';
 import usersIcon from '@iconify/icons-ant-design/user';
 import statsIcon from '@iconify/icons-ant-design/pie-chart-fill';
 import settingsIcon from '@iconify/icons-material-symbols/settings';
+import logsIcon from '@iconify/icons-material-symbols/format-list-bulleted';
+import aboutIcon from '@iconify/icons-material-symbols/notes';
 
 interface OptionMenuAdmin {
   title: string;
@@ -25,9 +27,19 @@ export default function AdminMenu() {
       link: '/admin/stats'
     },
     {
+      title: 'Logs',
+      icon: <Icon icon={logsIcon} width="100%" height="100%" />,
+      link: '/admin/logs'
+    },
+    {
       title: 'Sistema',
       icon: <Icon icon={settingsIcon} width="100%" height="100%" />,
       link: '/admin/system'
+    },
+    {
+      title: 'Acerca de',
+      icon: <Icon icon={aboutIcon} width="100%" height="100%" />,
+      link: '/admin/about'
     }
   ];
 
@@ -35,7 +47,7 @@ export default function AdminMenu() {
     <Box>
       <Grid container spacing={3} sx={{ display: 'flex' }}>
         {options.map((opt) => (
-          <Grid item xs={12} md={6} lg={4} key={opt.title}>
+          <Grid item xs={12} md={3} lg={3} key={opt.title}>
             <Box component={Link} to={opt.link} sx={{ textDecoration: 'none', display: 'flex', width: '100%' }}>
               <Card sx={{ width: '100%' }}>
                 <CardContent sx={{ display: 'flex' }}>{opt.icon}</CardContent>

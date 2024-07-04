@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { apiUrl } from '../config';
-import { User, SpaceUsed, SpaceConfig, UsedSpaceUser, UsageG } from '../@types/admin';
+import { User, SpaceUsed, SpaceConfig, UsedSpaceUser, UsageG, SharedFileActivity } from '../@types/admin';
 import { MessageResponse } from '../@types/auth';
 import { UsedSpaceType } from '../@types/files';
 import { GROUPFILTER, TIMEOPTION, StatsLineChart } from '../@types/stats';
@@ -26,6 +26,16 @@ export async function setAdmin(token: string, userid: string, admin: boolean): P
 
 export async function createAccount(token: string, username: string, password: string): Promise<MessageResponse> {
   const result = await conn.post(`users/create?t=${token}`, { username, password });
+  return result.data;
+}
+
+export async function getOwner(token: string): Promise<{ id: string }> {
+  const result = await conn.get(`users/owner?t=${token}`);
+  return result.data;
+}
+
+export async function setOwner(token: string, userId: string) {
+  const result = await conn.patch(`users/owner/${userId}?t=${token}`);
   return result.data;
 }
 
@@ -69,7 +79,32 @@ export async function getMemoryUsageBuffer(token: string): Promise<UsageG> {
   return result.data;
 }
 
+export async function getMemoryUsageData(token: string): Promise<StatsLineChart> {
+  const result = await conn.get(`memory/stats/line?t=${token}`);
+  return result.data;
+}
+
 export async function getLineChartData(group: GROUPFILTER, time: TIMEOPTION, token: string): Promise<StatsLineChart> {
   const result = await conn.get(`logs/stats/${group}/line/${time}?t=${token}`);
   return result.data;
+}
+
+export async function getLogsList(page: number, token: string): Promise<SharedFileActivity[]> {
+  const result = await conn.get(`logs/list?page=${page}&t=${token}`);
+  return result.data;
+}
+
+export async function getPagesLogs(token: string): Promise<{ pages: number }> {
+  const result = await conn.get(`logs/pages?t=${token}`);
+  return result.data;
+}
+
+export async function updateUsersTrees(token: string): Promise<MessageResponse> {
+  const result = await conn.patch(`/update-users-trees?t=${token}`);
+  return result.data;
+}
+
+export async function getAbout(): Promise<{ app: string; version: string }> {
+  const result = await axios.get(`${apiUrl}`);
+  return result.data; 
 }

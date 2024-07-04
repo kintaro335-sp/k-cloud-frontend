@@ -1,7 +1,7 @@
 {
   "name": "k-cloud-frontend",
   "private": true,
-  "version": "0.8.4",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "dev": "vite --host",
@@ -18,19 +18,19 @@
     "@iconify/icons-material-symbols": "^1.2.30",
     "@iconify/react": "^3.2.2",
     "@mui/lab": "^5.0.0-alpha.94",
-    "@mui/material": "^5.10.0",
+    "@mui/material": "^5.15.18",
     "@mui/x-date-pickers": "^6.0.1",
     "@nivo/line": "^0.83.0",
     "@nivo/pie": "^0.83.0",
     "@reduxjs/toolkit": "^1.8.4",
     "axios": "^1.2.0",
     "axios-observable": "^2.0.0",
-    "base-64": "^1.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "notistack": "^2.0.5",
     "numeral": "^2.0.6",
     "react": "^18.0.0",
+    "react-beforeunload": "^2.6.0",
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.34.1",
     "react-redux": "^8.0.2",
@@ -38,16 +38,18 @@
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "rxjs": "^7.5.7",
+    "socket.io-client": "^4.7.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@types/base-64": "^1.0.0",
+    "@types/mime-types": "^2.1.4",
     "@types/node": "^18.13.0",
     "@types/numeral": "^2.0.2",
     "@types/react": "^18.0.0",
+    "@types/react-beforeunload": "^2.1.2",
     "@types/react-dom": "^18.0.0",
-    "@vitejs/plugin-react": "^1.3.0",
+    "@vitejs/plugin-react": "^4.1.0",
     "typescript": "^4.6.3",
-    "vite": "^2.9.9"
+    "vite": "^4.4.11"
   }
 }

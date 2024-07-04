@@ -1,6 +1,7 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, TextField, Grid, MenuItem } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import SpaceAssigned from './SpaceAssigned';
 import { useSnackbar } from 'notistack';
 // form
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -12,10 +13,12 @@ import { SpaceConfig, UnitByte } from '../../../@types/admin';
 import { useSelector } from '../../../redux/store';
 // api
 import { setDedicatedSpace, getDedicatedSpaceConfig } from '../../../api/admin';
+import { isAxiosError } from 'axios';
 
 export default function DedicatedSpaceForm() {
   const { access_token } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
+  const [spaceDCalculated, setSpaceDCalculated] = useState(0);
 
   const validationSchema = yup
     .object()
@@ -32,11 +35,17 @@ export default function DedicatedSpaceForm() {
     resolver: yupResolver(validationSchema)
   });
 
-  const { unitType } = watch();
+  const { unitType, dedicatedSpace, usedSpaceBytes } = watch();
 
   const onHandleSubmit: SubmitHandler<SpaceConfig> = async (data) => {
-    const result = await setDedicatedSpace(access_token, data.unitType, data.dedicatedSpace);
-    enqueueSnackbar(result.message, { variant: 'success' });
+    try {
+      const result = await setDedicatedSpace(access_token, data.unitType, data.dedicatedSpace);
+      enqueueSnackbar(result.message, { variant: 'success' });
+    } catch (err) {
+      if (isAxiosError(err)) {
+        enqueueSnackbar(err.response?.data.message, { variant: 'error' });
+      }
+    }
   };
 
   const unitTypeOptions: ['MB', 'GB'] = ['MB', 'GB'];
@@ -45,7 +54,21 @@ export default function DedicatedSpaceForm() {
     const result = await getDedicatedSpaceConfig(access_token);
     setValue('dedicatedSpace', result.dedicatedSpace);
     setValue('unitType', result.unitType);
+    setValue('usedSpaceBytes', result.usedSpaceBytes);
   }, [access_token]);
+
+  const megabyte = 1024 * 1024;
+  const gigabyte = 1024 * 1024 * 1024;
+
+  useEffect(() => {
+    // calculate space dedicated
+    if (unitType === 'MB') {
+      setSpaceDCalculated(dedicatedSpace * megabyte);
+    }
+    if (unitType === 'GB') {
+      setSpaceDCalculated(dedicatedSpace * gigabyte);
+    }
+  }, [dedicatedSpace, unitType]);
 
   useEffect(() => {
     getSpaceInfo();
@@ -57,6 +80,9 @@ export default function DedicatedSpaceForm() {
       <CardContent>
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <SpaceAssigned dedicatedSpace={spaceDCalculated} usedSpace={usedSpaceBytes}  />
+            </Grid>
             <Grid item xs={9}>
               <TextField label="Cantidad" fullWidth {...register('dedicatedSpace')} type="number" />
             </Grid>

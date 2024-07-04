@@ -18,8 +18,8 @@ export const AuthContext = createContext({
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const [init, setInit] = useState(false);
-  const socketClient = useRef(createAuthSocket());
-  const { access_token, path } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const socketClient = useRef(createAuthSocket(access_token));
   const [sessionId, setSessionId] = useState<string>('');
   const [username, setUsername] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -55,8 +55,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }, [access_token]);
 
   useEffect(() => {
-    const newSocket = createAuthSocket();
-    newSocket.auth = { access_token };
+    const newSocket = createAuthSocket(access_token);
     newSocket.connect();
     socketClient.current = newSocket;
   }, [access_token]);

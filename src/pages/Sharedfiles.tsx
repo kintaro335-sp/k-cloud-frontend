@@ -11,8 +11,8 @@ import { createNewSocket } from '../api/websocket'
 // import { isAxiosError } from 'axios';
 
 export default function ShareFiles() {
-  const socketClient = useRef(createNewSocket());
   const { access_token } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
   const { page, pages } = useSelector((state) => state.sharedfiles);
 
 
@@ -36,9 +36,8 @@ export default function ShareFiles() {
   }, [TokensEffect]);
 
   useEffect(() => {
-    const newSocket = createNewSocket();
+    const newSocket = createNewSocket(access_token);
     newSocket.removeAllListeners()
-    newSocket.auth = { access_token };
     newSocket.on('token-change', async () => {
       console.log('evant called change');
       PagesEffect();

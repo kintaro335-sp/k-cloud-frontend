@@ -14,7 +14,7 @@ export default function Tokens() {
   const { access_token } = useSelector((state) => state.session);
   const { pages, page } = useSelector((state) => state.sharedfilesuser);
   const [loading, setLoading] = useState(false);
-  const socketClient = useRef(createNewSocket());
+  const socketClient = useRef(createNewSocket(access_token));
 
   useEffect(() => {
     async function PagesEffect() {
@@ -35,9 +35,8 @@ export default function Tokens() {
   }, [page]);
 
   useEffect(() => {
-    const newSocket = createNewSocket();
+    const newSocket = createNewSocket(access_token);
     newSocket.removeAllListeners()
-    // newSocket.auth = { access_token };
     newSocket.on('token-change', async () => {
       const { pages } = await getTokenPagesByUser(access_token);
       setPagesU(pages);

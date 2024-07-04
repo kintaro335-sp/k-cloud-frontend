@@ -37,8 +37,8 @@ import { SerieLineChart } from '../../@types/stats';
 export default function Stats() {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
-  const socketClient = useRef(createNewSocket());
   const { access_token } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
   const { activityActions, activityReason, activityStatus, memoryUsageH } = useSelector((state) => state.stats);
   const [updating, setUpdating] = useState(false);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
@@ -98,9 +98,8 @@ export default function Stats() {
   }, [access_token]);
 
   useEffect(() => {
-    const newSocket = createNewSocket();
+    const newSocket = createNewSocket(access_token);
     newSocket.removeAllListeners();
-    newSocket.auth = { access_token };
     newSocket.on('memory-usage-update', () => {
       getMemoryUsageHEffect();
     });

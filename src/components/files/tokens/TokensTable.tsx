@@ -24,8 +24,8 @@ interface TokensTableProps {
 }
 
 export default function TokensTable({ url }: TokensTableProps) {
-  const socketClient = useRef(createNewSocket());
   const { access_token, tokens } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -38,8 +38,7 @@ export default function TokensTable({ url }: TokensTableProps) {
   }, [access_token]);
 
   useEffect(() => {
-    const newSocket = createNewSocket();
-    newSocket.auth = { access_token };
+    const newSocket = createNewSocket(access_token);
     newSocket.on('token-change', async (data) => {
       if (data.path !== url) {
         return;

@@ -13,8 +13,8 @@ import { getApiKeys, getSessions } from '../api/auth';
 
 export default function ApiKeysPage() {
   const theme = useTheme();
-  const socketClient = useRef(createNewSocket());
   const { access_token } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
   const [tabValue, setTabValue] = useState('0');
 
   const getSessionData = useCallback(async () => {
@@ -29,9 +29,8 @@ export default function ApiKeysPage() {
   }, [getSessionData]);
 
   useEffect(() => {
-    const newSocket = createNewSocket();
+    const newSocket = createNewSocket(access_token);
     newSocket.removeAllListeners();
-    newSocket.auth = { access_token };
     newSocket.on('sessions-update', () => {
       getSessionData()
     });

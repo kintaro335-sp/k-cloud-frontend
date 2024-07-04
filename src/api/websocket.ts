@@ -3,13 +3,13 @@ import { wsUrl } from '../config';
 
 const manager = new Manager(wsUrl, { transports: ['websocket'] });
 
-function createNewSocket() {
-  const socket = manager.socket('/');
+function createNewSocket(access_token: string) {
+  const socket = manager.socket('/', { auth: { access_token } });
   return socket;
 }
 
-function createAuthSocket() {
-  const socket = manager.socket('/');
+function createAuthSocket(access_token: string) {
+  const socket = manager.socket('/', { auth: { access_token } });
   return socket;
 }
 

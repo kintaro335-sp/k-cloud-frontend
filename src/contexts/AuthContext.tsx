@@ -1,24 +1,26 @@
 import { createContext, useState, useMemo, useEffect, useRef } from 'react';
 // redux
 import { useSelector, useDispatch } from '../redux/store';
-import { setFiles } from '../redux/slices/session';
+import { setAccessToken } from '../redux/slices/session';
 // api
 import { verifyAuth } from '../api/auth';
-import { getListFiles } from '../api/files';
 import { createAuthSocket } from '../api/websocket';
+import { isAxiosError } from 'axios';
 
 export const AuthContext = createContext({
   isAdmin: false,
   isAuthenticated: false,
   init: false,
-  username: ''
+  username: '',
+  sessionId: '',
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const [init, setInit] = useState(false);
-  const socketClient = useRef(createAuthSocket());
-  const { access_token, path } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const socketClient = useRef(createAuthSocket(access_token));
+  const [sessionId, setSessionId] = useState<string>('');
   const [username, setUsername] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -29,11 +31,17 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         verifyAuth(access_token)
           .then((u) => {
             setIsAdmin(u.isadmin);
+            setSessionId(u.sessionId);
             setUsername(u.username);
             setIsAuthenticated(true);
             setInit(true);
           })
-          .catch(() => {
+          .catch((err) => {
+            if (isAxiosError(err)) {
+              if (err.response?.status === 401) {
+                dispatch(setAccessToken(''));
+              }
+            }
             setIsAuthenticated(false);
             setInit(true);
           });
@@ -47,15 +55,14 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }, [access_token]);
 
   useEffect(() => {
-    const newSocket = createAuthSocket();
-    newSocket.auth = { access_token };
+    const newSocket = createAuthSocket(access_token);
     newSocket.connect();
     socketClient.current = newSocket;
   }, [access_token]);
 
   const value = useMemo(
-    () => ({ isAuthenticated, init, isAdmin, username }),
-    [isAuthenticated, init, isAdmin, username]
+    () => ({ isAuthenticated, init, isAdmin, sessionId, username }),
+    [isAuthenticated, init, isAdmin, username, sessionId]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

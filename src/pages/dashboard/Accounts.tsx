@@ -10,8 +10,8 @@ import { useSelector } from '../../redux/store';
 import { setUsers, setOwner } from '../../redux/slices/admin';
 
 export default function Accounts() {
-  const socketClient = useRef(createNewSocket());
   const { access_token } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
   const [userClock, setUserClock] = useState(false);
 
   useEffect(() => {
@@ -27,9 +27,8 @@ export default function Accounts() {
   }, [userClock]);
 
   useEffect(() => {
-    const newSocket = createNewSocket();
+    const newSocket = createNewSocket(access_token);
     newSocket.removeAllListeners();
-    newSocket.auth = { access_token };
     newSocket.on('users-update', () => {
       setUserClock((val) => !val);
     });

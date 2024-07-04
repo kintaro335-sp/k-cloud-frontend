@@ -23,12 +23,12 @@ export default function Files() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const scrollLimit = isMobile ? 0.978 : 0.945;
-  const socketClient = useRef(createNewSocket());
+  const { access_token, path, files } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
   const scrollElement = useRef<HTMLDivElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const { showOptions } = useFileSelect();
-  const { access_token, path, files } = useSelector((state) => state.session);
   const [start, setStart] = useState<number>(0);
   const [showQ, setShowQ] = useState<number>(48);
   const [loading, setLoading] = useState(false);
@@ -97,9 +97,8 @@ export default function Files() {
   }
 
   useEffect(() => {
-    const newSocket = createNewSocket();
+    const newSocket = createNewSocket(access_token);
     newSocket.removeAllListeners();
-    newSocket.auth = { access_token };
     newSocket.on('tree-update', () => {
       getTree();
     });

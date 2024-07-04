@@ -11,8 +11,8 @@ import { getLogsList, getPagesLogs } from '../../api/admin';
 import { createNewSocket } from '../../api/websocket';
 
 export default function Logs(): JSX.Element {
-  const socketClient = useRef(createNewSocket());
   const { access_token } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
   const { page, pages } = useSelector((state) => state.logs);
   const [statUpdate, setStatUpdate] = useState(false);
 
@@ -27,9 +27,8 @@ export default function Logs(): JSX.Element {
   }, [access_token, page, statUpdate]);
 
   useEffect(() => {
-    const newSocket = createNewSocket();
-    newSocket.removeAllListeners()
-    newSocket.auth = { access_token };
+    const newSocket = createNewSocket(access_token);
+    newSocket.removeAllListeners();
     newSocket.on('stats-update', () => {
       setStatUpdate((val) => !val);
     });

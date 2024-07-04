@@ -3,15 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, IconButton, Menu, MenuItem, Typography, Stack, Box } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
-
+// api
+import { logoutApi } from '../../api/auth';
 // redux
-import { useDispatch } from '../../redux/store';
+import { useDispatch, useSelector } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
 
 export default function UserProfile() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const anchorRef = useRef<HTMLButtonElement>(null);
+  const { access_token } = useSelector((state) => state.session);
   const dispatch = useDispatch();
   const { isAdmin, username } = useAuth();
 
@@ -38,13 +40,19 @@ export default function UserProfile() {
     navigate('/admin');
   };
 
+  const handleGoApiKeys = () => {
+    clickClose();
+    navigate('/api-keys');
+  };
+
   const handleChangePassword = () => {
     clickClose();
     navigate('/passwd');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     clickClose();
+    await logoutApi(access_token);
     dispatch(setAccessToken(''));
     navigate('/');
   };
@@ -64,6 +72,7 @@ export default function UserProfile() {
         <MenuItem onClick={handleGotoFiles}>Tus Archivos</MenuItem>
         <MenuItem onClick={handleGotoTokens}>Tokens</MenuItem>
         {isAdmin && <MenuItem onClick={handleGoAdministration}>Administración</MenuItem>}
+        <MenuItem onClick={handleGoApiKeys}>Api Keys</MenuItem>
         <MenuItem onClick={handleChangePassword}>Cambiar Contraseña</MenuItem>
         <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
       </Menu>

@@ -23,8 +23,8 @@ export const FileUploadContext = createContext({ uploadFile: (path: string, file
 
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
   // const { enqueueSnackbar } = useSnackbar();
-  const socketClient = useRef(createNewSocket());
   const { access_token, path } = useSelector((state) => state.session);
+  const socketClient = useRef(createNewSocket(access_token));
   const { uploading } = useSelector((state) => state.files);
 
   const initializeFile = async (path: string): Promise<boolean> => {
@@ -128,7 +128,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   };
 
   useEffect(() => {
-    const newSocket = createNewSocket();
+    const newSocket = createNewSocket(access_token);
     newSocket.removeListener('upload-update');
     newSocket.on('upload-update', (data) => {
       setWrittenProgress(data.path, data.fileStatus.saved);

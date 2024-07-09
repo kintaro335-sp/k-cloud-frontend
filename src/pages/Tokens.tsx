@@ -6,15 +6,16 @@ import Loading from './Loading';
 // redux
 import { useSelector } from '../redux/store';
 import { setPagesU, setTokensU, setPageU } from '../redux/slices/sharedfilesuser';
+// hooks
+import useAuth from '../hooks/useAuth';
 // api
 import { getTokensListByUser, getTokenPagesByUser } from '../api/sharedfiles';
-import { createNewSocket } from '../api/websocket';
 
 export default function Tokens() {
+  const { socketClient } = useAuth();
   const { access_token } = useSelector((state) => state.session);
   const { pages, page } = useSelector((state) => state.sharedfilesuser);
   const [loading, setLoading] = useState(false);
-  const socketClient = useRef(createNewSocket(access_token));
 
   useEffect(() => {
     async function PagesEffect() {
@@ -35,17 +36,14 @@ export default function Tokens() {
   }, [page]);
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.removeAllListeners()
-    newSocket.on('token-change', async () => {
+    socketClient.removeAllListeners()
+    socketClient.on('token-change', async () => {
       const { pages } = await getTokenPagesByUser(access_token);
       setPagesU(pages);
       const resp = await getTokensListByUser(page, access_token);
       setTokensU(resp);
     });
-    newSocket.connect();
-    socketClient.current = newSocket;
-  }, [access_token, page]);
+  }, [page]);
 
   return (
     <Box>

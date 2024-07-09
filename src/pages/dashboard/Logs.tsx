@@ -6,13 +6,15 @@ import { BackButton } from '../../components/atoms';
 // redux
 import { useSelector } from '../../redux/store';
 import { setLogs, setPage, setPages } from '../../redux/slices/logs';
+// hooks
+import useAuth from '../../hooks/useAuth';
 // api
 import { getLogsList, getPagesLogs } from '../../api/admin';
 import { createNewSocket } from '../../api/websocket';
 
 export default function Logs(): JSX.Element {
+  const { socketClient } = useAuth();
   const { access_token } = useSelector((state) => state.session);
-  const socketClient = useRef(createNewSocket(access_token));
   const { page, pages } = useSelector((state) => state.logs);
   const [statUpdate, setStatUpdate] = useState(false);
 
@@ -27,14 +29,11 @@ export default function Logs(): JSX.Element {
   }, [access_token, page, statUpdate]);
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.removeAllListeners();
-    newSocket.on('stats-update', () => {
+    socketClient.removeAllListeners();
+    socketClient.on('stats-update', () => {
       setStatUpdate((val) => !val);
     });
-    newSocket.connect();
-    socketClient.current = newSocket;
-  }, [access_token]);
+  }, []);
 
   return (
     <Box>

@@ -5,14 +5,15 @@ import { PaginationT } from '../components/atoms';
 // redux
 import { useSelector } from '../redux/store';
 import { setPages, setTokens, setPage } from '../redux/slices/sharedfiles';
+// hooks
+import useAuth from '../hooks/useAuth';
 // api
 import { getTokensList, getPagesTokens } from '../api/sharedfiles';
-import { createNewSocket } from '../api/websocket'
 // import { isAxiosError } from 'axios';
 
 export default function ShareFiles() {
+  const { socketClient } = useAuth();
   const { access_token } = useSelector((state) => state.session);
-  const socketClient = useRef(createNewSocket(access_token));
   const { page, pages } = useSelector((state) => state.sharedfiles);
 
 
@@ -36,16 +37,12 @@ export default function ShareFiles() {
   }, [TokensEffect]);
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.removeAllListeners()
-    newSocket.on('token-change', async () => {
-      console.log('evant called change');
+    socketClient.removeAllListeners()
+    socketClient.on('token-change', () => {
       PagesEffect();
       TokensEffect();
     });
-    newSocket.connect();
-    socketClient.current = newSocket;
-  }, [])  
+  }, [access_token]);  
 
 
   return (

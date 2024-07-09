@@ -7,14 +7,16 @@ import { ApiKeysList, SessionsList } from '../components/apikeys';
 // redux
 import { useSelector } from '../redux/store';
 import { setApiKeys, setSessions } from '../redux/slices/api';
+// hooks
+import useAuth from '../hooks/useAuth';
 // api
 import { createNewSocket } from '../api/websocket';
 import { getApiKeys, getSessions } from '../api/auth';
 
 export default function ApiKeysPage() {
   const theme = useTheme();
+  const { socketClient } = useAuth();
   const { access_token } = useSelector((state) => state.session);
-  const socketClient = useRef(createNewSocket(access_token));
   const [tabValue, setTabValue] = useState('0');
 
   const getSessionData = useCallback(async () => {
@@ -29,13 +31,10 @@ export default function ApiKeysPage() {
   }, [getSessionData]);
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.removeAllListeners();
-    newSocket.on('sessions-update', () => {
+    socketClient.removeAllListeners();
+    socketClient.on('sessions-update', () => {
       getSessionData()
     });
-    newSocket.connect();
-    socketClient.current = newSocket;
   }, [access_token]);
 
   return <Box>

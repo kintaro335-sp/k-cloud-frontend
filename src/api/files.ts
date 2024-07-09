@@ -1,11 +1,6 @@
 import axios from 'axios';
-import axiosObs from 'axios-observable';
 import { apiUrl } from '../config';
 import { FileI, FilePTempResponse, Folder } from '../@types/files';
-
-const connFilesObs = axiosObs.create({
-  baseURL: `${apiUrl}/files`
-});
 
 const connFiles = axios.create({
   baseURL: `${apiUrl}/files`

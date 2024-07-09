@@ -5,13 +5,15 @@ import { BackButton } from '../../components/atoms';
 // api
 import { getAccounts, getOwner } from '../../api/admin';
 import { createNewSocket } from '../../api/websocket';
+// hooks
+import useAuth from '../../hooks/useAuth';
 // redux
 import { useSelector } from '../../redux/store';
 import { setUsers, setOwner } from '../../redux/slices/admin';
 
 export default function Accounts() {
+  const { socketClient } = useAuth();
   const { access_token } = useSelector((state) => state.session);
-  const socketClient = useRef(createNewSocket(access_token));
   const [userClock, setUserClock] = useState(false);
 
   useEffect(() => {
@@ -27,15 +29,11 @@ export default function Accounts() {
   }, [userClock]);
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.removeAllListeners();
-    newSocket.on('users-update', () => {
+    socketClient.removeAllListeners();
+    socketClient.on('users-update', () => {
       setUserClock((val) => !val);
     });
-
-    newSocket.connect();
-    socketClient.current = newSocket;
-  }, [access_token]);
+  }, []);
 
   return (
     <>

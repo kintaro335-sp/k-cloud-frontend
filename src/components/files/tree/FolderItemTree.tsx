@@ -22,8 +22,9 @@ export default function FolderItemTree({ folder, index, level, path = '' }: Fold
   return (
     <TreeItem
       slots={{
+        endIcon: () => <Icon icon={FolderIcon} />,
         collapseIcon: () => <Icon icon={FolderOpenIcon} />,
-        expandIcon: () => <Icon icon={FolderIcon} />,
+        expandIcon: () => <Icon icon={FolderIcon} />
       }}
       itemId={`${name}-${index}-${level}`}
       label={

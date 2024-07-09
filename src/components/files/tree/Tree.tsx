@@ -1,18 +1,15 @@
 import { Box } from '@mui/material';
-import { TreeView } from '@mui/lab';
+import { SimpleTreeView as TreeView } from '@mui/x-tree-view';
 import { useSelector } from '../../../redux/store';
 import FolderItemTree from './FolderItemTree';
-// icon
-import { Icon } from '@iconify/react';
-import FolderOpenIcon from '@iconify/icons-material-symbols/folder-open';
-import FolderIcon from '@iconify/icons-material-symbols/folder';
+
 
 export default function Tree() {
   const { tree } = useSelector((state) => state.session);
 
   return (
     <Box>
-      <TreeView defaultCollapseIcon={<Icon icon={FolderOpenIcon} />} defaultExpandIcon={<Icon icon={FolderIcon} />}>
+      <TreeView>
         {tree.map((elem, i) => {
           if (!elem) return;
           if (elem.type === 'Folder') {

@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { TreeItem } from '@mui/lab';
+import { TreeItem } from '@mui/x-tree-view';
 import { Folder } from '../../../@types/files';
 // redux
 import { useDispatch } from '../../../redux/store';
@@ -7,6 +7,7 @@ import { setPath } from '../../../redux/slices/session';
 // icon
 import { Icon } from '@iconify/react';
 import FolderIcon from '@iconify/icons-material-symbols/folder';
+import FolderOpenIcon from '@iconify/icons-material-symbols/folder-open';
 
 interface FolderItemTreeProps {
   folder: Folder;
@@ -20,8 +21,11 @@ export default function FolderItemTree({ folder, index, level, path = '' }: Fold
   const dispatch = useDispatch();
   return (
     <TreeItem
-      icon={content.length === 0 && <Icon icon={FolderIcon} />}
-      nodeId={`${name}-${index}-${level}`}
+      slots={{
+        collapseIcon: () => <Icon icon={FolderOpenIcon} />,
+        expandIcon: () => <Icon icon={FolderIcon} />,
+      }}
+      itemId={`${name}-${index}-${level}`}
       label={
         <Typography
           onClick={() => {

@@ -27,18 +27,19 @@ import {
   getMemoryUsageData,
   updateUsersTrees
 } from '../../api/admin';
-import { createNewSocket } from '../../api/websocket';
 // types
 import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
+// hooks
+import useAuth from '../../hooks/useAuth';
 // utils
 import { bytesFormat } from '../../utils/files';
 import { SerieLineChart } from '../../@types/stats';
 
 export default function Stats() {
+  const { socketClient } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const { access_token } = useSelector((state) => state.session);
-  const socketClient = useRef(createNewSocket(access_token));
   const { activityActions, activityReason, activityStatus, memoryUsageH } = useSelector((state) => state.stats);
   const [updating, setUpdating] = useState(false);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
@@ -98,17 +99,14 @@ export default function Stats() {
   }, [access_token]);
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.removeAllListeners();
-    newSocket.on('memory-usage-update', () => {
+    socketClient.removeAllListeners();
+    socketClient.on('memory-usage-update', () => {
       getMemoryUsageHEffect();
     });
-    newSocket.on('stats-update', () => {
+    socketClient.on('stats-update', () => {
       getActivityStats();
     });
-    newSocket.connect();
-    socketClient.current = newSocket;
-  }, [access_token]);
+  }, []);
 
   const handleUpdate = () => {
     setUpdating(true);

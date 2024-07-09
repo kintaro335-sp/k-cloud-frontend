@@ -8,8 +8,6 @@ export default function UserItem({ user }: { user: User }) {
   const { owner } = useSelector((state) => state.admin);
   const { id, username, admin } = user;
 
-  if (id === owner) return <></>;
-
   return (
     <TableRow>
       <TableCell>

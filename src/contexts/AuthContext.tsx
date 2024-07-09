@@ -13,6 +13,7 @@ export const AuthContext = createContext({
   init: false,
   username: '',
   sessionId: '',
+  socketClient: createAuthSocket('')
 });
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -55,13 +56,13 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }, [access_token]);
 
   useEffect(() => {
-    const newSocket = createAuthSocket(access_token);
-    newSocket.connect();
-    socketClient.current = newSocket;
+    socketClient.current.disconnect();
+    socketClient.current.auth = { access_token };
+    socketClient.current.connect();
   }, [access_token]);
 
   const value = useMemo(
-    () => ({ isAuthenticated, init, isAdmin, sessionId, username }),
+    () => ({ isAuthenticated, init, isAdmin, sessionId, username, socketClient: socketClient.current }),
     [isAuthenticated, init, isAdmin, username, sessionId]
   );
 

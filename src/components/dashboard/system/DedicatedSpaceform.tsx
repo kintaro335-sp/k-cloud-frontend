@@ -22,7 +22,7 @@ export default function DedicatedSpaceForm() {
 
   const validationSchema = yup
     .object()
-    .shape({ dedicatedSpace: yup.number().min(1), unitType: yup.string().oneOf(['MB', 'GB']) });
+    .shape({ dedicatedSpace: yup.number().min(1).required(), unitType: yup.string().oneOf(['MB', 'GB']).required() });
 
   const {
     register,
@@ -32,6 +32,7 @@ export default function DedicatedSpaceForm() {
     formState: { errors, isSubmitting }
   } = useForm<SpaceConfig>({
     defaultValues: { dedicatedSpace: 1024, unitType: 'MB' },
+    // @ts-ignore
     resolver: yupResolver(validationSchema)
   });
 

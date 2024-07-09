@@ -15,7 +15,9 @@ import { initializeFileAPI, uploadBlobAPI, uploadFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
 import { isAxiosError } from 'axios';
 // import { useSnackbar } from 'notistack';
-import { createNewSocket } from '../api/websocket';
+// hooks
+import useAuth from '../hooks/useAuth';
+// api
 import { FileToUpload } from '../@types/files';
 
 const getFilesState = () => getState().files;
@@ -24,7 +26,7 @@ export const FileUploadContext = createContext({ uploadFile: (path: string, file
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
   // const { enqueueSnackbar } = useSnackbar();
   const { access_token, path } = useSelector((state) => state.session);
-  const socketClient = useRef(createNewSocket(access_token));
+  const { socketClient } = useAuth();
   const { uploading } = useSelector((state) => state.files);
 
   const initializeFile = async (path: string): Promise<boolean> => {
@@ -128,12 +130,10 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   };
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.removeListener('upload-update');
-    newSocket.on('upload-update', (data) => {
+    socketClient.removeAllListeners()
+    socketClient.on('upload-update', (data) => {
       setWrittenProgress(data.path, data.fileStatus.saved);
     });
-    socketClient.current = newSocket;
   }, [uploading, path]);
 
   return <FileUploadContext.Provider value={{ uploadFile }}>{children}</FileUploadContext.Provider>;

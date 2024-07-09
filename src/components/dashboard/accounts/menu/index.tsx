@@ -41,9 +41,9 @@ export default function MenuUser({ user }: { user: User }) {
             <Grid item xs={4}>
               <SetOwner userid={id} />
             </Grid>
-            <Grid item xs={12}>
+            {id !== owner && <Grid item xs={12}>
               <SetPasswordForm userid={id} />
-            </Grid>
+            </Grid>}
           </Grid>
         </DialogContent>
       </Dialog>

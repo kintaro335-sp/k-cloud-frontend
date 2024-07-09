@@ -15,17 +15,18 @@ import { useSnackbar } from 'notistack';
 // redux
 import { useSelector, useDispatch } from '../../../redux/store';
 import { setTokens } from '../../../redux/slices/session';
+// hooks
+import useAuth from '../../../hooks/useAuth';
 // api
 import { getTokensByPath, deleteTokensByPath } from '../../../api/sharedfiles';
-import { createNewSocket } from '../../../api/websocket';
 
 interface TokensTableProps {
   url: string;
 }
 
 export default function TokensTable({ url }: TokensTableProps) {
+  const { socketClient } = useAuth();
   const { access_token, tokens } = useSelector((state) => state.session);
-  const socketClient = useRef(createNewSocket(access_token));
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -38,17 +39,15 @@ export default function TokensTable({ url }: TokensTableProps) {
   }, [access_token]);
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.on('token-change', async (data) => {
+    socketClient.removeAllListeners();
+    socketClient.on('token-change', async (data) => {
       if (data.path !== url) {
         return;
       }
       const tokensRes = await getTokensByPath(url, access_token);
       dispatch(setTokens(tokensRes));
     });
-    newSocket.connect();
-    socketClient.current = newSocket;
-  }, [access_token]);
+  }, []);
 
   const onClickRemoveTokens = async () => {
     if (window.confirm('Desea dejar de compartir este archivo?')) {

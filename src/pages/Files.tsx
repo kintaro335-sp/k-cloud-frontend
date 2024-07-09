@@ -12,19 +12,20 @@ import Loading from './Loading';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { setFiles, setTree, setPath, addFile, substituteFile } from '../redux/slices/session';
+// hooks
+import useAuth from '../hooks/useAuth';
 // api
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
-import { createNewSocket } from '../api/websocket';
 import { FileI, UpdateFileEvent } from '../@types/files';
 import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
   const theme = useTheme();
+  const { socketClient } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const scrollLimit = isMobile ? 0.978 : 0.945;
   const { access_token, path, files } = useSelector((state) => state.session);
-  const socketClient = useRef(createNewSocket(access_token));
   const scrollElement = useRef<HTMLDivElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -97,15 +98,14 @@ export default function Files() {
   }
 
   useEffect(() => {
-    const newSocket = createNewSocket(access_token);
-    newSocket.removeAllListeners();
-    newSocket.on('tree-update', () => {
+    socketClient.removeAllListeners();
+    socketClient.on('tree-update', () => {
       getTree();
     });
-    newSocket.on('file-change', (data) => {
+    socketClient.on('file-change', (data) => {
       if (path === data.path) getFiles();
     });
-    newSocket.on('file-update', (event) => {
+    socketClient.on('file-update', (event) => {
       const { type, content } = event as UpdateFileEvent;
       if (event.path !== path) return;
       switch (type) {
@@ -117,7 +117,6 @@ export default function Files() {
           break;
       }
     });
-    socketClient.current = newSocket;
     setLoading(true);
     getTree();
     getFiles().then(() => {
@@ -168,7 +167,6 @@ export default function Files() {
           onScroll={(e) => {
             const { scrollTop, scrollHeight } = e.currentTarget;
             const scrollH = scrollTop / scrollHeight;
-            console.log(scrollH);
             if (scrollH === 0) {
               handleChangeStart('back');
             }

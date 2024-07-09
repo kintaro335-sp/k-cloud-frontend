@@ -1,4 +1,4 @@
-import { TreeItem } from '@mui/lab';
+import { TreeItem } from '@mui/x-tree-view';
 import { FileI } from '../../../@types/files';
 
 interface FileItemTreeProps {
@@ -9,5 +9,5 @@ interface FileItemTreeProps {
 
 export default function FileItemTree({ file, index, level }: FileItemTreeProps) {
   const { name } = file;
-  return <TreeItem nodeId={`${name}-${index}-${level}`} label={name}></TreeItem>;
+  return <TreeItem itemId={`${name}-${index}-${level}`} label={name}></TreeItem>;
 }

@@ -20,6 +20,7 @@
     "@mui/lab": "^5.0.0-alpha.171",
     "@mui/material": "^5.16.0",
     "@mui/x-date-pickers": "^7.9.0",
+    "@mui/x-tree-view": "^7.9.0",
     "@nivo/line": "^0.87.0",
     "@nivo/pie": "^0.87.0",
     "@reduxjs/toolkit": "^2.2.6",

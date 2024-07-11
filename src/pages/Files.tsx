@@ -181,7 +181,7 @@ export default function Files() {
           <Grid container spacing={2}>
             {filesMemo.slice(start, start + showQ).map((file: FileI, i) => (
               <Grid item key={file.name + i} xs={12} md={4} lg={3}>
-                <FileElement file={file} arrayIndex={i} />
+                <FileElement file={file} arrayIndex={showQ + i} />
               </Grid>
             ))}
             <Grid item xs={12}>

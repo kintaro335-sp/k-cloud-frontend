@@ -26,6 +26,7 @@ export default function Files() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const scrollLimit = isMobile ? 0.978 : 0.945;
   const { access_token, path, files } = useSelector((state) => state.session);
+  const pathM = useRef<string>(path);
   const scrollElement = useRef<HTMLDivElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -80,16 +81,16 @@ export default function Files() {
       } else {
         enqueueSnackbar('Error al obtener los archivos', { variant: 'error' });
       }
-      dispatch(setFiles([]));
+      setFiles([]);
       return { list: [] };
     });
-    dispatch(setFiles(list));
+    setFiles(list);
   }
 
   function getTree() {
     getTreeAPI('', access_token)
       .then((tree) => {
-        dispatch(setTree(tree));
+        setTree(tree);
       })
       .catch((err) => {
         console.error(err);
@@ -124,7 +125,8 @@ export default function Files() {
     });
     setShowQ(48);
     setStart(0);
-  }, [access_token, path]);
+    pathM.current = path;
+  }, [path]);
 
   const filesMemo = useMemo(() => files, [files]);
 

@@ -33,19 +33,19 @@ export default function TokensTable({ url }: TokensTableProps) {
   useEffect(() => {
     async function getTokensEffect() {
       const tokensRes = await getTokensByPath(url, access_token);
-      dispatch(setTokens(tokensRes));
+      setTokens(tokensRes)
     }
     getTokensEffect();
   }, [access_token]);
 
   useEffect(() => {
-    socketClient.removeAllListeners();
+    socketClient.removeListener('token-change');
     socketClient.on('token-change', async (data) => {
       if (data.path !== url) {
         return;
       }
       const tokensRes = await getTokensByPath(url, access_token);
-      dispatch(setTokens(tokensRes));
+      setTokens(tokensRes)
     });
   }, []);
 

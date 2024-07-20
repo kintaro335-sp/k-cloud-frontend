@@ -10,7 +10,6 @@ import { setLogs, setPage, setPages } from '../../redux/slices/logs';
 import useAuth from '../../hooks/useAuth';
 // api
 import { getLogsList, getPagesLogs } from '../../api/admin';
-import { createNewSocket } from '../../api/websocket';
 
 export default function Logs(): JSX.Element {
   const { socketClient } = useAuth();

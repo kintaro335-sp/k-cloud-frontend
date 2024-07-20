@@ -4,7 +4,6 @@ import { UsersList, NewUserForm } from '../../components/dashboard/accounts';
 import { BackButton } from '../../components/atoms';
 // api
 import { getAccounts, getOwner } from '../../api/admin';
-import { createNewSocket } from '../../api/websocket';
 // hooks
 import useAuth from '../../hooks/useAuth';
 // redux

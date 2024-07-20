@@ -22,7 +22,7 @@ export default function TokensMenu({ url, onClose }: TokensMenuProps) {
   };
 
   const clickClose = () => {
-    dispatch(setTokens([]));
+    setTokens([]);
     setOpen(false);
     if (typeof onClose === 'function') {
       onClose();

@@ -53,9 +53,30 @@ const slice = createSlice({
   }
 });
 
-export const { setAccessToken, setPath, setFiles, setTree, setTokens } = slice.actions;
+export const { setAccessToken, setPath } = slice.actions;
 
 export default slice.reducer;
+
+export function setTree(tree: Array<Folder | FileI>) {
+  try {
+    dispatch(slice.actions.setTree(tree));
+  } catch (e) {}
+}
+
+export function setFiles(files: FileI[]) {
+  try {
+    dispatch(slice.actions.setFiles(files));
+  } catch (e) {}
+}
+
+
+export function setTokens(tokens: TokenElement[]) {
+  try {
+    dispatch(slice.actions.setTokens(tokens));
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 export function addFile(file: FileI) {
   try {

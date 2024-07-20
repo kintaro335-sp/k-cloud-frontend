@@ -56,14 +56,16 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }, [access_token]);
 
   useEffect(() => {
-    socketClient.current.disconnect();
-    socketClient.current.auth = { access_token };
+    if (socketClient.current.connected) {
+      socketClient.current.disconnect();
+    }
     socketClient.current.connect();
+    socketClient.current.emit('auth', access_token);
   }, [access_token]);
 
   const value = useMemo(
     () => ({ isAuthenticated, init, isAdmin, sessionId, username, socketClient: socketClient.current }),
-    [isAuthenticated, init, isAdmin, username, sessionId]
+    [isAuthenticated, init, isAdmin, username, sessionId, socketClient.current]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

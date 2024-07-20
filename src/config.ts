@@ -4,7 +4,7 @@ const api_prefix = import.meta.env.VITE_API_PREFIX as string || '';
 const ws_prefix = import.meta.env.VITE_API_WS_PREFIX as string || '';
 const autoConfig = import.meta.env.VITE_API_AUTO;
 const port = import.meta.env.VITE_API_PORT as string || '';
-const port_ws = import.meta.env.VITE_API_PORT_WS as string || '';
+const port_ws = import.meta.env.VITE_API_WS_PORT as string || '';
 const rawAuto = autoConfig === '1'; // 0 = false, 1 = true
 
 const cPort = port ? `:${port}`: '';

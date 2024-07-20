@@ -10,7 +10,6 @@ import { setApiKeys, setSessions } from '../redux/slices/api';
 // hooks
 import useAuth from '../hooks/useAuth';
 // api
-import { createNewSocket } from '../api/websocket';
 import { getApiKeys, getSessions } from '../api/auth';
 
 export default function ApiKeysPage() {

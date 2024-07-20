@@ -30,11 +30,11 @@ export default function ApiKeysPage() {
   }, [getSessionData]);
 
   useEffect(() => {
-    socketClient.removeAllListeners();
+    socketClient.removeListener('sessions-update');
     socketClient.on('sessions-update', () => {
       getSessionData()
     });
-  }, [access_token]);
+  }, []);
 
   return <Box>
     <TabContext value={tabValue}>

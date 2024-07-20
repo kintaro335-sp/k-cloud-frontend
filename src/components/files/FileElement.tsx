@@ -110,7 +110,7 @@ export default function FileElement({ file, sf = false, arrayIndex }: FileElemen
     if (sf) {
       setPathSF(url);
     } else {
-      dispatch(setPathSession(url));
+      setPathSession(url);
     }
   };
 

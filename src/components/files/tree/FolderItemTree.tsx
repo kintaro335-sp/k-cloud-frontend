@@ -30,7 +30,7 @@ export default function FolderItemTree({ folder, index, level, path = '' }: Fold
       label={
         <Typography
           onClick={() => {
-            dispatch(setPath(`${path}/${name}`));
+            setPath(`${path}/${name}`);
           }}
           variant="body2"
         >

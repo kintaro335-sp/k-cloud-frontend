@@ -28,7 +28,7 @@ export default function Logs(): JSX.Element {
   }, [access_token, page, statUpdate]);
 
   useEffect(() => {
-    socketClient.removeAllListeners();
+    socketClient.removeListener('stats-update');
     socketClient.on('stats-update', () => {
       setStatUpdate((val) => !val);
     });

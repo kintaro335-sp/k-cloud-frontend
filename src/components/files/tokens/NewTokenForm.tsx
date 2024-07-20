@@ -58,7 +58,7 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
     } else {
       await shareFile(url, values.expire, values.publict, values.expires.getTime(), access_token);
       const tokens = await getTokensByPath(url, access_token);
-      dispatch(setTokens(tokens));
+      setTokens(tokens)
       enqueueSnackbar('Token Generado', { variant: 'success' });
     }
   };

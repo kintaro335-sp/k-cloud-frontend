@@ -130,11 +130,11 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
   };
 
   useEffect(() => {
-    socketClient.removeAllListeners()
+    socketClient.removeListener('upload-update');
     socketClient.on('upload-update', (data) => {
       setWrittenProgress(data.path, data.fileStatus.saved);
     });
-  }, [uploading, path]);
+  }, []);
 
   return <FileUploadContext.Provider value={{ uploadFile }}>{children}</FileUploadContext.Provider>;
 }

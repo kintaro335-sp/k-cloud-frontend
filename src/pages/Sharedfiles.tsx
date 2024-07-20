@@ -37,7 +37,7 @@ export default function ShareFiles() {
   }, [TokensEffect]);
 
   useEffect(() => {
-    socketClient.removeAllListeners()
+    socketClient.removeListener('token-change');
     socketClient.on('token-change', () => {
       PagesEffect();
       TokensEffect();

@@ -53,9 +53,17 @@ const slice = createSlice({
   }
 });
 
-export const { setAccessToken, setPath } = slice.actions;
+export const { setAccessToken } = slice.actions;
 
 export default slice.reducer;
+
+export function setPath(path: string) {
+  try {
+    dispatch(slice.actions.setPath(path));
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 export function setTree(tree: Array<Folder | FileI>) {
   try {

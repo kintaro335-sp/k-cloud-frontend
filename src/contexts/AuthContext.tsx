@@ -16,11 +16,13 @@ export const AuthContext = createContext({
   socketClient: createAuthSocket('')
 });
 
+const socket = createAuthSocket('');
+
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const [init, setInit] = useState(false);
   const { access_token } = useSelector((state) => state.session);
-  const socketClient = useRef(createAuthSocket(access_token));
+  const socketClient = useRef(socket);
   const [sessionId, setSessionId] = useState<string>('');
   const [username, setUsername] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -65,7 +67,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   const value = useMemo(
     () => ({ isAuthenticated, init, isAdmin, sessionId, username, socketClient: socketClient.current }),
-    [isAuthenticated, init, isAdmin, username, sessionId, socketClient.current]
+    [isAuthenticated, init, isAdmin, username, sessionId, socketClient]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,7 +1,7 @@
 import { Manager } from 'socket.io-client';
 import { wsUrl } from '../config';
 
-const manager = new Manager(wsUrl, { transports: ['websocket'] });
+const manager = new Manager(wsUrl, { transports: ['websocket'], autoConnect: true });
 
 function createNewSocket(access_token: string) {
   const socket = manager.socket('/', { auth: { access_token } });

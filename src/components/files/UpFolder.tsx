@@ -13,7 +13,7 @@ export default function UpFolder() {
 
   const click = () => {
     const newPath = path.split('/').slice(0, -1).join('/');
-    dispatch(setPath(newPath));
+    setPath(newPath);
   };
 
   return (

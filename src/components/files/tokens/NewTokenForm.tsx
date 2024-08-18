@@ -13,7 +13,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 // redux
-import { useSelector, useDispatch } from '../../../redux/store';
+import { useSelector } from '../../../redux/store';
 import { setTokens } from '../../../redux/slices/session';
 // api
 import { shareFile, getTokensByPath, updateToken } from '../../../api/sharedfiles';
@@ -32,8 +32,7 @@ interface NewTokenValues {
 }
 
 export default function NewTokenForm({ url, edit = false, token }: NewTokenFormProps) {
-  const { access_token } = useSelector((state) => state.session);
-  const dispatch = useDispatch();
+  const { access_token, tokens } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
 
   const {
@@ -54,11 +53,12 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
   const onHandleSubmit: SubmitHandler<NewTokenValues> = async (values) => {
     if (edit) {
       await updateToken(token?.id || '', values, access_token);
+      setTokens(tokens.map((t) => (t.id === token?.id ? { ...t, ...values, expires: values.expires.getTime() } : t)));
       enqueueSnackbar('Update success', { variant: 'success' });
     } else {
       await shareFile(url, values.expire, values.publict, values.expires.getTime(), access_token);
-      const tokens = await getTokensByPath(url, access_token);
-      setTokens(tokens)
+      const tokensR = await getTokensByPath(url, access_token);
+      setTokens(tokensR)
       enqueueSnackbar('Token Generado', { variant: 'success' });
     }
   };

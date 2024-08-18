@@ -12,5 +12,6 @@ export const SetupUser = lazy(() => import('./SetupUser'));
 export const Tokens = lazy(() => import('./Tokens'));
 export const TokenView = lazy(() => import('./TokenView'));
 export const ApiKeysPage = lazy(() => import('./ApiKeysPage'));
+export const UserStats = lazy(() => import('./UserStats'));
 
 export { default as Loading } from './Loading';

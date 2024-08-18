@@ -11,7 +11,8 @@ import {
   SetupUser,
   Tokens,
   TokenView,
-  ApiKeysPage
+  ApiKeysPage,
+  UserStats
 } from '../pages';
 import { Accounts, Stats, AdminMenu, SystemSettings, Logs, About } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
@@ -53,6 +54,16 @@ export default function Routes() {
         <Authguard redirect redirectTo="/login">
           <ContextsR>
             <FilesPage />
+          </ContextsR>
+        </Authguard>
+      )
+    },
+    {
+      path: '/stats',
+      element: (
+        <Authguard redirect redirectTo="/login">
+          <ContextsR>
+            <UserStats />
           </ContextsR>
         </Authguard>
       )

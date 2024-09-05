@@ -16,4 +16,4 @@ const noPortwsUrlR =  rawAuto ? window.origin.split(/:[0-9]/)[0] : url_ws;
 export const apiUrl = rawAuto ? `${noPortUrl}${cPort}${api_prefix}` : url;
 export const wsUrl = rawAuto ? `${noPortwsUrlR}${cPortWS}${ws_prefix}` : url_ws;
 
-export const version = 'v1.0.3';
+export const version = 'v1.1.0';

@@ -1,7 +1,7 @@
 {
   "name": "k-cloud-frontend",
   "private": true,
-  "version": "1.0.3",
+  "version": "1.1.0",
   "license": "MIT",
   "type": "module",
   "scripts": {

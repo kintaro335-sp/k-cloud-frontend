@@ -13,6 +13,7 @@ import tokenviewReducer from './slices/tokenview';
 import sharedfileReducer from './slices/sharedfile';
 import logsReducer from './slices/logs';
 import apiReducer from './slices/api';
+import userstatsReducer from './slices/userStats';
 
 const rootPersistConfig = {
   key: 'root',
@@ -39,7 +40,8 @@ const rootReducer = combineReducers({
   tokenexplorer: tokenexplorerReducer,
   tokenview: tokenviewReducer,
   logs: logsReducer,
-  api: apiReducer
+  api: apiReducer,
+  userstats: userstatsReducer
 });
 
 export { rootPersistConfig, rootReducer };

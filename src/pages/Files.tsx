@@ -60,13 +60,7 @@ export default function Files() {
     socketClient.removeListener('tree-update');
     socketClient.removeListener('file-change');
     socketClient.removeListener('file-update');
-    socketClient.removeListener('token-change');
 
-    socketClient.on('token-change', (data) => {
-      if (pathM.current === data.path) {
-        getFiles();
-      }
-    });
     socketClient.on('tree-update', () => {
       getTree();
     });

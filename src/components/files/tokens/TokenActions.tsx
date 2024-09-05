@@ -10,6 +10,7 @@ import editIcon from '@iconify/icons-material-symbols/edit';
 import { useSnackbar } from 'notistack';
 // redux
 import { useSelector } from '../../../redux/store';
+import { setTokens } from '../../../redux/slices/session';
 // api
 import { deleteToken } from '../../../api/sharedfiles';
 import { TokenElement } from '../../../@types/sharedfiles';
@@ -20,13 +21,14 @@ interface TokenActionsProps {
 }
 
 export default function TokenActions({ id, token }: TokenActionsProps) {
-  const { access_token } = useSelector((state) => state.session);
+  const { access_token, tokens } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
 
   const handleDelete = async () => {
     if (window.confirm(`desea eliminar ${id}?`)) {
       await deleteToken(id, access_token);
+      setTokens(tokens.filter((t) => t.id !== id));
       enqueueSnackbar('eliminado', { variant: 'success' });
     }
   };

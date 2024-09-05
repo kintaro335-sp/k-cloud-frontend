@@ -13,7 +13,7 @@ import {
 import TokenRow from './TokenRow';
 import { useSnackbar } from 'notistack';
 // redux
-import { useSelector, useDispatch } from '../../../redux/store';
+import { useSelector } from '../../../redux/store';
 import { setTokens } from '../../../redux/slices/session';
 // hooks
 import useAuth from '../../../hooks/useAuth';
@@ -25,9 +25,7 @@ interface TokensTableProps {
 }
 
 export default function TokensTable({ url }: TokensTableProps) {
-  const { socketClient } = useAuth();
   const { access_token, tokens } = useSelector((state) => state.session);
-  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -38,20 +36,10 @@ export default function TokensTable({ url }: TokensTableProps) {
     getTokensEffect();
   }, [access_token]);
 
-  useEffect(() => {
-    socketClient.removeListener('token-change');
-    socketClient.on('token-change', async (data) => {
-      if (data.path !== url) {
-        return;
-      }
-      const tokensRes = await getTokensByPath(url, access_token);
-      setTokens(tokensRes)
-    });
-  }, []);
-
   const onClickRemoveTokens = async () => {
     if (window.confirm('Desea dejar de compartir este archivo?')) {
       await deleteTokensByPath(url, access_token);
+      setTokens([]);
       enqueueSnackbar('se dejó de compartir', { variant: 'success' });
     }
   };

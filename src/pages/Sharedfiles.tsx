@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useRef, useCallback } from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import { TokensList } from '../components/sharedfiles';

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Manager } from 'socket.io-client';
 import { wsUrl } from '../config';
 

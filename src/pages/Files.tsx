@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { RouteBar } from '../components/files/routebar';
 import { Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';

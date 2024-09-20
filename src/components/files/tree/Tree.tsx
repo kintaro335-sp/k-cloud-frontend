@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Box } from '@mui/material';
 import { SimpleTreeView as TreeView } from '@mui/x-tree-view';
 import { useSelector } from '../../../redux/store';

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ResponsivePie } from '@nivo/pie';

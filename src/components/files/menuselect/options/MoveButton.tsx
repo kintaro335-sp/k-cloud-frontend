@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState, useEffect } from 'react';
 import { Button, MenuItem, Dialog, AppBar, DialogContent, Grid, IconButton, Toolbar, Box, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';

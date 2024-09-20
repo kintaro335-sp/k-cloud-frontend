@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useRef, useState } from 'react';
 import { Grid, Box, Toolbar } from '@mui/material';
 import { PaginationT } from '../../components/atoms';

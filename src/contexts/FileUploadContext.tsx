@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import React, { createContext, useEffect, useRef } from 'react';
 import { useSelector, getState } from '../redux/store';
 import {

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { TableRow, TableCell } from '@mui/material';
 import { SharedFileActivity } from '../../../@types/admin';
 import { fullDateFormat } from '../../../utils/dateformat';

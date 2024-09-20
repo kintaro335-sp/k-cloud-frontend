@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 // components
 import { Card, CardHeader, CardContent, Box, Button, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';

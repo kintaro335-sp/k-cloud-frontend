@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Button } from '@mui/material';
 // icon
 import { Icon } from '@iconify/react';

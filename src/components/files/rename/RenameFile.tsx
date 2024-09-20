@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState } from 'react';
 // mui
 import { MenuItem, Dialog, DialogContent, Grid, TextField } from '@mui/material';

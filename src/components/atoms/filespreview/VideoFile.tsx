@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState } from 'react';
 import { Box, Dialog, DialogContent, AppBar, Toolbar, Typography } from '@mui/material';
 import { Icon } from '@iconify/react';

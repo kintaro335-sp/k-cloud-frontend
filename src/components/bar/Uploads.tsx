@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState } from 'react';
 import { Button, Dialog, DialogContent, Box } from '@mui/material';
 import FilesList from '../files/upload/FileList';

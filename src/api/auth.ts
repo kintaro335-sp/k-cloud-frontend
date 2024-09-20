@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import axios from 'axios';
 import { apiUrl } from '../config';
 import { AuthResponse, MessageResponse, UserPayload } from '../@types/auth';

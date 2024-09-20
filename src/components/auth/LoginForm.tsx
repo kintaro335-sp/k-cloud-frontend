@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Navigate } from 'react-router-dom';
 import { Grid, TextField, Card, CardContent, CardProps } from '@mui/material';
 import { LoadingButton } from '@mui/lab';

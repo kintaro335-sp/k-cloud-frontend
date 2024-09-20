@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Card, CardContent, CardHeader, Box } from '@mui/material';
 // icons
 import { Icon } from '@iconify/react';

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { List, Box, LinearProgress } from '@mui/material';
 import FileItem from './FileItem';
 import { useSelector } from '../../../redux/store';

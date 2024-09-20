@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 const url = import.meta.env.VITE_API_URL as string;
 const url_ws = import.meta.env.VITE_API_URL_WS as string;
 const api_prefix = (import.meta.env.VITE_API_PREFIX as string) || '';

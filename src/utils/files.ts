@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 export const BLOB_SIZE = 1048576 * 100;
 import Numeral from 'numeral';
 

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 export { default as BackButton } from './BackButton';
 export { default as CopyClipboard } from './CopyClipboard';
 export { default as DownloadButton } from './DownloadButton';

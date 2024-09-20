@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Card, CardContent, Table, TableContainer, TableBody, TableRow, TableCell, TableHead } from '@mui/material';
 import UserItem from './UserItem';
 // redux

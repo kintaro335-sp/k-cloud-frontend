@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { createSlice } from '@reduxjs/toolkit';
 import { TokenElement } from '../../@types/sharedfiles';
 import { dispatch } from '../store';

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState, useRef, useEffect, useCallback } from 'react';
 // components
 import { Box, Tab } from '@mui/material';

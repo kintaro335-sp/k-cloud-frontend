@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Card, CardHeader, Toolbar, CardContent } from '@mui/material';
 import { UsersList, NewUserForm } from '../../components/dashboard/accounts';

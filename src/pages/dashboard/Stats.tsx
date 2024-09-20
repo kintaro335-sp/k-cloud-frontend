@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useState, useRef } from 'react';
 import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box, Tab, Button } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';

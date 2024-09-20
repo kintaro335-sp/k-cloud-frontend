@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 export { default as SelectAllButton } from './SelectAllButton';
 export { default as ShareButton } from './ShareButton';
 export { default as CancelButton } from './CancelButton';

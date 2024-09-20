@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { createContext, useState, useMemo, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dialog, DialogContent, Box, Stack, IconButton, Toolbar, AppBar, Tooltip } from '@mui/material';

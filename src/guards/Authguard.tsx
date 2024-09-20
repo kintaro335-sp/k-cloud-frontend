@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from '../redux/store';

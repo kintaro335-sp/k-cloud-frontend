@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Card, CardContent, CardHeader, Tooltip, Box, Typography } from '@mui/material';
 import { Folder } from '../files/filetypes';
 import { FileI } from '../../@types/files';

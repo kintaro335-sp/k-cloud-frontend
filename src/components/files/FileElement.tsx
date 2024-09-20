@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack, Checkbox } from '@mui/material';
 import { Folder } from './filetypes';

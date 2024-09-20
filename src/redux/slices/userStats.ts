@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { UsedSpaceType } from '../../@types/files';
 import { createSlice } from '@reduxjs/toolkit';
 import { dispatch } from '../store';

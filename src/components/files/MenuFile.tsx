@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { IconButton, Menu, MenuItem } from '@mui/material';

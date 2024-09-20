@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Card, CardHeader, CardContent } from '@mui/material';
 import LineChartPrefab from './LineChartPrefab';
 import { StatsLineChart } from '../../../../@types/stats';

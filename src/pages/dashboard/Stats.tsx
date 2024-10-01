@@ -105,14 +105,16 @@ export default function Stats() {
   }, [access_token]);
 
   useEffect(() => {
-    socketClient.removeListener('memory-usage-update');
-    socketClient.removeListener('stats-update');
     socketClient.on('memory-usage-update', () => {
       getMemoryUsageHEffect();
     });
     socketClient.on('stats-update', () => {
       getActivityStats();
     });
+    return () => {
+      socketClient.removeListener('memory-usage-update');
+      socketClient.removeListener('stats-update');
+    };
   }, []);
 
   const handleUpdate = () => {

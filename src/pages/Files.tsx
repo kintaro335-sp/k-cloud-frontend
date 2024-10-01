@@ -63,10 +63,6 @@ export default function Files() {
   }
 
   useEffect(() => {
-    socketClient.removeListener('tree-update');
-    socketClient.removeListener('file-change');
-    socketClient.removeListener('file-update');
-
     socketClient.on('tree-update', () => {
       getTree();
     });
@@ -89,8 +85,14 @@ export default function Files() {
       }
     });
 
-    socket.current.connect();
-    socket.current.emit('auth', access_token);
+    // socket.current.connect();
+    // socket.current.emit('auth', access_token);
+
+    return () => {
+      socketClient.removeListener('tree-update');
+      socketClient.removeListener('file-change');
+      socketClient.removeListener('file-update');
+    }
   }, [pathM.current]);
 
   useEffect(() => {

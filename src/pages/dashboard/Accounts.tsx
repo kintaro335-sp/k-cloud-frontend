@@ -34,10 +34,12 @@ export default function Accounts() {
   }, [userClock]);
 
   useEffect(() => {
-    socketClient.removeListener('users-update');
     socketClient.on('users-update', () => {
       setUserClock((val) => !val);
     });
+    return () => {
+      socketClient.removeListener('users-update');
+    };
   }, []);
 
   return (

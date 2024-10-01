@@ -43,11 +43,14 @@ export default function ShareFiles() {
   }, [TokensEffect]);
 
   useEffect(() => {
-    socketClient.removeListener('token-change');
     socketClient.on('token-change', () => {
       PagesEffect();
       TokensEffect();
     });
+
+    return () => {
+      socketClient.removeListener('token-change');
+    };
   }, [access_token]);  
 
 

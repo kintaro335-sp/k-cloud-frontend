@@ -36,10 +36,13 @@ export default function ApiKeysPage() {
   }, [getSessionData]);
 
   useEffect(() => {
-    socketClient.removeListener('sessions-update');
     socketClient.on('sessions-update', () => {
       getSessionData()
     });
+
+    return () => {
+      socketClient.removeListener('sessions-update');
+    }
   }, []);
 
   return <Box>

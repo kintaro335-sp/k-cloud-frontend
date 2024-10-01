@@ -34,10 +34,13 @@ export default function Logs(): JSX.Element {
   }, [access_token, page, statUpdate]);
 
   useEffect(() => {
-    socketClient.removeListener('stats-update');
     socketClient.on('stats-update', () => {
       setStatUpdate((val) => !val);
     });
+
+    return () => {
+      socketClient.removeListener('stats-update');
+    };
   }, []);
 
   return (

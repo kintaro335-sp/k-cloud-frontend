@@ -23,9 +23,14 @@ import {
 import { Accounts, Stats, AdminMenu, SystemSettings, Logs, About } from '../pages/dashboard';
 import Authguard from '../guards/Authguard';
 import GalleryContext from '../contexts/GalleryContext';
+import VideoPlayerContext from '../contexts/VideoPlayerContext';
 
 function ContextsR({ children }: { children: JSX.Element }) {
-  return <GalleryContext>{children}</GalleryContext>;
+  return (
+    <GalleryContext>
+      <VideoPlayerContext>{children}</VideoPlayerContext>
+    </GalleryContext>
+  );
 }
 
 export default function Routes() {

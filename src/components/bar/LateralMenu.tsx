@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import React, { useState, useCallback } from 'react';
 import { Card, CardContent, Tabs, Tab, CircularProgress, Box, Stack } from '@mui/material';
 import FileList from '../files/upload/FileList';

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useNavigate } from 'react-router-dom';
 // mui
 import { useTheme } from '@mui/material/styles'

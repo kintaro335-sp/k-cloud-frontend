@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Box } from '@mui/material';
 import useGallery from '../../../hooks/useGallery';
 import { explorerContext } from '../../../@types/general';

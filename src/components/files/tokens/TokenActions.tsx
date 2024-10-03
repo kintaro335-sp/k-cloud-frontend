@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Stack, IconButton, MenuItem } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { CopyClipboard } from '../../atoms';

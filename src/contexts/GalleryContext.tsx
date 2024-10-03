@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { createContext, useState, useMemo, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dialog, DialogContent, Box, Stack, IconButton, Toolbar, AppBar, Tooltip } from '@mui/material';
@@ -169,7 +175,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
                 <Icon icon={!fullScreen ? fullScreenIcon : fullScreenExitIcon} width="25px" height="25px" />
               </IconButton>
             </Tooltip>
-            <Box>{nameFileFinal}</Box>
+            <Box>{nameFileFinal.split('?')[0]}</Box>
           </Toolbar>
         </AppBar>
         <DialogContent ref={galleryRef} sx={{ padding: '17px 0px' }}>

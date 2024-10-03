@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, IconButton, Menu, MenuItem, Typography, Stack, Box } from '@mui/material';

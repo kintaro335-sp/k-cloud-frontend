@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useState, useRef } from 'react';
 import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box, Tab, Button } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
@@ -99,14 +105,16 @@ export default function Stats() {
   }, [access_token]);
 
   useEffect(() => {
-    socketClient.removeListener('memory-usage-update');
-    socketClient.removeListener('stats-update');
     socketClient.on('memory-usage-update', () => {
       getMemoryUsageHEffect();
     });
     socketClient.on('stats-update', () => {
       getActivityStats();
     });
+    return () => {
+      socketClient.removeListener('memory-usage-update');
+      socketClient.removeListener('stats-update');
+    };
   }, []);
 
   const handleUpdate = () => {

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Toolbar, Box, Typography, Card, CardContent } from '@mui/material';

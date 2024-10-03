@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const colors = {

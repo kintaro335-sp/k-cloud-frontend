@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -62,6 +68,17 @@ const iconsPack3 = [
   '@iconify/icons-material-symbols/arrow-left-rounded'
 ];
 
+const iconsPack4 = [
+  '@iconify/icons-material-symbols/play-arrow',
+  '@iconify/icons-material-symbols/pause',
+  '@iconify/icons-material-symbols/fast-rewind',
+  '@iconify/icons-material-symbols/fast-forward',
+  '@iconify/icons-material-symbols/volume-off',
+  '@iconify/icons-material-symbols/volume-up',
+  '@iconify/icons-material-symbols/fullscreen',
+  '@iconify/icons-material-symbols/fullscreen-exit'
+]
+
 // https://vitejs.dev/config/
 export default defineConfig({
   preview: { strictPort: true, port: 3000 },
@@ -75,7 +92,7 @@ export default defineConfig({
           'icons/Pack1': iconsPack1,
           'icons/Pack2': iconsPack2,
           'icons/Pack3': iconsPack3,
-          utils: ['lodash'],
+          'icons/Pack4': iconsPack4,
           ...renderchinks(require('./package.json').dependencies)
         }
       }

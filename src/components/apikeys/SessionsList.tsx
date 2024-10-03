@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Box, Stack } from '@mui/material';
 import SessionItem from './SessionItem';
 // redux

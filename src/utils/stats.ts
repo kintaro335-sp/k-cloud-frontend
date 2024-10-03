@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { StatsLineChart } from '../@types/stats';
 
 export function getMaxNumber(dataChart: StatsLineChart, min = 50, margin = 0) {

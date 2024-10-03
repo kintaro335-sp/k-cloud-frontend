@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { RouteBar } from '../components/files/routebar';
 import { Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';
@@ -57,10 +63,6 @@ export default function Files() {
   }
 
   useEffect(() => {
-    socketClient.removeListener('tree-update');
-    socketClient.removeListener('file-change');
-    socketClient.removeListener('file-update');
-
     socketClient.on('tree-update', () => {
       getTree();
     });
@@ -83,8 +85,14 @@ export default function Files() {
       }
     });
 
-    socket.current.connect();
-    socket.current.emit('auth', access_token);
+    // socket.current.connect();
+    // socket.current.emit('auth', access_token);
+
+    return () => {
+      socketClient.removeListener('tree-update');
+      socketClient.removeListener('file-change');
+      socketClient.removeListener('file-update');
+    }
   }, [pathM.current]);
 
   useEffect(() => {

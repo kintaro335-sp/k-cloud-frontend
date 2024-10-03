@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useRef, useState } from 'react';
 import { Grid, Box, Toolbar } from '@mui/material';
 import { PaginationT } from '../../components/atoms';
@@ -28,10 +34,13 @@ export default function Logs(): JSX.Element {
   }, [access_token, page, statUpdate]);
 
   useEffect(() => {
-    socketClient.removeListener('stats-update');
     socketClient.on('stats-update', () => {
       setStatUpdate((val) => !val);
     });
+
+    return () => {
+      socketClient.removeListener('stats-update');
+    };
   }, []);
 
   return (

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Suspense } from 'react';
 import { Loading } from './pages';
 import Bar from './components/Bar';

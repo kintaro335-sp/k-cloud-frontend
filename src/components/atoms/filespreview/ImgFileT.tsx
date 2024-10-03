@@ -1,6 +1,13 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+import { useRef } from 'react';
 import { Box } from '@mui/material';
 import useGallery from '../../../hooks/useGallery';
 import { explorerContext } from '../../../@types/general';
+import './css/img.css';
 
 interface ImgFileProps {
   url: string;
@@ -9,26 +16,52 @@ interface ImgFileProps {
 }
 
 export default function ImgFile({ url, context, index }: ImgFileProps) {
+  const imgRef = useRef<HTMLImageElement>(null);
+
   const { openImage } = useGallery();
   return (
-    <Box
-      component="img"
-      src={url}
-      alt={url}
-      width="220px"
-      height="220px"
-      onClick={() => {
-        if (context === 'sharedFile' || context === 'tokenView' || context === 'default') {
-          if (index === undefined) {
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '255px', height: '225px' }}>
+      <img
+        className='imgfilepreview'
+        ref={imgRef}
+        onMouseMoveCapture={(event) => {
+
+          const width = imgRef.current?.width as number;
+          const height = imgRef.current?.height as number;
+
+          const mousePositionX = event.pageX;
+          const mousePositionY = event.pageY;
+
+          const elementPosition = imgRef.current?.getBoundingClientRect();
+
+          const decimalX = (mousePositionX - (elementPosition?.x || 1)) / width;
+          const decimalY = (mousePositionY - (elementPosition?.y || 1)) / height;
+          
+          const percentX = decimalX * 100;
+          const percentY = decimalY * 100;
+
+          imgRef.current?.style.setProperty('object-position', `${percentX.toFixed(2)}% ${percentY.toFixed(2)}%`);
+        }}
+        onMouseOut={() => {
+          imgRef.current?.style.setProperty('object-position', '50% 50%');
+        }}
+        src={url}
+        alt={url}
+        width="250px"
+        height="220px"
+        onClick={() => {
+          if (context === 'sharedFile' || context === 'tokenView' || context === 'default') {
+            if (index === undefined) {
+              openImage(url, context);
+              return;
+            }
+            openImage(index, context);
+          } else {
             openImage(url, context);
-            return;
           }
-          openImage(index, context);
-        } else {
-          openImage(url, context);
-        }
-      }}
-      sx={{ objectFit: 'cover', objectPosition: '80% 0%' }}
-    />
+        }}
+        style={{ objectFit: 'cover', objectPosition: '50% 50%' }}
+      />
+    </Box>
   );
 }

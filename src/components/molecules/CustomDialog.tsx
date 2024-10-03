@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import React, { useState } from 'react';
 import { Dialog, DialogContent } from '@mui/material';
 

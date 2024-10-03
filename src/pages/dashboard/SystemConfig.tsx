@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Toolbar, Box } from '@mui/material';
 import { BackButton } from '../../components/atoms';
 import { DedicatedSpaceForm } from '../../components/dashboard/system';

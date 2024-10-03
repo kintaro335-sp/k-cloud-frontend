@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Link } from 'react-router-dom';
 import { Box, Typography, Grid, Button, useTheme } from '@mui/material';
 

@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useRef, useCallback } from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import { TokensList } from '../components/sharedfiles';
@@ -37,11 +43,14 @@ export default function ShareFiles() {
   }, [TokensEffect]);
 
   useEffect(() => {
-    socketClient.removeListener('token-change');
     socketClient.on('token-change', () => {
       PagesEffect();
       TokensEffect();
     });
+
+    return () => {
+      socketClient.removeListener('token-change');
+    };
   }, [access_token]);  
 
 

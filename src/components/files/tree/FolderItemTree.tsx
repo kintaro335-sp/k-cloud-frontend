@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Typography } from '@mui/material';
 import { TreeItem } from '@mui/x-tree-view';
 import { Folder } from '../../../@types/files';

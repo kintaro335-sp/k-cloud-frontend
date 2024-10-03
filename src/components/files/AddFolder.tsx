@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState, useRef } from 'react';
 import { Button, TextField, Paper, Grid, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';

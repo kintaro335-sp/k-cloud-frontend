@@ -1,17 +1,20 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState } from 'react';
 import { Box, Dialog, DialogContent, AppBar, Toolbar, Typography } from '@mui/material';
+import useVideoPlayer from '../../../hooks/useVideoPlayer';
 import { Icon } from '@iconify/react';
 import videoIcon from '@iconify/icons-ant-design/video-camera-filled';
 
 export default function VideoFile({ url, nameFile }: { url: string; nameFile: string }) {
-  const [open, setOpen] = useState(false);
+  const { setUrl } = useVideoPlayer();
 
   const clickOpen = () => {
-    setOpen(true);
-  };
-
-  const clickClose = () => {
-    setOpen(false);
+    setUrl(url, nameFile);
   };
 
   return (
@@ -22,16 +25,6 @@ export default function VideoFile({ url, nameFile }: { url: string; nameFile: st
       >
         <Icon icon={videoIcon} width="220px" height="220px" />
       </Box>
-      <Dialog open={open} onClose={clickClose} maxWidth="lg">
-        <AppBar position="relative">
-          <Toolbar>
-            <Typography>{nameFile}</Typography>
-          </Toolbar>
-        </AppBar>
-        <DialogContent>
-          <Box component="video" controls src={url} width="100%" height="auto" />
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

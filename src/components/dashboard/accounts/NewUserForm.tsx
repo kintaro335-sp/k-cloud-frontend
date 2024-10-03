@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { Button, Dialog, DialogContent, TextField, Grid } from '@mui/material';

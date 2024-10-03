@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 // components
 import { Box, Stack, Card, CardHeader } from '@mui/material';
 import CreateApiKeyForm from './CreateApiKeyForm';

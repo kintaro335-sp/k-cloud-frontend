@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Box } from '@mui/material';
 import { Icon } from '@iconify/react';
 import folderIcon from '@iconify/icons-ant-design/folder-filled';

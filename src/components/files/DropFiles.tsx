@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { Box, Typography } from '@mui/material';
 import { useSelector } from '../../redux/store';
 import { addFile } from '../../redux/slices/fileUploader';

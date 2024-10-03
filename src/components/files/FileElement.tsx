@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack, Checkbox } from '@mui/material';
 import { Folder } from './filetypes';
@@ -31,10 +37,10 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
   const selected = files.includes(file.name);
   return (
     <Card className="cardfile">
-      <CardContent>
+      <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {!sf && (
           <Box
-            sx={{ display: selected ? 'block !important' : undefined, top: '20px', zIndex: 100 }}
+            sx={{ display: selected ? 'block !important' : undefined, top: '20px', left: '5px', zIndex: 100 }}
             className="checkfile"
           >
             <Checkbox

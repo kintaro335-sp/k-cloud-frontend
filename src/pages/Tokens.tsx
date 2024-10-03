@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useRef, useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import { TokensUList } from '../components/tokens';
@@ -36,13 +42,15 @@ export default function Tokens() {
   }, [page]);
 
   useEffect(() => {
-    socketClient.removeListener('token-change');
     socketClient.on('token-change', async () => {
       const { pages } = await getTokenPagesByUser(access_token);
       setPagesU(pages);
       const resp = await getTokensListByUser(page, access_token);
       setTokensU(resp);
     });
+    return () => {
+      socketClient.removeListener('token-change');
+    }
   }, [page]);
 
   return (

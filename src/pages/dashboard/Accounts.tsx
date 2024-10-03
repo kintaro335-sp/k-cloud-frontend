@@ -1,3 +1,9 @@
+/*
+ * k-cloud-frontend
+ * Copyright(c) 2022 Kintaro Ponce
+ * MIT Licensed
+ */
+
 import { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Card, CardHeader, Toolbar, CardContent } from '@mui/material';
 import { UsersList, NewUserForm } from '../../components/dashboard/accounts';
@@ -28,10 +34,12 @@ export default function Accounts() {
   }, [userClock]);
 
   useEffect(() => {
-    socketClient.removeListener('users-update');
     socketClient.on('users-update', () => {
       setUserClock((val) => !val);
     });
+    return () => {
+      socketClient.removeListener('users-update');
+    };
   }, []);
 
   return (

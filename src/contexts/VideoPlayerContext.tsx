@@ -33,18 +33,18 @@ export default function VideoPlayerContext({ children }: { children: React.React
   return (
     <VideoPlayerC.Provider value={{ setUrl }}>
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg" fullScreen>
-        <AppBar position="relative">
+        <AppBar position="absolute">
           <Toolbar>
             <IconButton onClick={() => setOpen(false)}>
-              <Icon icon={closeIcon} width="25px" height="25px" />
+              <Icon icon={closeIcon} width="22px" height="22px" />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="body2" component="div" sx={{ flexGrow: 1 }}>
               {nameFile.split('?')[0]}
             </Typography>
           </Toolbar>
         </AppBar>
         <DialogContent
-          sx={{ width: '90%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          sx={{ width: '78vw', height: '93vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
           <VideoPlayer url={source} nameFile={nameFile} />
         </DialogContent>

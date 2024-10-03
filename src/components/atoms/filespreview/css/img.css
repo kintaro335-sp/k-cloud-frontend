@@ -1,0 +1,64 @@
+@keyframes size-aimg-hover {
+  from {
+    width: 250px;
+    height: 220px;
+  }
+
+  to {
+    width: 290px;
+    height: 250px;
+  }
+}
+
+@keyframes size-aimg {
+  to {
+    width: 250px;
+    height: 220px;
+  }
+
+  from {
+    width: 290px;
+    height: 250px;
+  }
+}
+
+.imgfilepreview {
+  width: 250px;
+  height: 220px;
+  animation-name: size-aimg;
+  animation-duration: 0.3s;
+  transition: object-position;
+  transition-duration: 300ms;
+  transition-delay: 100ms;
+}
+
+.imgfilepreview:hover {
+  cursor: pointer;
+  position: static;
+  top: 0;
+  left: 0;
+  width: 290px;
+  height: 250px;
+  animation-name: size-aimg-hover;
+  animation-duration: 0.3s;
+  transition: object-position;
+  transition-duration: 10ms;
+  transition-delay: 1ms;
+}
+
+.imgfilepreview:hover::after {
+  transition-duration: 1500ms;
+  transition-delay: 300ms;
+}
+
+.cardfile:hover .imgfilepreview {
+  cursor: pointer;
+  position: static;
+  top: 0;
+  left: 0;
+  width: 290px;
+  height: 250px;
+  animation-name: size-aimg-hover;
+  animation-duration: 0.3s;
+}
+

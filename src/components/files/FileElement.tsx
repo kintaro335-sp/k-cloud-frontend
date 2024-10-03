@@ -37,10 +37,10 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
   const selected = files.includes(file.name);
   return (
     <Card className="cardfile">
-      <CardContent>
+      <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {!sf && (
           <Box
-            sx={{ display: selected ? 'block !important' : undefined, top: '20px', zIndex: 100 }}
+            sx={{ display: selected ? 'block !important' : undefined, top: '20px', left: '5px', zIndex: 100 }}
             className="checkfile"
           >
             <Checkbox

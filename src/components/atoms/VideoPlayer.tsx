@@ -7,6 +7,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 // mui
 import { Box, IconButton, Typography, Paper } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 // icons
 import { Icon } from '@iconify/react';
 import playArrow from '@iconify/icons-material-symbols/play-arrow';
@@ -24,6 +25,8 @@ interface BufferRange {
 }
 
 export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: string }) {
+  const theme = useTheme();
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -144,14 +147,26 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   return (
     <Paper
       elevation={3}
-      sx={{ width: '80vw', maxWidth: '100%', margin: 'auto', p: 2, height: 'auto' }}
+      sx={{ width: '100%', maxWidth: '100%', margin: 'auto', p: 2, height: 'auto' }}
       ref={containerRef}
     >
-      <Box sx={{ position: 'relative', width: '100%', paddingTop: '56.25%' }}>
+      <Box sx={{ position: 'relative', width: '100%', paddingTop: '50%' }}>
         <video
           ref={videoRef}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
           src={url}
+          onClick={togglePlay}
+          onKeyDown={(event) => {
+            if (event.code === 'Space') {
+              togglePlay();
+            }
+            if (event.code === 'ArrowLeft') {
+              skip(-5);
+            }
+            if (event.code === 'ArrowRight') {
+              skip(5);
+            }
+          }}
         />
       </Box>
       <Box
@@ -189,21 +204,27 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
         />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1 }}>
-        <Typography variant="body2">
-          {formatTime(currentTime)} / {formatTime(duration)}
-        </Typography>
+        
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconButton onClick={() => skip(-10)} size="small">
-            <Icon icon={fastRewindIcon} />
+            <Icon icon={fastRewindIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
           </IconButton>
           <IconButton onClick={togglePlay} size="small">
-            {isPlaying ? <Icon icon={pauseIcon} /> : <Icon icon={playArrow} />}
+            {isPlaying ? (
+              <Icon icon={pauseIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
+            ) : (
+              <Icon icon={playArrow} width="25px" height="25px" color={theme.palette.text.secondary} />
+            )}
           </IconButton>
           <IconButton onClick={() => skip(10)} size="small">
-            <Icon icon={fastforwardIcon} />
+            <Icon icon={fastforwardIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
           </IconButton>
           <IconButton onClick={toggleMute} size="small">
-            {isMuted ? <Icon icon={volumeOff} /> : <Icon icon={volumeUp} />}
+            {isMuted ? (
+              <Icon icon={volumeOff} width="25px" height="25px" color={theme.palette.text.secondary} />
+            ) : (
+              <Icon icon={volumeUp} width="25px" height="25px" color={theme.palette.text.secondary} />
+            )}
           </IconButton>
           <input
             type="range"
@@ -214,8 +235,15 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
             onChange={handleVolumeChange}
             style={{ width: '100px', marginLeft: '8px', verticalAlign: 'middle' }}
           />
+        <Typography variant="body2">
+          {formatTime(currentTime)} / {formatTime(duration)}
+        </Typography>
           <IconButton onClick={toggleFullscreen} size="small">
-            {isFullscreen ? <Icon icon={fullscreenExitIcon} /> : <Icon icon={fullscreenIcon} />}
+            {isFullscreen ? (
+              <Icon icon={fullscreenExitIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
+            ) : (
+              <Icon icon={fullscreenIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
+            )}
           </IconButton>
         </Box>
       </Box>

@@ -175,7 +175,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
                 <Icon icon={!fullScreen ? fullScreenIcon : fullScreenExitIcon} width="25px" height="25px" />
               </IconButton>
             </Tooltip>
-            <Box>{nameFileFinal}</Box>
+            <Box>{nameFileFinal.split('?')[0]}</Box>
           </Toolbar>
         </AppBar>
         <DialogContent ref={galleryRef} sx={{ padding: '17px 0px' }}>

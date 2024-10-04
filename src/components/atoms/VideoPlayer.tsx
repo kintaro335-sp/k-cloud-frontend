@@ -59,7 +59,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
           }
         }
       }
-      if (bufferEnd - currentTime < 10) {
+      if (bufferEnd - currentTime < 30 && currentTime > 0 && duration - currentTime > 30) {
         video.load();
       }
       setBufferRanges(ranges);
@@ -168,24 +168,29 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
     }
     // @ts-ignore
     timeOutId.current = setTimeout(() => {
-      videoControls.style.opacity = '0';
+      videoControls.style.display = 'none';
     }, 3000);
-    videoControls.style.opacity = '1';
+    videoControls.style.display = 'block';
   };
+
+  const videoplayerWidth = isFullscreen ? '100vw' : '100%';
+  const videoplayerHeight = isFullscreen ? '100vh' : 'auto';
+
+  const videoContainerPadding = isFullscreen ? '56%' : '50%';
 
   return (
     <Paper
       elevation={3}
-      sx={{ width: '100%', margin: 'auto', p: 2, height: 'auto' }}
+      sx={{ width: videoplayerWidth, margin: '0', p: 0, height: videoplayerHeight, overflow: 'hidden' }}
       ref={containerRef}
       onMouseMove={() => {
         setHideTimeout();
       }}
     >
-      <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', paddingTop: '50%' }}>
+      <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', paddingTop: videoContainerPadding }}>
         <video
           ref={videoRef}
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%' }}
           src={url}
           onClick={togglePlay}
           onKeyDown={(event) => {
@@ -206,7 +211,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
             }
           }}
         />
-        <Box ref={videoControlsRef} className="video-controls-show" sx={{ opacity: 1 }}>
+        <Box ref={videoControlsRef} className="video-controls-show" sx={{ position: 'absolute', bottom: 0, left: 0 }}>
           <Box sx={{ position: 'relative', width: videoContainerRef.current?.clientWidth }}>
             <Box
               sx={{

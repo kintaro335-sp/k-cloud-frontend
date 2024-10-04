@@ -38,7 +38,7 @@ export default function VideoPlayerContext({ children }: { children: React.React
             <IconButton onClick={() => setOpen(false)}>
               <Icon icon={closeIcon} width="22px" height="22px" />
             </IconButton>
-            <Typography variant="body2" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginLeft: '20px' }}>
               {nameFile.split('?')[0]}
             </Typography>
           </Toolbar>

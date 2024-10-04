@@ -2,6 +2,5 @@
 .video-controls-show {
   padding-top: 30px;
   background: rgb(0,0,0);
-  background: linear-gradient(0deg, rgba(0,0,0,0.6432773793110995) 18%, rgba(0,0,0,0.5340336818321079) 34%, rgba(0,0,0,0.3827731776304272) 59%, rgba(0,0,0,0.19509810760241597) 92%);
-  transition: opacity 0.7s;
+  background: linear-gradient(0deg, rgba(0,0,0,0.6432773793110995) 18%, rgba(0,0,0,0.5340336818321079) 34%, rgba(0,0,0,0.3827731776304272) 59%, rgba(0, 0, 0, 0) 92%);
 }

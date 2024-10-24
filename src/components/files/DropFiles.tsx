@@ -16,6 +16,7 @@ export default function DropFiles() {
   return (
     <Box
       sx={{
+        width: '96%',
         padding: '1.1em',
         display: 'flex',
         alignItems: 'center',

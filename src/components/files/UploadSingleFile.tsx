@@ -20,7 +20,7 @@ export default function UploadFile() {
     <>
       <Button
         variant="contained"
-        startIcon={<Icon icon={addFileC} width="25px" height="25px" />}
+        startIcon={<Icon icon={addFileC} width="20px" height="20px" />}
         onClick={() => {
           inputRef.current?.click();
         }}

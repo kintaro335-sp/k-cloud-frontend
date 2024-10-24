@@ -42,7 +42,7 @@ export default function AddFolder() {
         onClick={clickOpen}
         ref={anchorRef}
         variant="contained"
-        startIcon={<Icon icon={folderAddIcon} width="25px" height="25px" />}
+        startIcon={<Icon icon={folderAddIcon} width="20px" height="20px" />}
       >
         Agregar Carpeta
       </Button>

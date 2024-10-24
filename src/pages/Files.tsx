@@ -92,7 +92,7 @@ export default function Files() {
       socketClient.removeListener('tree-update');
       socketClient.removeListener('file-change');
       socketClient.removeListener('file-update');
-    }
+    };
   }, [pathM.current]);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export default function Files() {
       <Card sx={{ margin: '2px' }}>
         <CardContent>
           <Grid container spacing={1}>
-            <Grid item xs={9}>
+            <Grid item lg={9} xs={12} sm={12}>
               <RouteBar
                 path={path}
                 onChangePath={(newPath) => {
@@ -117,13 +117,13 @@ export default function Files() {
                 }}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item lg={3} xs={12} sm={12}>
               <Stack spacing={1} direction="row">
                 <UploadSingleFile />
                 <AddFolder />
               </Stack>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item lg={12} xs={12} sm={12}>
               <DropFiles />
             </Grid>
           </Grid>

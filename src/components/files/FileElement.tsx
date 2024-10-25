@@ -32,7 +32,6 @@ interface FileInfoProps {
 }
 
 function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
   const cardHeaderRef = useRef<HTMLDivElement>(null);
   const fileNameContainer = useRef<HTMLDivElement>(null);
   const resizeObserver = useRef<ResizeObserver | null>(null);
@@ -54,7 +53,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
   }, []);
 
   return (
-    <Card ref={cardRef} className="cardfile">
+    <Card className="cardfile">
       <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {!sf && (
           <Box

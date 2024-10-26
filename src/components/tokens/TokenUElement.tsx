@@ -82,7 +82,7 @@ export default function TokenUElement({ token }: TokenUElementProps) {
         title={
           <Box component={Link} to={`/tokens/id/${id}`} sx={{ color: 'secondary.main' }}>
             <Tooltip title={<Typography>{name}</Typography>}>
-              <Box ref={fileNameContainer} sx={{ width: { xs: '12ex', md: '16ex', lg: '17ex' } }}>
+              <Box ref={fileNameContainer}>
                 <Box
                   sx={{
                     whiteSpace: 'nowrap',

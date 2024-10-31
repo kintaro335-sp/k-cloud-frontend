@@ -38,6 +38,7 @@ export default function LoginForm({ ...props }: CardProps) {
   const {
     register,
     handleSubmit,
+    resetField,
     formState: { isSubmitting, errors, touchedFields }
   } = useForm<FormValues>({
     defaultValues: {
@@ -57,6 +58,7 @@ export default function LoginForm({ ...props }: CardProps) {
         const { response } = error;
         switch (response?.status) {
           case 400:
+            resetField('password');
             enqueueSnackbar(response.data.message, { variant: 'error' });
             break;
           case 500:

@@ -31,11 +31,6 @@ export default function UserProfile() {
     setOpen(false);
   };
 
-  const handleGotoFiles = () => {
-    clickClose();
-    navigate('/files');
-  };
-
   const handleGotoStats = () => {
     clickClose();
     navigate('/stats');
@@ -80,9 +75,7 @@ export default function UserProfile() {
       </Stack>
 
       <Menu open={open} onClose={clickClose} anchorEl={anchorRef.current}>
-        <MenuItem onClick={handleGotoFiles}>Tus Archivos</MenuItem>
         <MenuItem onClick={handleGotoStats}>Estadisticas</MenuItem>
-        <MenuItem onClick={handleGotoTokens}>Tokens</MenuItem>
         {isAdmin && <MenuItem onClick={handleGoAdministration}>Administración</MenuItem>}
         <MenuItem onClick={handleGoApiKeys}>Api Keys</MenuItem>
         <MenuItem onClick={handleChangePassword}>Cambiar Contraseña</MenuItem>

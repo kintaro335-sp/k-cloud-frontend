@@ -9,8 +9,6 @@ import { RouteBar } from '../components/files/routebar';
 import { Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import FilesList from '../components/files/FilesList';
-import AddFolder from '../components/files/AddFolder';
-import UploadSingleFile from '../components/files/UploadSingleFile';
 import { useSnackbar } from 'notistack';
 import DropFiles from '../components/files/DropFiles';
 import { ContextualMenuSelect } from '../components/files/menuselect';
@@ -109,19 +107,13 @@ export default function Files() {
       <Card sx={{ margin: '2px' }}>
         <CardContent>
           <Grid container spacing={1}>
-            <Grid item lg={9} xs={12} sm={12}>
+            <Grid item lg={12} xs={12} sm={12}>
               <RouteBar
                 path={path}
                 onChangePath={(newPath) => {
                   setPath(newPath);
                 }}
               />
-            </Grid>
-            <Grid item lg={3} xs={12} sm={12}>
-              <Stack spacing={1} direction="row">
-                <UploadSingleFile />
-                <AddFolder />
-              </Stack>
             </Grid>
             <Grid item lg={12} xs={12} sm={12}>
               <DropFiles />

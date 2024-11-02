@@ -55,7 +55,7 @@ export default function Bar({ children }: BarProps) {
         <Grid item xs={2} sx={{ display: { xs: 'none', md: showMenuL ? 'block' : 'none' }, height: '100%' }}>
           <LateralMenu />
         </Grid>
-        <Grid item xs={showMenuL && bk ? 10 : 12} sx={{ height: '100%' }}>
+        <Grid item xs={showMenuL && bk ? 10 : 12} sx={{ height: '100%', padding: showMenuL && bk ? undefined : '0px' }}>
           {children}
         </Grid>
       </Grid>

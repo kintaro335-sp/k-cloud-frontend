@@ -6,7 +6,7 @@
 
 import axios from 'axios';
 import { apiUrl } from '../config';
-import { FileI, FilePTempResponse, Folder, UsedSpaceType } from '../@types/files';
+import { FileI, FilePTempResponse, Folder, UsedSpaceType, IndexList } from '../@types/files';
 
 const connFiles = axios.create({
   baseURL: `${apiUrl}/files`
@@ -218,6 +218,11 @@ export async function renameFile(url: string, newName: string, token: string) {
 
 export async function getStatsFiles(token: string): Promise<UsedSpaceType[]> {
   const result = await connFiles.get(`stats/type?t=${token}`);
+  return result.data;
+}
+
+export async function searchFiles(search:string, token: string): Promise<IndexList> {
+  const result = await connFiles.get(`index?s=${search}&t=${token}`);
   return result.data;
 }
 

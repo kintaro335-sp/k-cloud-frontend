@@ -13,8 +13,8 @@ import { useSelector } from '../../redux/store';
 export default function TokensList() {
   const { tokens } = useSelector((state) => state.sharedfiles);
   return (
-    <Box sx={{ width: '100vw' }}>
-      <Grid container spacing={2} sx={{ width: '100%' }}>
+    <Box sx={{ height: 'calc(100vh - 20px)', overflowY: 'scroll', overflowX: 'hidden' }}>
+      <Grid container spacing={1}>
         {tokens.map((t, i) => (
           <Grid key={i} item xs={12} md={4} lg={3}>
             <TokenElement token={t} />

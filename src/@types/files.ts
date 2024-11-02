@@ -80,3 +80,14 @@ export interface UsedSpaceType {
   used: number;
 }
 
+export interface IndexElement {
+  lowercase_name: string;
+  name: string;
+  path: string;
+  size: number;
+  type: 'file' | 'folder';
+  mime_type: string;
+}
+
+export type IndexList = IndexElement[];
+

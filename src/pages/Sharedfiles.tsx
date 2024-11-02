@@ -55,8 +55,8 @@ export default function ShareFiles() {
 
 
   return (
-    <Box>
-      <Grid container spacing={3}>
+    <Box sx={{ width: '100%', padding: 0, margin: 0 }}>
+      <Grid container spacing={3} sx={{ width: '100vw' }}>
         <Grid item xs={12}>
           <TokensList />
         </Grid>

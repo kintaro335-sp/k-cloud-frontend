@@ -75,7 +75,7 @@ export default function FilesList({ loading }: FilesListProps) {
         <Loading />
       ) : (
         <Box
-          sx={{ width: '100%', height: '68%', marginTop: '1ex', overflowY: 'scroll' }}
+          sx={{ width: '100%', height: '77%', marginTop: '1ex', overflowY: 'scroll' }}
           ref={scrollElement}
           onScroll={(e) => {
             const { scrollTop, scrollHeight } = e.currentTarget;

@@ -12,12 +12,14 @@ interface SharedfilesState {
   pages: number;
   page: number;
   tokens: TokenElement[];
+  loading: boolean;
 }
 
 const initialState: SharedfilesState = {
   page: 1,
   pages: 1,
-  tokens: []
+  tokens: [],
+  loading: false
 };
 
 const slice = createSlice({
@@ -32,6 +34,9 @@ const slice = createSlice({
     },
     setTokens(state, action) {
       state.tokens = action.payload as TokenElement[];
+    },
+    setLoading(state, action) {
+      state.loading = action.payload as boolean;
     }
   }
 });
@@ -57,6 +62,14 @@ export function setPages(pages: number) {
 export function setTokens(tokens: TokenElement[]) {
   try {
     dispatch(slice.actions.setTokens(tokens));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export function setLoading(loading: boolean) {
+  try {
+    dispatch(slice.actions.setLoading(loading));
   } catch (err) {
     console.log(err);
   }

@@ -27,7 +27,7 @@ export default function TokensUList() {
   };
 
   return (
-    <Box sx={{ width: '100vw' }}>
+    <Box sx={{ width: 'calc(100vw - 10px)' }}>
       <Box sx={{ marginBottom: '24px', height: '37px' }}>
         {files.length !== 0 && (
           <Stack spacing={1} direction="row">

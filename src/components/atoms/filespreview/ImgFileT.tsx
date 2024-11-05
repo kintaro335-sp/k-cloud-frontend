@@ -29,8 +29,7 @@ export default function ImgFile({ url, context, index }: ImgFileProps) {
         height: { xs: '310px', sm: '290px', md: '250px', lg: '220px' }
       }}
     >
-      <Box
-        component="img"
+      <img
         className="imgfilepreview"
         ref={imgRef}
         onMouseMoveCapture={(event) => {
@@ -54,6 +53,7 @@ export default function ImgFile({ url, context, index }: ImgFileProps) {
           imgRef.current?.style.setProperty('object-position', '50% 50%');
         }}
         src={url}
+        loading='lazy'
         alt={url}
         onClick={() => {
           if (context === 'sharedFile' || context === 'tokenView' || context === 'default') {
@@ -67,7 +67,7 @@ export default function ImgFile({ url, context, index }: ImgFileProps) {
           }
         }}
         width="100%"
-        sx={{
+        style={{
           width: '100%',
           height: '100%',
           objectFit: 'cover',

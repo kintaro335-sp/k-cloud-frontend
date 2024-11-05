@@ -61,7 +61,7 @@ export default function ShareFiles() {
     <Box sx={{ width: '100%', padding: 0, margin: 0 }}>
       <Grid container spacing={3} sx={{ width: '100vw' }}>
         <Grid item xs={12}>
-          {loading ? <Loading /> : <TokensList />}
+          {loading ? <Loading width="99vw" height="calc(100vh - 130px)"/> : <TokensList />}
         </Grid>
         <Grid item xs={12}>
           <PaginationT

@@ -72,7 +72,7 @@ export default function FilesList({ loading }: FilesListProps) {
   return (
     <>
       {loading ? (
-        <Loading />
+        <Loading width="100%" height="77%" />
       ) : (
         <Box
           sx={{ width: '100%', height: '77%', marginTop: '1ex', overflowY: 'scroll' }}

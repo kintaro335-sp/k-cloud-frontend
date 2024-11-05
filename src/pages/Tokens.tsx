@@ -57,7 +57,7 @@ export default function Tokens() {
     <Box sx={{ width: '100%', margin: 0, padding: 0 }}>
       <Grid container spacing={3} sx={{ width: '100%' }}>
         <Grid item xs={12}>
-          {loading ? <Loading  /> : <TokensUList />}
+          {loading ? <Loading width="calc(100vw - 10px)" height="calc(100vh - 200px)"  /> : <TokensUList />}
         </Grid>
         <Grid item xs={12}>
           <PaginationT

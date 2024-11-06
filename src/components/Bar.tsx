@@ -38,7 +38,7 @@ export default function Bar({ children }: BarProps) {
               Cloud
             </Typography>
             {isAuthenticated && <UserProfile />}
-            <Stack spacing={2} direction="row" sx={{ display: 'flex', float: 'right', overflowX: 'scroll', marginRight: '5px' }}>
+            <Stack spacing={2} direction="row" sx={{ display: 'flex', float: 'right', overflowX: 'auto', marginRight: '5px' }}>
               {!isAuthenticated && pathname !== '/login' && <LinkBar to="/login">Login</LinkBar>}
               {isAuthenticated && pathname !== '/files' && <LinkBar to="/files">Archivos</LinkBar>}
               {isAuthenticated && pathname === '/files' && <FilesSubMenu />}

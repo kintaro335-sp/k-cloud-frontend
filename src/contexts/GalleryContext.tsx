@@ -185,7 +185,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
                 <Icon icon={iconLeft} width="25px" height="25px" />
               </IconButton>
             )}
-            <img src={urlFinal} height="auto" width="100%" />
+            <img src={urlFinal} height="auto" width="100%" loading='lazy' />
             {RawURL === '' && (
               <IconButton onClick={() => changeImage('next')}>
                 <Icon icon={iconRight} width="25px" height="25px" />

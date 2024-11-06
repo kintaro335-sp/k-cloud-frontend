@@ -186,13 +186,20 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
       onMouseMove={() => {
         setHideTimeout();
       }}
+      onMouseOut={() => {
+        setHideTimeout();
+      }}
     >
       <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', paddingTop: videoContainerPadding }}>
         <video
           ref={videoRef}
           style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%' }}
           src={url}
-          onClick={togglePlay}
+          onClick={() => {
+            setHideTimeout();
+            togglePlay();
+          }}
+          onDoubleClick={toggleFullscreen}
           onKeyDown={(event) => {
             if (event.code === 'Space') {
               togglePlay();
@@ -250,23 +257,23 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton onClick={() => skip(-10)} size="small">
-                  <Icon icon={fastRewindIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
+                  <Icon icon={fastRewindIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                 </IconButton>
                 <IconButton onClick={togglePlay} size="small">
                   {isPlaying ? (
-                    <Icon icon={pauseIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
+                    <Icon icon={pauseIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                   ) : (
-                    <Icon icon={playArrow} width="25px" height="25px" color={theme.palette.text.secondary} />
+                    <Icon icon={playArrow} width="20px" height="20px" color={theme.palette.text.secondary} />
                   )}
                 </IconButton>
                 <IconButton onClick={() => skip(10)} size="small">
-                  <Icon icon={fastforwardIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
+                  <Icon icon={fastforwardIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                 </IconButton>
                 <IconButton onClick={toggleMute} size="small">
                   {isMuted ? (
-                    <Icon icon={volumeOff} width="25px" height="25px" color={theme.palette.text.secondary} />
+                    <Icon icon={volumeOff} width="20px" height="20px" color={theme.palette.text.secondary} />
                   ) : (
-                    <Icon icon={volumeUp} width="25px" height="25px" color={theme.palette.text.secondary} />
+                    <Icon icon={volumeUp} width="20px" height="20px" color={theme.palette.text.secondary} />
                   )}
                 </IconButton>
                 <input
@@ -276,16 +283,16 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                   step="0.01"
                   value={isMuted ? 0 : volume}
                   onChange={handleVolumeChange}
-                  style={{ width: '100px', marginLeft: '8px', verticalAlign: 'middle' }}
+                  style={{ width: '75px', marginLeft: '8px', verticalAlign: 'middle' }}
                 />
                 <Typography variant="body2">
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </Typography>
                 <IconButton onClick={toggleFullscreen} size="small">
                   {isFullscreen ? (
-                    <Icon icon={fullscreenExitIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
+                    <Icon icon={fullscreenExitIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                   ) : (
-                    <Icon icon={fullscreenIcon} width="25px" height="25px" color={theme.palette.text.secondary} />
+                    <Icon icon={fullscreenIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                   )}
                 </IconButton>
               </Box>

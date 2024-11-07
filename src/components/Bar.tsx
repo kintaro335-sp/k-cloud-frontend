@@ -8,6 +8,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { AppBar, Container, Toolbar, Typography, Box, Stack, Grid, useMediaQuery } from '@mui/material';
 import { UserProfile, LateralMenu, Uploads, LinkBar } from './bar';
+import FilesSubMenu from './files/FilesSubMenu';
 import useAuth from '../hooks/useAuth';
 
 interface BarProps {
@@ -37,8 +38,12 @@ export default function Bar({ children }: BarProps) {
               Cloud
             </Typography>
             {isAuthenticated && <UserProfile />}
-            <Stack spacing={2} direction="row" sx={{ display: 'flex', float: 'right' }}>
+            <Stack spacing={2} direction="row" sx={{ display: 'flex', float: 'right', overflowX: 'auto', marginRight: '5px' }}>
               {!isAuthenticated && pathname !== '/login' && <LinkBar to="/login">Login</LinkBar>}
+              {isAuthenticated && pathname !== '/files' && <LinkBar to="/files">Archivos</LinkBar>}
+              {isAuthenticated && pathname === '/files' && <FilesSubMenu />}
+              {isAuthenticated && pathname !== '/search' && <LinkBar to="/search">Buscar</LinkBar>}
+              {isAuthenticated && pathname !== '/tokens' && <LinkBar to="/tokens">Tokens</LinkBar>}
               {pathname !== '/shared-files' && <LinkBar to="/shared-files">Shared Files</LinkBar>}
               {mobile && isAuthenticated && <Uploads />}
             </Stack>
@@ -50,7 +55,7 @@ export default function Bar({ children }: BarProps) {
         <Grid item xs={2} sx={{ display: { xs: 'none', md: showMenuL ? 'block' : 'none' }, height: '100%' }}>
           <LateralMenu />
         </Grid>
-        <Grid item xs={showMenuL && bk ? 10 : 12} sx={{ height: '100%' }}>
+        <Grid item xs={showMenuL && bk ? 10 : 12} sx={{ height: '100%', padding: showMenuL && bk ? undefined : '0px' }}>
           {children}
         </Grid>
       </Grid>

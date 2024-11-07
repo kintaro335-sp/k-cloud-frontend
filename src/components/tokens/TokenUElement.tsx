@@ -4,6 +4,7 @@
  * MIT Licensed
  */
 
+import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // componenets
 import { Card, Box, CardContent, Typography, CardHeader, Tooltip, Stack, Checkbox, useMediaQuery } from '@mui/material';
@@ -39,6 +40,24 @@ export default function TokenUElement({ token }: TokenUElementProps) {
   const selected = files.includes(token.id);
   const theme = useTheme();
   const ismobile = useMediaQuery(theme.breakpoints.down('md'));
+  const cardHeaderRef = useRef<HTMLDivElement>(null);
+  const fileNameContainer = useRef<HTMLDivElement>(null);
+  const resizeObserver = useRef<ResizeObserver | null>(null);
+
+  useEffect(() => {
+    
+    resizeObserver.current = new ResizeObserver((entries) => {
+      if (!cardHeaderRef.current || !fileNameContainer.current) return;
+      fileNameContainer.current.style.setProperty('width', `${entries[0].contentRect.width - 35}px`);
+    });
+
+    resizeObserver.current.observe(cardHeaderRef.current as Element);
+    return () => {
+      resizeObserver.current?.disconnect();
+    }
+  }, []);
+
+
 
   return (
     <Card className="cardfile">
@@ -59,10 +78,11 @@ export default function TokenUElement({ token }: TokenUElementProps) {
         </Box>
       </CardContent>
       <CardHeader
+        ref={cardHeaderRef}
         title={
           <Box component={Link} to={`/tokens/id/${id}`} sx={{ color: 'secondary.main' }}>
             <Tooltip title={<Typography>{name}</Typography>}>
-              <Box sx={{ width: { xs: '12ex', md: '16ex', lg: '17ex' } }}>
+              <Box ref={fileNameContainer}>
                 <Box
                   sx={{
                     whiteSpace: 'nowrap',

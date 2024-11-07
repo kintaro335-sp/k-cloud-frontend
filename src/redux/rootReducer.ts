@@ -20,6 +20,7 @@ import sharedfileReducer from './slices/sharedfile';
 import logsReducer from './slices/logs';
 import apiReducer from './slices/api';
 import userstatsReducer from './slices/userStats';
+import searchReducer from './slices/search';
 
 const rootPersistConfig = {
   key: 'root',
@@ -47,7 +48,8 @@ const rootReducer = combineReducers({
   tokenview: tokenviewReducer,
   logs: logsReducer,
   api: apiReducer,
-  userstats: userstatsReducer
+  userstats: userstatsReducer,
+  search: searchReducer
 });
 
 export { rootPersistConfig, rootReducer };

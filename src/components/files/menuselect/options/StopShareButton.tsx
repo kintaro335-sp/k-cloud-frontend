@@ -20,13 +20,13 @@ export default function StopShareButton() {
   const { enqueueSnackbar } = useSnackbar();
 
   const onClickStopShare = () => {
-    enqueueSnackbar(`Compartiendo ${files.length} archivos`, { variant: 'success' });
+    enqueueSnackbar(`dejando de compartir ${files.length} archivos`, { variant: 'success' });
     StopShareFiles(path, files, access_token).then((result) => {
       let count = 0;
       result.forEach((n) => {
         count += n;
       });
-      enqueueSnackbar(`Compartidos ${count} de ${result.length} Archivos`, { variant: 'success' });
+      enqueueSnackbar(`dejado de Compartir ${count} de ${result.length} Archivos`, { variant: 'success' });
     });
     clearSelect();
   };

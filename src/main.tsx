@@ -19,6 +19,10 @@ import Systemcontext from './contexts/SystemContext';
 import FileSelectContext from './contexts/FileSelectContext';
 import ThemeP from './theme/ThemeP';
 
+document.addEventListener("DOMContentLoaded", () => {
+  console.log('DOM Content Loaded');
+})
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <SnackbarProvider maxSnack={3}>

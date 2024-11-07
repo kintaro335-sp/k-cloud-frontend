@@ -67,7 +67,7 @@ export default function FolderExplorer() {
         </Stack>
       </Box>
       <Box
-        sx={{ height: '74vh', overflowY: 'scroll' }}
+        sx={{ height: 'calc(100vh - 220px)', overflowY: 'scroll' }}
         onScroll={(e) => {
           const { scrollTop, scrollHeight } = e.currentTarget;
           if (scrollTop / scrollHeight >= 0.82) {

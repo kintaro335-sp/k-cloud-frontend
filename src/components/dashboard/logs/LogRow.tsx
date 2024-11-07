@@ -20,7 +20,7 @@ export default function LogRow({ info }: LogRowProps) {
       <TableCell>{fullDateFormat(date)}</TableCell>
       <TableCell>{user}</TableCell>
       <TableCell>{tokenid}</TableCell>
-      <TableCell>{path}</TableCell>
+      <TableCell sx={{ overflowX: 'scroll', whiteSpace: 'nowrap' }}>{path}</TableCell>
       <TableCell>{action}</TableCell>
       <TableCell>{reason}</TableCell>
       <TableCell>{status}</TableCell>

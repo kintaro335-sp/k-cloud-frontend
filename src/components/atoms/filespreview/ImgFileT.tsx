@@ -3,7 +3,7 @@
  * Copyright(c) 2022 Kintaro Ponce
  * MIT Licensed
  */
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import useGallery from '../../../hooks/useGallery';
 import { explorerContext } from '../../../@types/general';
@@ -20,12 +20,19 @@ export default function ImgFile({ url, context, index }: ImgFileProps) {
 
   const { openImage } = useGallery();
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '255px', height: '225px' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: { xs: '310px', sm: '290px', md: '250px', lg: '220px' }
+      }}
+    >
       <img
-        className='imgfilepreview'
+        className="imgfilepreview"
         ref={imgRef}
         onMouseMoveCapture={(event) => {
-
           const width = imgRef.current?.width as number;
           const height = imgRef.current?.height as number;
 
@@ -36,7 +43,7 @@ export default function ImgFile({ url, context, index }: ImgFileProps) {
 
           const decimalX = (mousePositionX - (elementPosition?.x || 1)) / width;
           const decimalY = (mousePositionY - (elementPosition?.y || 1)) / height;
-          
+
           const percentX = decimalX * 100;
           const percentY = decimalY * 100;
 
@@ -46,9 +53,8 @@ export default function ImgFile({ url, context, index }: ImgFileProps) {
           imgRef.current?.style.setProperty('object-position', '50% 50%');
         }}
         src={url}
+        loading='lazy'
         alt={url}
-        width="250px"
-        height="220px"
         onClick={() => {
           if (context === 'sharedFile' || context === 'tokenView' || context === 'default') {
             if (index === undefined) {
@@ -60,7 +66,14 @@ export default function ImgFile({ url, context, index }: ImgFileProps) {
             openImage(url, context);
           }
         }}
-        style={{ objectFit: 'cover', objectPosition: '50% 50%' }}
+        width="100%"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: '50% 50%',
+          cursor: 'pointer'
+        }}
       />
     </Box>
   );

@@ -8,9 +8,10 @@ import { useEffect, useRef, useCallback } from 'react';
 import { Box, Grid, Stack } from '@mui/material';
 import { TokensList } from '../components/sharedfiles';
 import { PaginationT } from '../components/atoms';
+import Loading from './Loading';
 // redux
 import { useSelector } from '../redux/store';
-import { setPages, setTokens, setPage } from '../redux/slices/sharedfiles';
+import { setPages, setTokens, setPage, setLoading } from '../redux/slices/sharedfiles';
 // hooks
 import useAuth from '../hooks/useAuth';
 // api
@@ -20,7 +21,7 @@ import { getTokensList, getPagesTokens } from '../api/sharedfiles';
 export default function ShareFiles() {
   const { socketClient } = useAuth();
   const { access_token } = useSelector((state) => state.session);
-  const { page, pages } = useSelector((state) => state.sharedfiles);
+  const { page, pages, loading } = useSelector((state) => state.sharedfiles);
 
 
   const PagesEffect = useCallback(async () => {
@@ -34,8 +35,10 @@ export default function ShareFiles() {
 
 
   const TokensEffect = useCallback(async () => {
+    setLoading(true);
     const resp = await getTokensList(page);
     setTokens(resp);
+    setLoading(false);
   }, [page]);
 
   useEffect(() => {
@@ -55,10 +58,10 @@ export default function ShareFiles() {
 
 
   return (
-    <Box>
-      <Grid container spacing={3}>
+    <Box sx={{ width: '100%', padding: 0, margin: 0 }}>
+      <Grid container spacing={3} sx={{ width: '100vw' }}>
         <Grid item xs={12}>
-          <TokensList />
+          {loading ? <Loading width="99vw" height="calc(100vh - 130px)"/> : <TokensList />}
         </Grid>
         <Grid item xs={12}>
           <PaginationT

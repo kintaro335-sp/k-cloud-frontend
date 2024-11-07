@@ -3,7 +3,7 @@
  * Copyright(c) 2022 Kintaro Ponce
  * MIT Licensed
  */
-
+import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, Box, Tooltip, Typography, Stack, Checkbox } from '@mui/material';
 import { Folder } from './filetypes';
@@ -32,9 +32,26 @@ interface FileInfoProps {
 }
 
 function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
+  const cardHeaderRef = useRef<HTMLDivElement>(null);
+  const fileNameContainer = useRef<HTMLDivElement>(null);
+  const resizeObserver = useRef<ResizeObserver | null>(null);
   const { id } = useParams();
   const { files, select, deselect } = useFileSelect();
   const selected = files.includes(file.name);
+
+  useEffect(() => {
+    
+    resizeObserver.current = new ResizeObserver((entries) => {
+      if (!cardHeaderRef.current || !fileNameContainer.current) return;
+      fileNameContainer.current.style.setProperty('width', `${entries[0].contentRect.width - 35}px`);
+    });
+
+    resizeObserver.current.observe(cardHeaderRef.current as Element);
+    return () => {
+      resizeObserver.current?.disconnect();
+    }
+  }, []);
+
   return (
     <Card className="cardfile">
       <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -54,9 +71,10 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         {children}
       </CardContent>
       <CardHeader
+        ref={cardHeaderRef}
         title={
           <Tooltip title={<Typography variant="body2">{file.name}</Typography>}>
-            <Box sx={{ width: { xs: '12ex', md: '15ex', lg: '17ex' } }}>
+            <Box ref={fileNameContainer} sx={{  }}>
               <Box
                 sx={{
                   whiteSpace: 'nowrap',

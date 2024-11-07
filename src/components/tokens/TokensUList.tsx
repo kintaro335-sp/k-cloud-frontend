@@ -27,7 +27,7 @@ export default function TokensUList() {
   };
 
   return (
-    <Box sx={{ width: '100vw' }}>
+    <Box sx={{ width: 'calc(100vw - 10px)' }}>
       <Box sx={{ marginBottom: '24px', height: '37px' }}>
         {files.length !== 0 && (
           <Stack spacing={1} direction="row">
@@ -44,7 +44,7 @@ export default function TokensUList() {
           </Stack>
         )}
       </Box>
-      <Grid container spacing={2} sx={{ width: '100%', overflowY: 'scroll', height: '78vh' }}>
+      <Grid container spacing={2} sx={{ width: '100%', overflowY: 'scroll', height: 'calc(100vh - 174px)' }}>
         {tokens.map((t, i) => (
           <Grid key={i} item xs={12} md={4} lg={3}>
             <TokenUElement token={t} />

@@ -16,19 +16,21 @@ export default function TokenIcon({
   mime_type,
   url,
   context,
-  arrayIndex
+  arrayIndex,
+  onClickFolder
 }: {
   type: FileType;
   mime_type: string;
   url: string;
   context: explorerContext;
   arrayIndex?: number;
+  onClickFolder?: VoidFunction;
 }) {
   const name = url.split('/').pop() || '';
 
   if (type === 'folder') {
     return (
-      <Box sx={{ display: 'inline-block' }}>
+      <Box sx={{ display: 'inline-block', cursor: onClickFolder ? 'pointer': undefined }} onClick={onClickFolder} >
         <Icon icon={FolderIcon} width="250px" height="250px" />
       </Box>
     );

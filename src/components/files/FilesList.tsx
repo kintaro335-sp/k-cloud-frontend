@@ -23,7 +23,7 @@ export default function FilesList({ loading }: FilesListProps) {
   const { files, path } = useSelector((state) => state.session);
   const scrollElement = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const scrollLimit = isMobile ? 0.978 : 0.945;
+  const scrollLimit = isMobile ? 0.978 : 0.930;
   const [start, setStart] = useState<number>(0);
   const [showQ, setShowQ] = useState<number>(48);
   const handleShowMore = () => {
@@ -40,7 +40,7 @@ export default function FilesList({ loading }: FilesListProps) {
       if (start === 0) return;
       setStart((st) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number;
-        const multiplier = isMobile ? 0.975 : 0.93;
+        const multiplier = isMobile ? 0.975 : 0.925;
         scrollElement.current?.scroll({ top: scrollHeight * multiplier });
         const newVal = st - 96;
         if (newVal < 0) {
@@ -52,11 +52,15 @@ export default function FilesList({ loading }: FilesListProps) {
     if (direction === 'go' && showQ >= 96) {
       setStart((st) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number;
-        scrollElement.current?.scroll({ top: scrollHeight * 0.001 });
+        const isLastPage = st + 96 >= files.length;
         const newVal = st + 96;
         if (newVal > files.length - 96) {
+          if (!isLastPage) {
+            scrollElement.current?.scroll({ top: scrollHeight * 0.0001 });
+          }
           return files.length - 96;
         }
+        scrollElement.current?.scroll({ top: scrollHeight * 0.0001 });
         return newVal;
       });
     }
@@ -98,7 +102,7 @@ export default function FilesList({ loading }: FilesListProps) {
               </Grid>
             ))}
             <Grid item xs={12}>
-              <Box sx={{ padding: isMobile ? '200px' : '100px' }} />
+              <Box sx={{ padding: isMobile ? '230px' : '130px' }} />
             </Grid>
           </Grid>
         </Box>

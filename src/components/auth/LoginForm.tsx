@@ -11,6 +11,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 // redux
 import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
@@ -51,7 +53,7 @@ export default function LoginForm({ ...props }: CardProps) {
     try {
       const { username, password } = data;
       const { access_token } = await loginApi(username, password);
-      enqueueSnackbar('Login success', { variant: 'success' });
+      enqueueSnackbar(t('pages.login.msg_login'), { variant: 'success' });
       dispatch(setAccessToken(access_token));
     } catch (error) {
       if (isAxiosError(error)) {
@@ -59,13 +61,13 @@ export default function LoginForm({ ...props }: CardProps) {
         switch (response?.status) {
           case 400:
             resetField('password');
-            enqueueSnackbar(response.data.message, { variant: 'error' });
+            enqueueSnackbar(t('pages.login.msg_error_login'), { variant: 'error' });
             break;
           case 500:
-            enqueueSnackbar('Error interno del servidor', { variant: 'error' });
+            enqueueSnackbar(t('snackbar.error_server'), { variant: 'error' });
             break;
           default:
-            enqueueSnackbar('ha ocurrido un error', { variant: 'error' });
+            enqueueSnackbar(t('snackbar.error_unknown'), { variant: 'error' });
             break;
         }
       }
@@ -81,7 +83,7 @@ export default function LoginForm({ ...props }: CardProps) {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Username"
+                label={<Trans i18nKey="pages.login.username">Username</Trans>}
                 {...register('username')}
                 error={Boolean(errors.username) || touchedFields.username}
                 // @ts-ignore
@@ -91,7 +93,7 @@ export default function LoginForm({ ...props }: CardProps) {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Password"
+                label={<Trans i18nKey="pages.login.password">Password</Trans>}
                 type="password"
                 {...register('password')}
                 error={Boolean(errors.password) || touchedFields.password}
@@ -101,7 +103,7 @@ export default function LoginForm({ ...props }: CardProps) {
             </Grid>
             <Grid item xs={12}>
               <LoadingButton type="submit" variant="contained" color="primary" fullWidth loading={isSubmitting}>
-                Login
+                <Trans i18nKey="pages.login.btn_login">Login</Trans>
               </LoadingButton>
             </Grid>
           </Grid>

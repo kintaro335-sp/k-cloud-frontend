@@ -1,0 +1,51 @@
+{
+  "pages": {
+    "404": {
+      "message": "Page not found",
+      "btn_go": "Go to Home"
+    },
+    "login": {
+      "username": "Username",
+      "password": "Password",
+      "btn_login": "Login",
+      "msg_login": "Logged in successfully",
+      "msg_error_login": "Incorrect username or password"
+    },
+    "search": {
+      "btn_search": "Search",
+      "placeholder_search": "Search...",
+      "tooltip_go_location": "Go to location"
+    },
+    "files": {
+      "drop_files": "Drop files here to upload"
+    }
+  },
+  "ui": {
+    "bar": {
+      "login": "Login",
+      "files": "Files",
+      "search": "Search",
+      "tokens": "Tokens", 
+      "shared_files": "Shared Files",
+      "btn_upload": "Upload File",
+      "btn_new_folder": "New Folder"
+    },
+    "create_folder": {
+      "title": "New Folder",
+      "label": "Folder Name",
+      "btn_cancel": "Cancel",
+      "btn_create": "Create"
+    },
+    "btn_download": {
+      "msg_download": "Download",
+      "msg_download_zip": "Download as Zip"
+    }
+  },
+  "snackbar": {
+    "folder_created": "Folder created",
+    "error_invalid_name_folder": "Invalid folder name",
+    "error_folder_exists": "Folder already exists",
+    "error_server": "Server error",
+    "error_unknown": "Unknown error occurred"
+  }
+}

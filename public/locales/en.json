@@ -17,7 +17,22 @@
       "tooltip_go_location": "Go to location"
     },
     "files": {
-      "drop_files": "Drop files here to upload"
+      "drop_files": "Drop files here to upload",
+      "femenu": {
+        "download": "Download",
+        "download_zip": "Download as Zip",
+        "share": "Share",
+        "tokens": "Tokens",
+        "delete": "Delete",
+        "msg_confirm_delete": "Are you sure you want to delete this file:",
+        "rename": "Rename",
+        "move": "Move"
+      },
+      "tokens_menu": {
+        "tokens_of": "Tokens of",
+        "new_token": "New Token",
+        "delete_token": "Delete Token"
+      }
     }
   },
   "ui": {
@@ -39,6 +54,15 @@
     "btn_download": {
       "msg_download": "Download",
       "msg_download_zip": "Download as Zip"
+    },
+    "rename_form": {
+      "btn_rename": "Rename",
+      "label_new_name": "New Name",
+      "msg_rename_success": "file renamed successfully"
+    },
+    "move_menu": {
+      "destination": "Destination:/",
+      "move_here": "Move here"
     }
   },
   "snackbar": {

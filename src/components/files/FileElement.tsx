@@ -17,7 +17,7 @@ import useFileSelect from '../../hooks/useFileSelect';
 import { apiUrl } from '../../config';
 
 // redux
-import { useSelector, useDispatch } from '../../redux/store';
+import { useSelector } from '../../redux/store';
 import { setPath as setPathSession } from '../../redux/slices/session';
 import { setPath as setPathSF } from '../../redux/slices/sharedfile';
 //css
@@ -91,7 +91,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         }
         subheader={
           <Box>
-            {file.type} {!sf && <>T:{file.tokens}</>} {bytesFormat(file.size)}
+            {!sf && <>T:{file.tokens}</>} {bytesFormat(file.size)}
           </Box>
         }
         action={
@@ -118,7 +118,6 @@ interface FileElementProps {
 export default function FileElement({ file, sf = false, arrayIndex }: FileElementProps) {
   const { name, size, type, mime_type, extension, tokens } = file;
   const { id } = useParams();
-  const dispatch = useDispatch();
   const session = useSelector((state) => state.session);
   const sharedfile = useSelector((state) => state.sharedfile);
   const pathSelected = sf ? sharedfile.path : session.path;

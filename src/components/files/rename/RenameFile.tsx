@@ -8,6 +8,8 @@ import { useState } from 'react';
 // mui
 import { MenuItem, Dialog, DialogContent, Grid, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 // hooks
 import { useSnackbar } from 'notistack';
 // icons
@@ -66,19 +68,19 @@ export default function RenameFile({ fileName, url, onClose }: RenameFileProps) 
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     await renameFile(url, data.newName, access_token);
-    enqueueSnackbar('Archivo renombrado', { variant: 'success' });
+    enqueueSnackbar(t('ui.rename_form.msg_rename_success'), { variant: 'success' });
     clickClose();
   };
 
   return (
     <>
-      <MenuItem onClick={clickOpen}><Icon icon={renameIcon} width="25px" height="25px" /> Renombrar</MenuItem>
+      <MenuItem onClick={clickOpen}><Icon icon={renameIcon} width="25px" height="25px" /><Trans i18nKey="pages.files.femenu.rename">Renombrar</Trans></MenuItem>
       <Dialog open={open} onClose={clickClose}>
         <DialogContent>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete='off'>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField {...register('newName')} fullWidth label="Nombre" />
+                <TextField {...register('newName')} fullWidth label={t('ui.rename_form.label_new_name')} />
               </Grid>
               <Grid item xs={12}>
                 <LoadingButton
@@ -89,7 +91,7 @@ export default function RenameFile({ fileName, url, onClose }: RenameFileProps) 
                   loading={isSubmitting}
                   fullWidth
                 >
-                  <Icon icon={renameIcon} width="25px" height="25px" /> Renombrar
+                  <Icon icon={renameIcon} width="25px" height="25px" /><Trans i18nKey="ui.rename_form.btn_rename">Renombrar</Trans>
                 </LoadingButton>
               </Grid>
             </Grid>

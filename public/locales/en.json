@@ -22,6 +22,7 @@
         "download": "Download",
         "download_zip": "Download as Zip",
         "share": "Share",
+        "msg_shared": "Shared",
         "tokens": "Tokens",
         "delete": "Delete",
         "msg_confirm_delete": "Are you sure you want to delete this file:",

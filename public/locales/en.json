@@ -34,6 +34,41 @@
         "new_token": "New Token",
         "delete_token": "Delete Token"
       }
+    },
+    "userstats":{
+      "title": "Space used by you"
+    },
+    "admin": {
+        "users": "Users",
+        "stats": "Stats",
+        "logs": "Logs",
+        "system": "System",
+        "about": "About"
+      },
+    "admin_users": {
+      "title": "User Management",
+      "btn_new_user": "New User",
+      "title_user_list": "User List",
+      "label_username": "Username",
+      "label_admin": "Admin",
+      "label_is_owner": "(Owner)",
+      "label_is_admin": "yes",
+      "label_is_not_admin": "no",
+      "form_new_user": {
+        "title": "New User",
+        "btn_open_form": "New User",
+        "btn_create": "Create",
+        "label_username": "Username",
+        "label_password": "Password"
+      },
+      "menu_user": {
+        "label_admin": "Administrator",
+        "label_set_owner": "Stablish as Owner",
+        "set_passwd_title": "Change Password",
+        "label_password": "Password",
+        "label_confirm_password": "Confirm Password",
+        "btn_set_passwd": "Set Password"
+      }
     }
   },
   "ui": {
@@ -64,6 +99,13 @@
     "move_menu": {
       "destination": "Destination:/",
       "move_here": "Move here"
+    },
+    "user_profile": {
+      "btn_logout": "Logout",
+      "btn_change_password": "Change Password",
+      "btn_api_keys": "API Keys",
+      "btn_stats": "Stats",
+      "btn_administration": "Administration"
     }
   },
   "snackbar": {
@@ -71,6 +113,11 @@
     "error_invalid_name_folder": "Invalid folder name",
     "error_folder_exists": "Folder already exists",
     "error_server": "Server error",
-    "error_unknown": "Unknown error occurred"
+    "error_unknown": "Unknown error occurred",
+    "user_created": "Account created",
+    "admin_set": "Admin setted",
+    "owner_set_confirm": "Are you sure you want to set this user as admin?",
+    "user_set_set_as_owner": "Admin setted as owner",
+    "password_changed": "Password changed"
   }
 }

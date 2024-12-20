@@ -8,6 +8,8 @@ import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { Button, Dialog, DialogContent, TextField, Grid } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { t } from 'i18next';
+import { Trans } from 'react-i18next';
 // hook
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -53,18 +55,18 @@ export default function NewUserForm() {
     try {
       const { password, username } = data;
       const resp = await createAccount(access_token, username, password);
-      enqueueSnackbar(resp.message, { variant: 'success' });
+      enqueueSnackbar(t('snackbar.user_created'), { variant: 'success' });
       reset();
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('ha ocurrido un error', { variant: 'error' });
+      enqueueSnackbar(t('snackbar.error_unknown'), { variant: 'error' });
     }
   };
 
   return (
     <>
       <Button variant="contained" onClick={clickOpen}>
-        Nueva Cuenta
+        <Trans i18nKey="pages.admin_users.form_new_user.btn_open_form">Nueva Cuenta</Trans>
       </Button>
       <Dialog open={open} onClose={clickClose}>
         <DialogContent>
@@ -72,7 +74,7 @@ export default function NewUserForm() {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <TextField
-                  label="Nombre de usuario"
+                  label={t('pages.admin_users.form_new_user.label_username')}
                   {...register('username')}
                   fullWidth
                   error={Boolean(errors.username?.message) && Boolean(touchedFields.username)}
@@ -81,7 +83,7 @@ export default function NewUserForm() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="contraseña"
+                  label={t('pages.admin_users.form_new_user.label_password')}
                   type="password"
                   {...register('password')}
                   fullWidth
@@ -91,7 +93,7 @@ export default function NewUserForm() {
               </Grid>
               <Grid item xs={12}>
                 <LoadingButton variant="contained" loading={isSubmitting} type="submit">
-                  Crear
+                  <Trans i18nKey="pages.admin_users.form_new_user.btn_create">Crear</Trans>
                 </LoadingButton>
               </Grid>
             </Grid>

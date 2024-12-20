@@ -7,6 +7,7 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, IconButton, Menu, MenuItem, Typography, Stack, Box } from '@mui/material';
+import { Trans } from 'react-i18next';
 // hooks
 import useAuth from '../../hooks/useAuth';
 // api
@@ -75,11 +76,11 @@ export default function UserProfile() {
       </Stack>
 
       <Menu open={open} onClose={clickClose} anchorEl={anchorRef.current}>
-        <MenuItem onClick={handleGotoStats}>Estadisticas</MenuItem>
-        {isAdmin && <MenuItem onClick={handleGoAdministration}>Administración</MenuItem>}
-        <MenuItem onClick={handleGoApiKeys}>Api Keys</MenuItem>
-        <MenuItem onClick={handleChangePassword}>Cambiar Contraseña</MenuItem>
-        <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+        <MenuItem onClick={handleGotoStats}><Trans i18nKey="ui.user_profile.btn_stats">Estadisticas</Trans></MenuItem>
+        {isAdmin && <MenuItem onClick={handleGoAdministration}><Trans i18nKey="ui.user_profile.btn_administration">Administración</Trans></MenuItem>}
+        <MenuItem onClick={handleGoApiKeys}><Trans i18nKey="ui.user_profile.btn_api_keys">API Keys</Trans></MenuItem>
+        <MenuItem onClick={handleChangePassword}><Trans i18nKey="ui.user_profile.btn_change_password">Cambiar Contraseña</Trans></MenuItem>
+        <MenuItem onClick={handleLogout}><Trans i18nKey="ui.user_profile.btn_logout">Cerrar sesión</Trans></MenuItem>
       </Menu>
     </>
   );

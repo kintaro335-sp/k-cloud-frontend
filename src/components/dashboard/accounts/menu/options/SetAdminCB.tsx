@@ -9,6 +9,7 @@ import { FormControlLabel, Checkbox } from '@mui/material';
 import { setAdmin } from '../../../../../api/admin';
 import { useSelector } from '../../../../../redux/store';
 import { useSnackbar } from 'notistack';
+import { t } from 'i18next';
 
 interface SetAdminCBProps {
   userid: string;
@@ -29,14 +30,14 @@ export default function SetAdminCB({ userid, admin }: SetAdminCBProps) {
         try {
           const response = await setAdmin(access_token, userid, checked);
           setIsAdmin(checked);
-          enqueueSnackbar(response.message, { variant: 'success' });
+          enqueueSnackbar(t('snackbar.admin_set'), { variant: 'success' });
         } catch (err) {
           console.error(err);
-          enqueueSnackbar('Ha ocurrido un error', { variant: 'error' });
+          enqueueSnackbar(t('snackbar.error_unknown'), { variant: 'error' });
         }
       }}
       control={<Checkbox />}
-      label="Adminitrador"
+      label={t('pages.admin_users.menu_user.label_admin')}
     />
   );
 }

@@ -7,6 +7,7 @@
 import { TableRow, TableCell } from '@mui/material';
 import MenuUser from './menu';
 import { useSelector } from '../../../redux/store';
+import { t } from 'i18next';
 // types
 import { User } from '../../../@types/admin';
 
@@ -20,9 +21,9 @@ export default function UserItem({ user }: { user: User }) {
         <MenuUser user={user} />
       </TableCell>
       <TableCell>
-        {username} {owner === id && '(owner)'}
+        {username} {owner === id && t('pages.admin_users.label_is_owner')}
       </TableCell>
-      <TableCell>{admin ? 'si' : 'no'}</TableCell>
+      <TableCell>{admin ? t('pages.admin_users.label_is_admin') : t('pages.admin_users.label_is_not_admin')}</TableCell>
     </TableRow>
   );
 }

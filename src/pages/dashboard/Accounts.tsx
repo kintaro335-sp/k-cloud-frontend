@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Card, CardHeader, Toolbar, CardContent } from '@mui/material';
 import { UsersList, NewUserForm } from '../../components/dashboard/accounts';
 import { BackButton } from '../../components/atoms';
+import { Trans } from 'react-i18next';
 // api
 import { getAccounts, getOwner } from '../../api/admin';
 // hooks
@@ -48,14 +49,15 @@ export default function Accounts() {
         <BackButton to="/admin" />
       </Toolbar>
       <Card sx={{ mb: '5px' }}>
-        <CardHeader title={<Typography variant="h4">Administracion de usuarios</Typography>} action={<NewUserForm />} />
+        <CardHeader title={<Typography variant="h4"><Trans i18nKey="pages.admin_users.title">Administracion de usuarios</Trans></Typography>} action={<NewUserForm />} />
         <CardContent>
-          <Typography variant="h5">Lista de usuarios</Typography>
+          <Typography variant="h5"><Trans i18nKey="pages.admin_users.title_user_list">Lista de usuarios</Trans></Typography>
+          <Box sx={{ mt: '10px' }}>
+            <UsersList />
+          </Box>
         </CardContent>
       </Card>
-      <Box>
-        <UsersList />
-      </Box>
+     
     </>
   );
 }

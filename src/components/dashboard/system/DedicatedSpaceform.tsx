@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, TextField, Grid, MenuItem } from '@mui/m
 import { LoadingButton } from '@mui/lab';
 import SpaceAssigned from './SpaceAssigned';
 import { useSnackbar } from 'notistack';
+import { t } from 'i18next';
+import { Trans } from 'react-i18next';
 // form
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -83,7 +85,7 @@ export default function DedicatedSpaceForm() {
 
   return (
     <Card>
-      <CardHeader title="Espacio dedicado" />
+      <CardHeader title={t('pages.admin_system.space_dedicated_title')} />
       <CardContent>
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <Grid container spacing={2}>
@@ -91,7 +93,7 @@ export default function DedicatedSpaceForm() {
               <SpaceAssigned dedicatedSpace={spaceDCalculated} usedSpace={usedSpaceBytes}  />
             </Grid>
             <Grid item xs={9}>
-              <TextField label="Cantidad" fullWidth {...register('dedicatedSpace')} type="number" />
+              <TextField label={t('pages.admin_system.label_used_space')} fullWidth {...register('dedicatedSpace')} type="number" />
             </Grid>
             <Grid item xs={3}>
               <TextField
@@ -112,7 +114,7 @@ export default function DedicatedSpaceForm() {
             </Grid>
             <Grid item xs={12}>
               <LoadingButton loading={isSubmitting} fullWidth type="submit" variant="contained">
-                Asignar Espacio
+                <Trans i18nKey="pages.admin_system.btn_set_space">Asignar Espacio</Trans>
               </LoadingButton>
             </Grid>
           </Grid>

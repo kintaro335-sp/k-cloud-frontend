@@ -1,4 +1,10 @@
 {
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "copy_clipboard": "Copy to clipboard",
+    "copied": "Copied"
+  },
   "pages": {
     "404": {
       "message": "Page not found",
@@ -32,7 +38,20 @@
       "tokens_menu": {
         "tokens_of": "Tokens of",
         "new_token": "New Token",
-        "delete_token": "Delete Token"
+        "delete_token": "Delete Token",
+        "title_form": "New Token",
+        "title_edit": "Edit",
+        "label_expire": "Expire",
+        "label_public": "Public",
+        "label_save": "Save",
+        "label_date_expiration": "Expiration Date",
+        "btn_save": "Save",
+        "title_token_list": "Tokens List",
+        "btn_stop_sharing": "Stop Sharing",
+        "tb_label_id": "ID",
+        "tb_label_expire": "Expire",
+        "tb_label_public": "Public",
+        "tb_label_expiration_date": "Expiration Date"
       }
     },
     "userstats":{
@@ -69,6 +88,46 @@
         "label_confirm_password": "Confirm Password",
         "btn_set_passwd": "Set Password"
       }
+    },
+    "admin_system": {
+      "space_dedicated_title": "Space Dedicated",
+      "label_dedicated_space": "Dedicated Space",
+      "label_used_space": "Used",
+      "label_free_space": "Free",
+      "label_missing_space": "Missing",
+      "label_quantity": "Quantity",
+      "label_size": "Size",
+      "btn_set_space":"set Space"
+    },
+    "admin_logs": {
+      "label_date": "Date",
+      "label_user": "User",
+      "label_action": "Action",
+      "label_token_id": "Token ID",
+      "label_resaon": "Reason",
+      "label_status": "Status",
+      "label_route": "Route"
+    },
+    "admin_stats": {
+      "btn_update": "Update",
+      "btn_updating": "Updating...",
+      "tab_space_used": "Space Used",
+      "tab_activity": "Activity",
+      "tab_memory_usage": "Memory Used",
+      "chart_space_used": "Space Used",
+      "chart_space_used_user": "Space Used by User",
+      "chart_space_used_file": "Space Used by File Type",
+      "label_used_space": "Used",
+      "label_free_space": "Free",
+      "label_today": "Today",
+      "label_last_7_days": "Last 7 days",
+      "label_this_month": "This month",
+      "label_last_30_days": "Last 30 days",
+      "title_action": "Action",
+      "title_status": "Status",
+      "title_reason": "Reason",
+      "title_total": "Total",
+      "title_buffers": "Buffers"
     }
   },
   "ui": {
@@ -118,6 +177,12 @@
     "admin_set": "Admin setted",
     "owner_set_confirm": "Are you sure you want to set this user as admin?",
     "user_set_set_as_owner": "Admin setted as owner",
-    "password_changed": "Password changed"
+    "password_changed": "Password changed",
+    "msg_token_created": "Token created",
+    "msg_token_updated": "Token updated",
+    "stop_sharing_confirm": "Are you sure you want to stop sharing this file?",
+    "msg_sharing_stopped": "Sharing stopped",
+    "msg_deleted": "Deleted",
+    "msg_delete_token_confirm": "do you want to delete "
   }
 }

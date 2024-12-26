@@ -42,7 +42,7 @@ export default function TokensMenu({ url, onClose }: TokensMenuProps) {
       <Dialog open={open} onClose={clickClose} maxWidth="lg">
         <AppBar position="relative">
           <Toolbar>
-            <Typography variant="h5"><Trans i18nKey="pages.files.tokensmenu.tokens_of">Tokens de</Trans> {url}</Typography>
+            <Typography variant="h5"><Trans i18nKey="pages.files.tokens_menu.tokens_of">Tokens de</Trans> {url}</Typography>
           </Toolbar>
         </AppBar>
         <DialogContent>

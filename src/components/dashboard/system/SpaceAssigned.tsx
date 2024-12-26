@@ -8,6 +8,8 @@ import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ResponsivePie } from '@nivo/pie';
 import { bytesFormat } from '../../../utils/files';
+import { t } from 'i18next';
+
 interface SpaceAsignedProps {
   dedicatedSpace: number;
   usedSpace: number;
@@ -21,13 +23,13 @@ export default function SpaceAsigned({ dedicatedSpace, usedSpace }: SpaceAsigned
       return [
         {
           id: 'used',
-          label: 'Used',
+          label: t('pages.admin_system.label_used_space'),
           value: usedSpace,
           color: 'hsl(0, 100%, 46%)'
         },
         {
           id: 'free',
-          label: 'Free',
+          label: t('pages.admin_system.label_free_space'),
           value: dedicatedSpace - usedSpace,
           color: 'hsl(30, 1%, 50%)'
         }
@@ -36,13 +38,13 @@ export default function SpaceAsigned({ dedicatedSpace, usedSpace }: SpaceAsigned
       return [
         {
           id: 'missing',
-          label: 'Missing',
+          label: t('pages.admin_system.label_missing_space'),
           value: usedSpace - dedicatedSpace,
           color: 'hsl(0, 100%, 46%)'
         },
         {
           id: 'dedicated',
-          label: 'Dedicated',
+          label: t('pages.admin_system.label_dedicated_space'),
           value: dedicatedSpace,
           color: 'hsl(30, 1%, 50%)'
         }

@@ -165,6 +165,12 @@
       "btn_api_keys": "API Keys",
       "btn_stats": "Stats",
       "btn_administration": "Administration"
+    },
+    "file_item": {
+      "label_total": "Total",
+      "label_sended": "Sended",
+      "label_written": "Written",
+      "label_in": "in"
     }
   },
   "snackbar": {

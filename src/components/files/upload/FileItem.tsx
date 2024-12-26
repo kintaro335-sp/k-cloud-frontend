@@ -7,6 +7,8 @@
 import { ListItem, ListItemText, Box, Stack, LinearProgress, Typography, CircularProgress } from '@mui/material';
 import { FileToUpload } from '../../../@types/files';
 import { BLOB_SIZE, bytesFormat } from '../../../utils/files';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 
 interface FileItemProps {
   path: string;
@@ -26,18 +28,18 @@ export default function FileItem({ path, fileP }: FileItemProps) {
         primary={
           <Stack spacing={1}>
             <Box>
-              {fileName} Total: {bytesFormat(size)}
+              {fileName} <Trans i18nKey="ui.file_item.label_total">Total</Trans>: {bytesFormat(size)}
             </Box>
             <Box>
               {blobsSended}/{totalBlobs}
             </Box>
             <Stack direction="row" spacing={1}>
-              <Typography variant="body1">Escrito: {bytesFormat(written)}</Typography>
+              <Typography variant="body1"><Trans i18nKey="ui.file_item.label_written">Escrito</Trans>: {bytesFormat(written)}</Typography>
               <CircularProgress variant="determinate" value={(written / size) * 100} />
             </Stack>
             <Stack direction="row" spacing={1}>
               <Typography variant="body1">
-                Enviado: {bytesFormat(sended + Math.floor(blobSizeReal * blobProgress))}
+                <Trans i18nKey="ui.file_item.label_sended">Enviado</Trans>: {bytesFormat(sended + Math.floor(blobSizeReal * blobProgress))}
               </Typography>
               <CircularProgress variant="determinate" value={(sended / size) * 100} />
             </Stack>
@@ -47,7 +49,7 @@ export default function FileItem({ path, fileP }: FileItemProps) {
             </Stack>
           </Stack>
         }
-        secondary={`en:${path}`}
+        secondary={`${t('ui.file_item.label_in')}:${path}`}
       />
     </ListItem>
   );

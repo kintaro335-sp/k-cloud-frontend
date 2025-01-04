@@ -171,6 +171,13 @@
       "label_sended": "Sended",
       "label_written": "Written",
       "label_in": "in"
+    },
+    "register_form": {
+      "title": "create User",
+      "label_username": "Username",
+      "label_password": "Password",
+      "label_password_confirm": "Confirm Password",
+      "btn_register": "register"
     }
   },
   "snackbar": {

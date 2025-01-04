@@ -11,6 +11,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 // redux
 import { useDispatch } from '../../redux/store';
 import { setAccessToken } from '../../redux/slices/session';
@@ -84,14 +86,14 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
 
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Crear Usuario
+          <Trans i18nKey="ui.resgiter_form.title">Crear Usuario</Trans>
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Username"
+                label={t('ui.resgiter_form.label_username')}
                 {...register('username')}
                 error={Boolean(errors.username) || touchedFields.username}
                 // @ts-ignore
@@ -101,7 +103,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Password"
+                label={t('ui.resgiter_form.label_password')}
                 type="password"
                 {...register('password')}
                 error={Boolean(errors.password) || touchedFields.password}
@@ -112,7 +114,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Confirm password"
+                label={t('ui.resgiter_form.label_password_confirm')}
                 type="password"
                 {...register('confirmPassword')}
                 error={Boolean(errors.confirmPassword) || touchedFields.confirmPassword}
@@ -124,7 +126,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
             </Grid>
             <Grid item xs={12}>
               <LoadingButton type="submit" variant="contained" color="primary" loading={isSubmitting}>
-                Register
+                <Trans i18nKey='ui.resgiter_form.btn_register'>Register</Trans>
               </LoadingButton>
             </Grid>
           </Grid>

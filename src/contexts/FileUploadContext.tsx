@@ -15,7 +15,8 @@ import {
   removeFileUploading,
   setBlobProgress,
   setWrittenProgress,
-  setUploadingFile
+  setUploadingFile,
+  setCurrentBlobSizeSend
 } from '../redux/slices/fileUploader';
 import { initializeFileAPI, uploadBlobAPI, uploadFileAPI } from '../api/files';
 import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
@@ -69,6 +70,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
 
   const sendBlob = async (path: string, position: number, size: number, file: File): Promise<number> => {
     const blob = file.slice(position, position + size);
+    setCurrentBlobSizeSend(path, blob.size);
     return new Promise((resolve) => {
       uploadBlobAPI(path, position, blob, access_token, (p) => {
         setBlobProgress(path, p);

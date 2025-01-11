@@ -10,6 +10,7 @@ import { apiUrl } from '../../config';
 import { IndexElement } from '../../@types/files';
 import { Card, CardHeader, CardContent, Box, Typography, Tooltip, IconButton, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { TokensMenu } from '../files/tokens';
 import { DownloadButton, FileIcon } from '../atoms';
 import { t } from 'i18next';
 // icons
@@ -82,6 +83,7 @@ export default function FileElement({ info }: { info: IndexElement }) {
         subheader={<Box>{bytesFormat(size)}</Box>}
         action={
           <Stack direction="row">
+            <TokensMenu url={path} variantBtn='icon' />
             <Tooltip title={t('pages.search.tooltip_go_location')}>
               <IconButton onClick={onGoToLocation}>
                 <Icon icon={gotoLocaltion} width="30px" height="30px" color={theme.palette.text.primary} />

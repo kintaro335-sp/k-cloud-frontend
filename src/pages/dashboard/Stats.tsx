@@ -4,12 +4,12 @@
  * MIT Licensed
  */
 
-import { useEffect, useState, useRef } from 'react';
-import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box, Tab, Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Toolbar, Grid, RadioGroup, FormControlLabel, Radio, Box, Tab, Button } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/atoms';
-import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie } from '../../components/dashboard/stats';
+import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie, CpuUsagePie } from '../../components/dashboard/stats';
 import { LineChartGeneral } from '../../components/dashboard/stats/logs';
 import { useSnackbar } from 'notistack';
 import { t } from 'i18next';
@@ -24,7 +24,8 @@ import {
   setActivityActions,
   setActivityReason,
   setActivityStatus,
-  setMemoryUsageH
+  setMemoryUsageH,
+  setCpuUsage
 } from '../../redux/slices/stats';
 // api
 import {
@@ -33,7 +34,8 @@ import {
   getUsedSpaceByFileType,
   getLineChartData,
   getMemoryUsageData,
-  updateUsersTrees
+  updateUsersTrees,
+  getCPUUsageData
 } from '../../api/admin';
 // types
 import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
@@ -100,6 +102,8 @@ export default function Stats() {
   async function getMemoryUsageHEffect() {
     const data = await getMemoryUsageData(access_token);
     setMemoryUsageH(data);
+    const dataCPU = await getCPUUsageData(access_token);
+    setCpuUsage(dataCPU.usage);
   }
 
   useEffect(() => {
@@ -213,6 +217,9 @@ export default function Stats() {
           </TabPanel>
           <TabPanel value="2">
             <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <CpuUsagePie />
+              </Grid>
               <Grid item xs={12}>
                 <LineChartGeneral title={t('pages.admin_stats.title_total')} data={[total]} yFormat={(val) => bytesFormat(Number(val))} />
               </Grid>

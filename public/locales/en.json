@@ -129,7 +129,8 @@
       "title_status": "Status",
       "title_reason": "Reason",
       "title_total": "Total",
-      "title_buffers": "Buffers"
+      "title_buffers": "Buffers",
+      "title_cpu_usage": "CPU Usage"
     }
   },
   "ui": {

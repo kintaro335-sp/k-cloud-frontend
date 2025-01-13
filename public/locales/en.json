@@ -24,6 +24,8 @@
     },
     "files": {
       "drop_files": "Drop files here to upload",
+      "gotoF": "Go to",
+      "btn_go": "Go",
       "femenu": {
         "download": "Download",
         "download_zip": "Download as Zip",

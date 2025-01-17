@@ -24,24 +24,32 @@ export default function FilesList({ loading }: FilesListProps) {
   const { files, path, start, showQ } = useSelector((state) => state.session);
   const scrollElement = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const scrollLimit = isMobile ? 0.978 : 0.93;
+  const scrollLimit = isMobile ? 0.978 : 0.95;
+  const elementsPerPage = 200;
+
   const handleShowMore = () => {
     if (files.length < showQ) return;
-    if (showQ >= 96) {
-      setShowQ(96);
+    if (showQ >= elementsPerPage) {
+      setShowQ(elementsPerPage);
       return;
     }
     setShowQ(showQ + 8);
   };
 
   const handleChangeStart = (direction: 'back' | 'go') => {
+
     if (direction === 'back') {
+      console.log(start);
+      if (start < 0 ){
+        setStart(0);
+        return;
+      }
       if (start === 0) return;
       const onSetStartBack = (st: number) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number;
-        const multiplier = isMobile ? 0.975 : 0.925;
+        const multiplier = isMobile ? 0.965 : 0.945;
         scrollElement.current?.scroll({ top: scrollHeight * multiplier });
-        const newVal = st - 96;
+        const newVal = st - elementsPerPage;
         if (newVal < 0) {
           return 0;
         }
@@ -49,18 +57,18 @@ export default function FilesList({ loading }: FilesListProps) {
       };
       setStart(onSetStartBack(start));
     }
-    if (direction === 'go' && showQ >= 96) {
+    if (direction === 'go' && showQ >= elementsPerPage) {
       const onSetStartGo = (st: number) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number;
-        const isLastPage = st + 96 >= files.length;
-        const newVal = st + 96;
-        if (newVal > files.length - 96) {
+        const isLastPage = st + elementsPerPage > files.length;
+        const newVal = st + elementsPerPage;
+        if (newVal > files.length - elementsPerPage) {
           if (!isLastPage) {
-            scrollElement.current?.scroll({ top: scrollHeight * 0.0003 });
+            scrollElement.current?.scroll({ top: scrollHeight * 0.002 });
           }
-          return files.length - 96;
+          return st;
         }
-        scrollElement.current?.scroll({ top: scrollHeight * 0.0001 });
+        scrollElement.current?.scroll({ top: scrollHeight * 0.002 });
         return newVal;
       };
       setStart(onSetStartGo(start));
@@ -68,7 +76,7 @@ export default function FilesList({ loading }: FilesListProps) {
   };
 
   useEffect(() => {
-    setShowQ(48);
+    setShowQ(32);
     setStart(0);
   }, [path]);
 

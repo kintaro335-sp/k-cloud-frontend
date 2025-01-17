@@ -39,7 +39,6 @@ export default function FilesList({ loading }: FilesListProps) {
   const handleChangeStart = (direction: 'back' | 'go') => {
 
     if (direction === 'back') {
-      console.log(start);
       if (start < 0 ){
         setStart(0);
         return;

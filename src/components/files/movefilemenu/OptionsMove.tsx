@@ -22,6 +22,7 @@ import { useSelector } from '../../../redux/store';
 import { moveFile, getListFiles } from '../../../api/files';
 // types
 import { FileI } from '../../../@types/files';
+import { Loading } from '../../../pages';
 
 interface OptionMoveProps {
   pathFrom: string;
@@ -101,7 +102,7 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false, on
               }}
             />
           </Box>
-          <Grid container spacing={2} sx={{ minWidth: '400px', minHeight: '150px' }}>
+          {!loading && <Grid container spacing={2} sx={{ minWidth: '30vw', minHeight: '30vh', maxHeight: '50vh', overflowY: 'scroll' }}>
             {files.map((f, i) => {
               if (f.name === filesToMove[0] && pathFrom === pathTo) return;
               return (
@@ -118,7 +119,8 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false, on
                 </Grid>
               );
             })}
-          </Grid>
+          </Grid>}
+          {loading && <Loading width={'60vw'} height={'60vh'} />}
           <Stack>
             <LoadingButton variant="contained" disabled={allowMove} onClick={clickMove} loading={loading}>
               <Trans i18nKey="ui.move_menu.move_here">Mover Aqui</Trans>

@@ -18,31 +18,31 @@ import AuthProvider from './contexts/AuthContext';
 import Systemcontext from './contexts/SystemContext';
 import FileSelectContext from './contexts/FileSelectContext';
 import ThemeP from './theme/ThemeP';
-
-document.addEventListener("DOMContentLoaded", () => {
-  console.log('DOM Content Loaded');
-})
+import { I18nextProvider } from 'react-i18next';
+import i18n from './contexts/i18next';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <SnackbarProvider maxSnack={3}>
-      <ReduxProvider store={store}>
-        <PersistGate persistor={persistor}>
-          <BrowserRouter>
-            <FileSelectContext>
-              <AuthProvider>
-                <FileUploadC>
-                  <Systemcontext>
-                    <ThemeP>
-                      <App />
-                    </ThemeP>
-                  </Systemcontext>
-                </FileUploadC>
-              </AuthProvider>
-            </FileSelectContext>
-          </BrowserRouter>
-        </PersistGate>
-      </ReduxProvider>
-    </SnackbarProvider>
+    <I18nextProvider i18n={i18n}>
+      <SnackbarProvider maxSnack={3}>
+        <ReduxProvider store={store}>
+          <PersistGate persistor={persistor}>
+            <BrowserRouter>
+              <FileSelectContext>
+                <AuthProvider>
+                  <FileUploadC>
+                    <Systemcontext>
+                      <ThemeP>
+                        <App />
+                      </ThemeP>
+                    </Systemcontext>
+                  </FileUploadC>
+                </AuthProvider>
+              </FileSelectContext>
+            </BrowserRouter>
+          </PersistGate>
+        </ReduxProvider>
+      </SnackbarProvider>
+    </I18nextProvider>
   </React.StrictMode>
 );

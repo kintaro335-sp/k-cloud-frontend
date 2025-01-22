@@ -6,6 +6,7 @@
 
 import { Link } from 'react-router-dom';
 import { Box, Grid, Typography, Card, CardContent, CardHeader } from '@mui/material';
+import { t } from 'i18next';
 // icons
 import { Icon } from '@iconify/react';
 import usersIcon from '@iconify/icons-ant-design/user';
@@ -23,27 +24,27 @@ interface OptionMenuAdmin {
 export default function AdminMenu() {
   const options: OptionMenuAdmin[] = [
     {
-      title: 'Usuarios',
+      title: t('pages.admin.users'),
       icon: <Icon icon={usersIcon} width="100%" height="100%" />,
       link: '/admin/accounts'
     },
     {
-      title: 'Estadisticas',
+      title: t('pages.admin.stats'),
       icon: <Icon icon={statsIcon} width="100%" height="100%" />,
       link: '/admin/stats'
     },
     {
-      title: 'Logs',
+      title: t('pages.admin.logs'),
       icon: <Icon icon={logsIcon} width="100%" height="100%" />,
       link: '/admin/logs'
     },
     {
-      title: 'Sistema',
+      title: t('pages.admin.system'),
       icon: <Icon icon={settingsIcon} width="100%" height="100%" />,
       link: '/admin/system'
     },
     {
-      title: 'Acerca de',
+      title: t('pages.admin.about'),
       icon: <Icon icon={aboutIcon} width="100%" height="100%" />,
       link: '/admin/about'
     }

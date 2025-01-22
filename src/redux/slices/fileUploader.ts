@@ -7,6 +7,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { dispatch } from '../store';
 import { FileToUpload, NewFile, BlobToWrite } from '../../@types/files';
+import { set } from 'lodash';
+import { setUsedSpaceFiles } from './stats';
 
 interface initialStateT {
   filesDir: string[];
@@ -34,6 +36,7 @@ const slice = createSlice({
         uploading: false,
         size: file.size,
         blobSended: [],
+        currentBlobSizeSend: 0,
         sended: 0,
         written: 0,
         inicializado: false,
@@ -111,6 +114,13 @@ const slice = createSlice({
       const fileM = state.files[path];
       if (fileM === null || fileM === undefined) return;
       fileM.written = progress;
+    },
+    setCurrentBlobSizeSend(state, action) {
+      const { path, size } = action.payload as { path: string; size: number };
+      const fileM = state.files[path];
+      if (fileM === null) return;
+      if (fileM === undefined) return;
+      fileM.currentBlobSizeSend = size;
     }
   }
 });
@@ -192,6 +202,14 @@ export function setBlobProgress(path: string, progress: number) {
 export function setWrittenProgress(path: string, progress: number) {
   try {
     dispatch(slice.actions.setWrittenProgress({ path, progress }));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setCurrentBlobSizeSend(path: string, size: number) {
+  try {
+    dispatch(slice.actions.setCurrentBlobSizeSend({ path, size }));
   } catch (err) {
     console.error(err);
   }

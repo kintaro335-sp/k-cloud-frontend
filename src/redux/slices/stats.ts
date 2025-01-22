@@ -13,6 +13,7 @@ import { StatsLineChart } from '../../@types/stats';
 interface StatsState {
   totalSpace: number;
   usedSpace: number;
+  cpuUsage: number;
   spaceUsedFiles: UsedSpaceType[];
   spaceUsedUsers: UsedSpaceUser[];
   activityActions: StatsLineChart;
@@ -24,6 +25,7 @@ interface StatsState {
 const initialState: StatsState = {
   totalSpace: 0,
   usedSpace: 0,
+  cpuUsage: 0,
   spaceUsedFiles: [],
   spaceUsedUsers: [],
   activityActions: [],
@@ -41,6 +43,9 @@ const slice = createSlice({
     },
     setUsed(state, action) {
       state.usedSpace = action.payload as number;
+    },
+    setCpuUsage(state, action) {
+      state.cpuUsage = action.payload as number;
     },
     setUsedSpaceFiles(state, action) {
       state.spaceUsedFiles = action.payload as UsedSpaceType[];
@@ -76,6 +81,14 @@ export function setTotal(total: number) {
 export function setUsed(used: number) {
   try {
     dispatch(slice.actions.setUsed(used));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setCpuUsage(cpuUsage: number) {
+  try {
+    dispatch(slice.actions.setCpuUsage(cpuUsage));
   } catch (err) {
     console.error(err);
   }

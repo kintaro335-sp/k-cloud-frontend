@@ -7,6 +7,7 @@
 import { Box, Typography } from '@mui/material';
 import { useSelector } from '../../redux/store';
 import { addFile } from '../../redux/slices/fileUploader';
+import { Trans } from 'react-i18next';
 import useFileU from '../../hooks/useFileU';
 
 export default function DropFiles() {
@@ -46,7 +47,7 @@ export default function DropFiles() {
         e.stopPropagation();
       }}
     >
-      <Typography sx={{ fontWeight: '300' }}>Arrastra archivos aqui</Typography>
+      <Typography sx={{ fontWeight: '300' }}><Trans i18nKey="pages.files.drop_files">Arrastra archivos aqui</Trans></Typography>
     </Box>
   );
 }

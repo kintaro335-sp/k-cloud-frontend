@@ -8,70 +8,63 @@ import { useTheme } from '@mui/material/styles';
 import { Card, CardHeader, CardContent, Box, Typography } from '@mui/material';
 import { ResponsivePie } from '@nivo/pie';
 import { t } from 'i18next';
+import numeral from 'numeral';
 // redux
 import { useSelector } from '../../../redux/store';
-import { bytesFormat } from '../../../utils/files';
 
-export default function UsedSpacePie() {
-  const { totalSpace, usedSpace } = useSelector((state) => state.stats);
+export default function CpuUsagePie() {
   const theme = useTheme();
+  const { cpuUsage } = useSelector((state) => state.stats);
+
+  const calcUsage = () => {
+    let usage = cpuUsage;
+    let idle = 0;
+    let overload = 0;
+    idle = 1 - usage;
+    overload = usage - 1;
+
+    return [
+      {
+        id: 'idle',
+        label: 'idle',
+        value: idle*100,
+        color: 'hsl(30, 1%, 50%)'
+      },
+      {
+        id: 'usage',
+        label: 'usage',
+        value: usage*100,
+        color: 'hsl(204, 92.50%, 46.90%)'
+      },
+      {
+        id: 'overload',
+        label: 'overload',
+        value: overload*100,
+        color: 'hsl(0, 90.30%, 44.50%)'
+      }
+    ].filter((e) => e.value > 0);
+  };
+
   return (
     <Card>
-      <CardHeader title={t('pages.admin_stats.chart_space_used')} />
+      <CardHeader title={t('pages.admin_stats.title_cpu_usage')} />
       <CardContent>
         <Box sx={{ width: '100%', height: '500px' }}>
           <ResponsivePie
-            data={[
-              { id: 'free', label: t('pages.admin_stats.label_free_space'), value: totalSpace - usedSpace, color: 'hsl(30, 1%, 50%)' },
-              { id: 'used', label: t('pages.admin_stats.label_used_space'), value: usedSpace, color: 'hsl(0, 100%, 46%)' }
-            ]}
+            data={calcUsage()}
             margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-            valueFormat={(value) => bytesFormat(value)}
+            valueFormat={(value) => `${numeral(value).format('0.00')}%`}
             innerRadius={0.5}
             padAngle={0.7}
             cornerRadius={3}
             activeOuterRadiusOffset={8}
             borderWidth={1}
-            defs={[
-              {
-                id: 'dots',
-                type: 'patternDots',
-                background: 'inherit',
-                color: 'rgba(255, 0, 0, 1)',
-                size: 4,
-                padding: 1,
-                stagger: true
-              },
-              {
-                id: 'lines',
-                type: 'patternLines',
-                background: 'inherit',
-                color: 'rgba(150, 150, 150, 1)',
-                rotation: -45,
-                lineWidth: 6,
-                spacing: 10
-              }
-            ]}
-            fill={[
-              {
-                match: {
-                  id: 'free'
-                },
-                id: 'lines'
-              },
-              {
-                match: {
-                  id: 'used'
-                },
-                id: 'dots'
-              }
-            ]}
             tooltip={(props) => (
               <Box sx={{ backgroundColor: theme.palette.background.default, borderRadius: '5px', padding: '0.4ex' }}>
-                {props.datum.label}: {bytesFormat(props.datum.value)}
+                {props.datum.label}: {numeral(props.datum.value).format('0.00')}%
               </Box>
             )}
-            arcLinkLabel={(e) => `${e.label} ${bytesFormat(e.value)}`}
+            arcLinkLabel={(e) => `${e.label} ${numeral(e.value).format('0.00')}%`}
             arcLinkLabelsSkipAngle={10}
             arcLinkLabelsTextColor="#AAA"
             arcLinkLabelsThickness={6}

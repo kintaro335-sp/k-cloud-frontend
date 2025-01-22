@@ -4,14 +4,16 @@
  * MIT Licensed
  */
 
-import { useEffect, useState, useRef } from 'react';
-import { Toolbar, Grid, Typography, RadioGroup, FormControlLabel, Radio, Box, Tab, Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Toolbar, Grid, RadioGroup, FormControlLabel, Radio, Box, Tab, Button } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/atoms';
-import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie } from '../../components/dashboard/stats';
+import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie, CpuUsagePie } from '../../components/dashboard/stats';
 import { LineChartGeneral } from '../../components/dashboard/stats/logs';
 import { useSnackbar } from 'notistack';
+import { t } from 'i18next';
+import { Trans } from 'react-i18next';
 // redux
 import { useSelector } from '../../redux/store';
 import {
@@ -22,7 +24,8 @@ import {
   setActivityActions,
   setActivityReason,
   setActivityStatus,
-  setMemoryUsageH
+  setMemoryUsageH,
+  setCpuUsage
 } from '../../redux/slices/stats';
 // api
 import {
@@ -31,7 +34,8 @@ import {
   getUsedSpaceByFileType,
   getLineChartData,
   getMemoryUsageData,
-  updateUsersTrees
+  updateUsersTrees,
+  getCPUUsageData
 } from '../../api/admin';
 // types
 import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
@@ -98,6 +102,8 @@ export default function Stats() {
   async function getMemoryUsageHEffect() {
     const data = await getMemoryUsageData(access_token);
     setMemoryUsageH(data);
+    const dataCPU = await getCPUUsageData(access_token);
+    setCpuUsage(dataCPU.usage);
   }
 
   useEffect(() => {
@@ -136,9 +142,9 @@ export default function Stats() {
       </Toolbar>
       <TabContext value={tabValue}>
         <TabList onChange={handleChange}>
-          <Tab sx={{ color: theme.palette.text.primary }} label="Use de Espacio" value="0" />
-          <Tab sx={{ color: theme.palette.text.primary }} label="Actividad" value="1" />
-          <Tab sx={{ color: theme.palette.text.primary }} label="Use De Memoria" value="2" />
+          <Tab sx={{ color: theme.palette.text.primary }} label={t('pages.admin_stats.tab_space_used')} value="0" />
+          <Tab sx={{ color: theme.palette.text.primary }} label={t('pages.admin_stats.tab_activity')} value="1" />
+          <Tab sx={{ color: theme.palette.text.primary }} label={t('pages.admin_stats.tab_memory_usage')} value="2" />
         </TabList>
         <Box>
           <TabPanel value="0">
@@ -150,7 +156,7 @@ export default function Stats() {
                 disabled={updating}
                 sx={{ mr: 2 }}
               >
-                {updating ? 'Actualizando...' : 'Actualizar'}
+                {updating ? <Trans i18nKey="admin_stats.btn_updating">Updating</Trans> : <Trans i18nKey="admin_stats.btn_update">Update</Trans>}
               </Button>
             </Toolbar>
             <Grid container spacing={2}>
@@ -178,44 +184,47 @@ export default function Stats() {
                 <FormControlLabel
                   value={TIMEOPTION.TODAY}
                   control={<Radio />}
-                  label={<Box sx={{ color: theme.palette.text.primary }}>hoy</Box>}
+                  label={<Box sx={{ color: theme.palette.text.primary }}><Trans i18nKey="pages.admin_stats.label_today">hoy</Trans></Box>}
                 />
                 <FormControlLabel
                   value={TIMEOPTION.LAST7DAYS}
                   control={<Radio />}
-                  label={<Box sx={{ color: theme.palette.text.primary }}>ultimos 7 dias</Box>}
+                  label={<Box sx={{ color: theme.palette.text.primary }}><Trans i18nKey="pages.admin_stats.label_last_7_days">ultimos 7 dias</Trans></Box>}
                 />
                 <FormControlLabel
                   value={TIMEOPTION.THISMONTH}
                   control={<Radio />}
-                  label={<Box sx={{ color: theme.palette.text.primary }}>este mes</Box>}
+                  label={<Box sx={{ color: theme.palette.text.primary }}><Trans i18nKey="pages.admin_stats.label_this_month">este mes</Trans></Box>}
                 />
                 <FormControlLabel
                   value={TIMEOPTION.LAST30DAYS}
                   control={<Radio />}
-                  label={<Box sx={{ color: theme.palette.text.primary }}>ultimos 30 dias</Box>}
+                  label={<Box sx={{ color: theme.palette.text.primary }}><Trans i18nKey="pages.admin_stats.label_last_30_days">ultimos 30 dias</Trans></Box>}
                 />
               </RadioGroup>
             </Toolbar>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <LineChartGeneral title="Action" data={activityActions} />
+                <LineChartGeneral title={t('pages.admin_stats.title_action')} data={activityActions} />
               </Grid>
               <Grid item xs={12}>
-                <LineChartGeneral title="Status Code" data={activityStatus} />
+                <LineChartGeneral title={t('pages.admin_stats.title_status')} data={activityStatus} />
               </Grid>
               <Grid item xs={12}>
-                <LineChartGeneral title="Reason" data={activityReason} />
+                <LineChartGeneral title={t('pages.admin_stats.title_reason')} data={activityReason} />
               </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value="2">
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <LineChartGeneral title="Total" data={[total]} yFormat={(val) => bytesFormat(Number(val))} />
+                <CpuUsagePie />
               </Grid>
               <Grid item xs={12}>
-                <LineChartGeneral title="Buffers" data={[buffer_info]} yFormat={(val) => bytesFormat(Number(val))} />
+                <LineChartGeneral title={t('pages.admin_stats.title_total')} data={[total]} yFormat={(val) => bytesFormat(Number(val))} />
+              </Grid>
+              <Grid item xs={12}>
+                <LineChartGeneral title={t('pages.admin_stats.title_buffers')} data={[buffer_info]} yFormat={(val) => bytesFormat(Number(val))} />
               </Grid>
             </Grid>
           </TabPanel>

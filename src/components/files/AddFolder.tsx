@@ -10,6 +10,8 @@ import { LoadingButton } from '@mui/lab';
 import { Icon } from '@iconify/react';
 import folderAddIcon from '@iconify/icons-ant-design/folder-add-filled';
 import { useSnackbar } from 'notistack';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 
 // api
 import { isAxiosError } from 'axios';
@@ -44,7 +46,7 @@ export default function AddFolder() {
         variant="contained"
         startIcon={<Icon icon={folderAddIcon} width="20px" height="20px" />}
       >
-        Agregar Carpeta
+        <Trans i18nKey="ui.bar.btn_new_folder">Agregar Carpeta</Trans>
       </Button>
       {open && (
         <Paper sx={{ position: 'fixed', zindex: 9999, top: '133px', padding: '8px' }}>
@@ -63,13 +65,13 @@ export default function AddFolder() {
                   if (KeyP === 'Enter') {
                     if (name !== '' && !['/'].includes(name)) {
                       createFolder(`${path}/${name}`, access_token).then((res) => {
-                        enqueueSnackbar(res.message, { variant: 'success' });
+                        enqueueSnackbar(t('snackbar.folder_created'), { variant: 'success' });
                         clickClose();
                         setName('');
                         setOpen(false);
                       });
                     } else {
-                      enqueueSnackbar('Nombre no valido', { variant: 'error' });
+                      enqueueSnackbar(t('snackbar.error_invalid_folder_name'), { variant: 'error' });
                     }
                   }
                 }}
@@ -84,7 +86,7 @@ export default function AddFolder() {
                     setOpen(false);
                   }}
                 >
-                  Cancelar
+                  <Trans i18nKey="ui.create_folder.btn_cancel">Cancelar</Trans>
                 </Button>{' '}
                 <LoadingButton
                   fullWidth
@@ -95,7 +97,7 @@ export default function AddFolder() {
                       setLoading(true);
                       createFolder(`${path}/${name}`, access_token)
                         .then((res) => {
-                          enqueueSnackbar(res.message, { variant: 'success' });
+                          enqueueSnackbar(t('snackbar.folder_created'), { variant: 'success' });
                           clickClose();
                           setName('');
                           setOpen(false);
@@ -104,17 +106,17 @@ export default function AddFolder() {
                         .catch((err) => {
                           if (isAxiosError(err)) {
                             if (err.response?.status === 500) {
-                              enqueueSnackbar('error del servidor', { variant: 'error' });
+                              enqueueSnackbar(t('snackbar.error_server'), { variant: 'error' });
                             }
                           }
                           setLoading(false);
                         });
                     } else {
-                      enqueueSnackbar('Nombre no valido', { variant: 'error' });
+                      enqueueSnackbar(t('snackbar.error_invalid_folder_name'), { variant: 'error' });
                     }
                   }}
                 >
-                  Crear
+                  <Trans i18nKey="ui.create_folder.btn_create">Crear</Trans>
                 </LoadingButton>
               </Stack>
             </Grid>

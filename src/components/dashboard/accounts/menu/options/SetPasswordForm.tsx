@@ -7,6 +7,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Card, CardContent, Grid, TextField, CardHeader, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { t } from 'i18next';
+import { Trans } from 'react-i18next';
 // api
 import { setPassword } from '../../../../../api/admin';
 import { isAxiosError } from 'axios';
@@ -50,7 +52,7 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
     try {
       if (data.password === data.confirmPassword) {
         const response = await setPassword(access_token, userid, data.password);
-        enqueueSnackbar(response.message, { variant: 'success' });
+        enqueueSnackbar(t('snackbar.password_changed'), { variant: 'success' });
       }
     } catch (err) {
       if (isAxiosError(err)) {
@@ -62,7 +64,7 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
             break;
         }
       } else {
-        enqueueSnackbar('Ha ocurrido un error', { variant: 'error' });
+        enqueueSnackbar(t('snackbar.error_unknown'), { variant: 'error' });
       }
       console.error(err);
     }
@@ -70,13 +72,13 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
 
   return (
     <Card>
-      <CardHeader title={<Typography variant="h5">Cambiar Contraseña</Typography>} />
+      <CardHeader title={<Typography variant="h5"><Trans i18nKey="pages.admin_users.menu_user.set_passwd_title">Cambiar Contraseña</Trans></Typography>} />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
-                label="Contraseña"
+                label={t('pages.admin_users.menu_user.label_password')}
                 type="password"
                 {...register('password')}
                 fullWidth
@@ -86,7 +88,7 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Confirmar Contraseña"
+                label={t('pages.admin_users.menu_user.label_confirm_password')}
                 type="password"
                 {...register('confirmPassword')}
                 fullWidth
@@ -104,7 +106,7 @@ export default function SetPasswordForm({ userid }: SetPasswordFormProps) {
                   (values.password === '' && values.confirmPassword === '')
                 }
               >
-                Cambiar Contraseña
+                <Trans i18nKey="pages.admin_users.menu_user.btn_set_passwd">Cambiar Contraseña</Trans>
               </LoadingButton>
             </Grid>
           </Grid>

@@ -7,6 +7,8 @@
 import { Card, CardContent, TextField, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 // api
 import { searchFiles } from '../../api/files';
 // redux
@@ -41,9 +43,9 @@ export default function SearchBar() {
         <Card>
           <CardContent>
             <Stack spacing={2} direction="row">
-              <TextField placeholder="Buscar..." fullWidth {...register('search')} />
+              <TextField placeholder={t('pages.search.placeholder_search')} fullWidth {...register('search')} />
               <LoadingButton type="submit" loading={isSubmitting} variant="contained">
-                Buscar
+                <Trans i18nKey="pages.search.btn_search">Buscar</Trans>
               </LoadingButton>
             </Stack>
           </CardContent>

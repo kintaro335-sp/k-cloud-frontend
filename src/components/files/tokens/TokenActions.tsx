@@ -9,6 +9,7 @@ import { useTheme } from '@mui/material/styles';
 import { CopyClipboard } from '../../atoms';
 import { CustomDialog } from '../../molecules';
 import NewTokenForm from './NewTokenForm';
+import { t } from 'i18next';
 // icons
 import { Icon } from '@iconify/react';
 import deleteIcon from '@iconify/icons-ant-design/delete-fill';
@@ -32,10 +33,10 @@ export default function TokenActions({ id, token }: TokenActionsProps) {
   const theme = useTheme();
 
   const handleDelete = async () => {
-    if (window.confirm(`desea eliminar ${id}?`)) {
+    if (window.confirm(`${t('snackbar.msg_delete_token_confirm')} ${id}?`)) {
       await deleteToken(id, access_token);
       setTokens(tokens.filter((t) => t.id !== id));
-      enqueueSnackbar('eliminado', { variant: 'success' });
+      enqueueSnackbar(t('snackbar.msg_deleted'), { variant: 'success' });
     }
   };
 

@@ -90,6 +90,11 @@ export async function getMemoryUsageData(token: string): Promise<StatsLineChart>
   return result.data;
 }
 
+export async function getCPUUsageData(token: string): Promise<{ usage: number }> {
+  const result = await conn.get(`cpu-usage?t=${token}`);
+  return result.data;
+}
+
 export async function getLineChartData(group: GROUPFILTER, time: TIMEOPTION, token: string): Promise<StatsLineChart> {
   const result = await conn.get(`logs/stats/${group}/line/${time}?t=${token}`);
   return result.data;

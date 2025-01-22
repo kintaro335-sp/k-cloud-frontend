@@ -5,12 +5,13 @@
  */
 
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { Box, Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';
+import { Box, Grid, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Loading from '../../pages/Loading';
 import FileElement from './FileElement';
 // redux
 import { useSelector } from '../../redux/store';
+import { setStart, setShowQ } from '../../redux/slices/session';
 // types
 import { FileI } from '../../@types/files';
 
@@ -20,50 +21,61 @@ interface FilesListProps {
 
 export default function FilesList({ loading }: FilesListProps) {
   const theme = useTheme();
-  const { files, path } = useSelector((state) => state.session);
+  const { files, path, start, showQ } = useSelector((state) => state.session);
   const scrollElement = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const scrollLimit = isMobile ? 0.978 : 0.945;
-  const [start, setStart] = useState<number>(0);
-  const [showQ, setShowQ] = useState<number>(48);
+  const scrollLimit = isMobile ? 0.978 : 0.95;
+  const elementsPerPage = 200;
+
   const handleShowMore = () => {
     if (files.length < showQ) return;
-    if (showQ >= 96) {
-      setShowQ(96);
+    if (showQ >= elementsPerPage) {
+      setShowQ(elementsPerPage);
       return;
     }
-    setShowQ((prev) => prev + 8);
+    setShowQ(showQ + 8);
   };
 
   const handleChangeStart = (direction: 'back' | 'go') => {
+
     if (direction === 'back') {
+      if (start < 0 ){
+        setStart(0);
+        return;
+      }
       if (start === 0) return;
-      setStart((st) => {
+      const onSetStartBack = (st: number) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number;
-        const multiplier = isMobile ? 0.975 : 0.93;
+        const multiplier = isMobile ? 0.965 : 0.945;
         scrollElement.current?.scroll({ top: scrollHeight * multiplier });
-        const newVal = st - 96;
+        const newVal = st - elementsPerPage;
         if (newVal < 0) {
           return 0;
         }
         return newVal;
-      });
+      };
+      setStart(onSetStartBack(start));
     }
-    if (direction === 'go' && showQ >= 96) {
-      setStart((st) => {
+    if (direction === 'go' && showQ >= elementsPerPage) {
+      const onSetStartGo = (st: number) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number;
-        scrollElement.current?.scroll({ top: scrollHeight * 0.001 });
-        const newVal = st + 96;
-        if (newVal > files.length - 96) {
-          return files.length - 96;
+        const isLastPage = st + elementsPerPage > files.length;
+        const newVal = st + elementsPerPage;
+        if (newVal > files.length - elementsPerPage) {
+          if (!isLastPage) {
+            scrollElement.current?.scroll({ top: scrollHeight * 0.002 });
+          }
+          return st;
         }
+        scrollElement.current?.scroll({ top: scrollHeight * 0.002 });
         return newVal;
-      });
+      };
+      setStart(onSetStartGo(start));
     }
   };
 
   useEffect(() => {
-    setShowQ(48);
+    setShowQ(32);
     setStart(0);
   }, [path]);
 
@@ -91,14 +103,18 @@ export default function FilesList({ loading }: FilesListProps) {
             }
           }}
         >
+          
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Box sx={{ padding: isMobile ? '5px' : '3px' }} />
+            </Grid>
             {filesMemo.slice(start, start + showQ).map((file: FileI, i) => (
               <Grid item key={file.name + i} xs={12} md={4} lg={3}>
                 <FileElement file={file} arrayIndex={start + i} />
               </Grid>
             ))}
             <Grid item xs={12}>
-              <Box sx={{ padding: isMobile ? '200px' : '100px' }} />
+              <Box sx={{ padding: isMobile ? '230px' : '130px' }} />
             </Grid>
           </Grid>
         </Box>

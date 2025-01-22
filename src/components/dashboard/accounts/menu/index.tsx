@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { IconButton, Dialog, DialogContent, Grid, Typography } from '@mui/material';
+import { t } from 'i18next';
 // components
 import { SetPasswordForm, SetAdminCB, SetOwner } from './options';
 // iconify
@@ -38,7 +39,7 @@ export default function MenuUser({ user }: { user: User }) {
       <Dialog open={open} onClose={clickClose} maxWidth="md">
         <DialogContent>
           <Typography variant="h4">
-            {username} {id === owner && '(Owner)'}
+            {username} {id === owner && t('pages.admin_users.label_is_owner')}
           </Typography>
           <Grid container>
             <Grid item xs={4}>

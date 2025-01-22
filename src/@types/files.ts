@@ -24,6 +24,7 @@ export interface FileToUpload {
   size: number;
   sended: number;
   written: number;
+  currentBlobSizeSend: number;
   blobSended: SendedBlobs[];
   totalBlobs: number;
   blobsSended: number;

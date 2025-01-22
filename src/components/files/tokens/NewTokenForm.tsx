@@ -10,6 +10,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import { useSnackbar } from 'notistack';
+import { t } from 'i18next';
+import { Trans } from 'react-i18next';
 // icon
 import { Icon } from '@iconify/react';
 import addIcon from '@iconify/icons-material-symbols/add';
@@ -60,24 +62,24 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
     if (edit) {
       await updateToken(token?.id || '', values, access_token);
       setTokens(tokens.map((t) => (t.id === token?.id ? { ...t, ...values, expires: values.expires.getTime() } : t)));
-      enqueueSnackbar('Update success', { variant: 'success' });
+      enqueueSnackbar(t('snackbar.msg_token_updated'), { variant: 'success' });
     } else {
       await shareFile(url, values.expire, values.publict, values.expires.getTime(), access_token);
       const tokensR = await getTokensByPath(url, access_token);
       setTokens(tokensR)
-      enqueueSnackbar('Token Generado', { variant: 'success' });
+      enqueueSnackbar(t('snackbar.msg_token_created'), { variant: 'success' });
     }
   };
 
   return (
     <Box>
-      <Typography variant="h6">{edit ? `edit: ${token?.name} id:${token?.id}` : 'Nuevo Token'}</Typography>
+      <Typography variant="h6">{edit ? `${t('pages.files.tokens_menu.title_edit')}: ${token?.name} id:${token?.id}` : <Trans i18nKey="pages.files.tokens_menu.title_form" >Nuevo Token</Trans>}</Typography>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={4}>
               <FormControlLabel
-                label="Caduca"
+                label={t('pages.files.tokens_menu.label_expire')}
                 labelPlacement="bottom"
                 checked={values.expire}
                 onChange={(e) => {
@@ -89,7 +91,7 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
             </Grid>
             <Grid item xs={4}>
               <FormControlLabel
-                label="Publico"
+                label={t('pages.files.tokens_menu.label_public')}
                 labelPlacement="bottom"
                 checked={values.publict}
                 onChange={(e) => {
@@ -101,13 +103,13 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
             </Grid>
             <Grid item xs={4}>
               <LoadingButton variant="contained" type="submit" loading={isSubmitting}>
-                {edit ? 'Guardar' : <Icon icon={addIcon} width="33px" height="33px" />}
+                {edit ? <Trans i18nKey="pages.files.tokens_menu.btn_save" >Guardar</Trans> : <Icon icon={addIcon} width="33px" height="33px" />}
               </LoadingButton>
             </Grid>
             {values.expire && (
               <Grid item xs={12}>
                 <DesktopDateTimePicker
-                  label="fecha de expiración"
+                  label={t('pages.files.tokens_menu.label_date_expiration')}
                   value={moment(values.expires)}
                   onChange={(value) => {
                     if (value === null) return;

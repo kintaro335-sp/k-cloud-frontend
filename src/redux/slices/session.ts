@@ -13,6 +13,8 @@ import { dispatch } from '../store';
 export interface SessionState {
   access_token: string;
   path: string;
+  start: number;
+  showQ: number;
   files: FileI[];
   tree: Array<Folder | FileI>;
   tokens: TokenElement[];
@@ -21,6 +23,8 @@ export interface SessionState {
 const initialState: SessionState = {
   access_token: '',
   path: '',
+  start: 0,
+  showQ: 48,
   files: [],
   tree: [],
   tokens: []
@@ -35,6 +39,12 @@ const slice = createSlice({
     },
     setPath: (state, action) => {
       state.path = action.payload;
+    },
+    setStart: (state, action) => {
+      state.start = action.payload;
+    },
+    setShowQ: (state, action) => {
+      state.showQ = action.payload;
     },
     setFiles: (state, action) => {
       state.files = action.payload;
@@ -66,6 +76,22 @@ export default slice.reducer;
 export function setPath(path: string) {
   try {
     dispatch(slice.actions.setPath(path));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setStart(start: number) {
+  try {
+    dispatch(slice.actions.setStart(start));
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function setShowQ(showQ: number) {
+  try {
+    dispatch(slice.actions.setShowQ(showQ));
   } catch (err) {
     console.error(err);
   }

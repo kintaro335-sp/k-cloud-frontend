@@ -7,6 +7,7 @@
 import { useTheme } from '@mui/material/styles';
 import { Card, CardHeader, CardContent, Box } from '@mui/material';
 import { ResponsivePie } from '@nivo/pie';
+import { t } from 'i18next';
 // redux
 import { useSelector } from '../../redux/store';
 import { bytesFormat } from '../../utils/files';
@@ -16,7 +17,7 @@ export default function UsedSpacePie() {
   const theme = useTheme();
   return (
     <Card>
-      <CardHeader title="Espacio usado por Usuario" />
+      <CardHeader title={t('pages.userstats.title')} />
       <CardContent>
         <Box sx={{ width: '100%', height: '500px' }}>
           <ResponsivePie

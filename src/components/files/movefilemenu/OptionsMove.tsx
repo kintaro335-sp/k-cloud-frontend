@@ -10,6 +10,8 @@ import { LoadingButton } from '@mui/lab';
 import { RouteBar } from '../routebar';
 import FolderElement from '../../atoms/FolderElement';
 import { useSnackbar } from 'notistack';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 // icons
 import { Icon } from '@iconify/react';
 import CloseIcon from '@iconify/icons-material-symbols/close';
@@ -20,6 +22,7 @@ import { useSelector } from '../../../redux/store';
 import { moveFile, getListFiles } from '../../../api/files';
 // types
 import { FileI } from '../../../@types/files';
+import { Loading } from '../../../pages';
 
 interface OptionMoveProps {
   pathFrom: string;
@@ -74,11 +77,11 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false, on
     <>
       {menuItem ? (
         <MenuItem onClick={clickOpen}>
-          <Icon icon={moveIcon} width="22px" height="22px" /> Mover
+          <Icon icon={moveIcon} width="22px" height="22px" /><Trans i18nKey="pages.files.femenu.move">Mover</Trans> 
         </MenuItem>
       ) : (
         <Button variant="contained" onClick={clickOpen}>
-          Mover
+          <Trans i18nKey="pages.files.femenu.move">Mover</Trans>
         </Button>
       )}
       <Dialog open={open} onClose={clickClose} maxWidth="lg">
@@ -92,14 +95,14 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false, on
         <DialogContent>
           <Box sx={{ margin: '10px' }}>
             <RouteBar
-              title="Destino:/"
+              title={t('ui.move_menu.destination')}
               path={pathTo}
               onChangePath={(newPath) => {
                 setPathTo(newPath);
               }}
             />
           </Box>
-          <Grid container spacing={2} sx={{ minWidth: '400px', minHeight: '150px' }}>
+          {!loading && <Grid container spacing={2} sx={{ minWidth: '30vw', minHeight: '30vh', maxHeight: '50vh', overflowY: 'scroll' }}>
             {files.map((f, i) => {
               if (f.name === filesToMove[0] && pathFrom === pathTo) return;
               return (
@@ -116,10 +119,11 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false, on
                 </Grid>
               );
             })}
-          </Grid>
+          </Grid>}
+          {loading && <Loading width={'60vw'} height={'60vh'} />}
           <Stack>
             <LoadingButton variant="contained" disabled={allowMove} onClick={clickMove} loading={loading}>
-              Mover Aqui
+              <Trans i18nKey="ui.move_menu.move_here">Mover Aqui</Trans>
             </LoadingButton>
           </Stack>
         </DialogContent>

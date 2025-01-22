@@ -8,6 +8,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { AppBar, Container, Toolbar, Typography, Box, Stack, Grid, useMediaQuery } from '@mui/material';
 import { UserProfile, LateralMenu, Uploads, LinkBar } from './bar';
+import { Trans } from 'react-i18next';
 import FilesSubMenu from './files/FilesSubMenu';
 import useAuth from '../hooks/useAuth';
 
@@ -39,12 +40,12 @@ export default function Bar({ children }: BarProps) {
             </Typography>
             {isAuthenticated && <UserProfile />}
             <Stack spacing={2} direction="row" sx={{ display: 'flex', float: 'right', overflowX: 'auto', marginRight: '5px' }}>
-              {!isAuthenticated && pathname !== '/login' && <LinkBar to="/login">Login</LinkBar>}
-              {isAuthenticated && pathname !== '/files' && <LinkBar to="/files">Archivos</LinkBar>}
+              {!isAuthenticated && pathname !== '/login' && <LinkBar to="/login"><Trans i18nKey="ui.bar.login">Login</Trans></LinkBar>}
+              {isAuthenticated && pathname !== '/files' && <LinkBar to="/files"><Trans i18nKey="ui.bar.files">Archivos</Trans></LinkBar>}
               {isAuthenticated && pathname === '/files' && <FilesSubMenu />}
-              {isAuthenticated && pathname !== '/search' && <LinkBar to="/search">Buscar</LinkBar>}
-              {isAuthenticated && pathname !== '/tokens' && <LinkBar to="/tokens">Tokens</LinkBar>}
-              {pathname !== '/shared-files' && <LinkBar to="/shared-files">Shared Files</LinkBar>}
+              {isAuthenticated && pathname !== '/search' && <LinkBar to="/search"><Trans i18nKey="ui.bar.search">Buscar</Trans></LinkBar>}
+              {isAuthenticated && pathname !== '/tokens' && <LinkBar to="/tokens"><Trans i18nKey="ui.bar.tokens">Tokens</Trans></LinkBar>}
+              {pathname !== '/shared-files' && <LinkBar to="/shared-files"><Trans i18nKey="ui.bar.shared_files">Shared Files</Trans></LinkBar>}
               {mobile && isAuthenticated && <Uploads />}
             </Stack>
           </Toolbar>

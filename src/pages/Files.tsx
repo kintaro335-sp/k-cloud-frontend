@@ -9,6 +9,7 @@ import { RouteBar } from '../components/files/routebar';
 import { Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import FilesList from '../components/files/FilesList';
+import GoToFiles from '../components/files/GoToFiles';
 import { useSnackbar } from 'notistack';
 import DropFiles from '../components/files/DropFiles';
 import { ContextualMenuSelect } from '../components/files/menuselect';
@@ -115,8 +116,11 @@ export default function Files() {
                 }}
               />
             </Grid>
-            <Grid item lg={12} xs={12} sm={12}>
+            <Grid item lg={11} xs={12} sm={12}>
               <DropFiles />
+            </Grid>
+            <Grid item lg={1} xs={12} sm={12}>
+              <GoToFiles />
             </Grid>
           </Grid>
           {showOptions && (

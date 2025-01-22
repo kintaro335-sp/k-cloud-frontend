@@ -22,7 +22,9 @@ export default function CpuUsagePie() {
     let overload = 0;
     idle = 1 - usage;
     overload = usage - 1;
-
+    if (usage > 1) {
+      usage = 1;
+    }
     return [
       {
         id: 'idle',

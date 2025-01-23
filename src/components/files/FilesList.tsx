@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { Box, Grid, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Loading from '../../pages/Loading';
@@ -23,8 +23,8 @@ export default function FilesList({ loading }: FilesListProps) {
   const theme = useTheme();
   const { files, path, start, showQ } = useSelector((state) => state.session);
   const scrollElement = useRef<HTMLDivElement>(null);
+  const divBottom = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const scrollLimit = isMobile ? 0.978 : 0.95;
   const elementsPerPage = 200;
 
   const handleShowMore = () => {
@@ -37,16 +37,15 @@ export default function FilesList({ loading }: FilesListProps) {
   };
 
   const handleChangeStart = (direction: 'back' | 'go') => {
-
     if (direction === 'back') {
-      if (start < 0 ){
+      if (start < 0) {
         setStart(0);
         return;
       }
       if (start === 0) return;
       const onSetStartBack = (st: number) => {
         const scrollHeight = scrollElement.current?.scrollHeight as number;
-        const multiplier = isMobile ? 0.965 : 0.945;
+        const multiplier = isMobile ? 0.96 : 0.955;
         scrollElement.current?.scroll({ top: scrollHeight * multiplier });
         const newVal = st - elementsPerPage;
         if (newVal < 0) {
@@ -63,11 +62,12 @@ export default function FilesList({ loading }: FilesListProps) {
         const newVal = st + elementsPerPage;
         if (newVal > files.length - elementsPerPage) {
           if (!isLastPage) {
-            scrollElement.current?.scroll({ top: scrollHeight * 0.002 });
+            scrollElement.current?.scroll({ top: scrollHeight * 0.001 });
+            return st + elementsPerPage;
           }
           return st;
         }
-        scrollElement.current?.scroll({ top: scrollHeight * 0.002 });
+        scrollElement.current?.scroll({ top: scrollHeight * 0.001 });
         return newVal;
       };
       setStart(onSetStartGo(start));
@@ -75,9 +75,31 @@ export default function FilesList({ loading }: FilesListProps) {
   };
 
   useEffect(() => {
-    setShowQ(32);
+    setShowQ(48);
     setStart(0);
   }, [path]);
+
+  useEffect(() => {
+    let observer
+    if (divBottom.current === null || scrollElement.current === undefined) return;
+    if (loading) return;
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        console.log(entries[0]);
+        if (entries[0].isIntersecting) {
+          handleChangeStart('go');
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5
+      }
+    );
+
+    observer.observe(divBottom.current);
+  }, [loading]);
 
   const filesMemo = useMemo(() => files, [files]);
 
@@ -95,15 +117,11 @@ export default function FilesList({ loading }: FilesListProps) {
             if (scrollH === 0) {
               handleChangeStart('back');
             }
-            if (scrollH >= 0.7) {
+            if (scrollH >= 0.8) {
               handleShowMore();
-            }
-            if (scrollH >= scrollLimit) {
-              handleChangeStart('go');
             }
           }}
         >
-          
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Box sx={{ padding: isMobile ? '5px' : '3px' }} />
@@ -114,7 +132,8 @@ export default function FilesList({ loading }: FilesListProps) {
               </Grid>
             ))}
             <Grid item xs={12}>
-              <Box sx={{ padding: isMobile ? '230px' : '130px' }} />
+              <Box sx={{ padding: isMobile ? '205px' : '105px' }} />
+              <Box ref={divBottom} sx={{ padding: isMobile ? '8px' : '5px' }} />
             </Grid>
           </Grid>
         </Box>

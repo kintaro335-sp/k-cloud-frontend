@@ -3,7 +3,8 @@
     "yes": "Yes",
     "no": "No",
     "copy_clipboard": "Copy to clipboard",
-    "copied": "Copied"
+    "copied": "Copied",
+    "loading": "Loading"
   },
   "pages": {
     "404": {

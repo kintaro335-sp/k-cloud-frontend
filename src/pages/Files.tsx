@@ -4,9 +4,9 @@
  * MIT Licensed
  */
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { RouteBar } from '../components/files/routebar';
-import { Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';
+import { Grid, Card, CardContent } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import FilesList from '../components/files/FilesList';
 import GoToFiles from '../components/files/GoToFiles';
@@ -19,7 +19,6 @@ import { setFiles, setTree, setPath, addFile, substituteFile } from '../redux/sl
 // hooks
 import useAuth from '../hooks/useAuth';
 // api
-import { createAuthSocket } from '../api/websocket';
 import { getListFiles, getTreeAPI } from '../api/files';
 import { isAxiosError } from 'axios';
 import { UpdateFileEvent } from '../@types/files';
@@ -29,13 +28,12 @@ export default function Files() {
   const theme = useTheme();
   const { socketClient } = useAuth();
   const { access_token, path } = useSelector((state) => state.session);
-  const socket = useRef(createAuthSocket(access_token));
   const pathM = useRef<string>(path);
   const { enqueueSnackbar } = useSnackbar();
   const { showOptions } = useFileSelect();
   const [loading, setLoading] = useState(false);
 
-  async function getFiles() {
+  async function getFiles(path: string = '') {
     const { list } = await getListFiles(path, access_token).catch((err) => {
       if (isAxiosError(err)) {
         if (err.response?.status === 404) {
@@ -47,7 +45,10 @@ export default function Files() {
       }
       return { list: [] };
     });
-    setFiles(list);
+    if (pathM.current === path) {
+      setLoading(false);
+      setFiles(list);
+    }
   }
 
   function getTree() {
@@ -96,12 +97,13 @@ export default function Files() {
 
   useEffect(() => {
     setLoading(true);
-    getTree();
-    getFiles().then(() => {
-      setLoading(false);
-    });
+    getFiles(path);
     pathM.current = path;
   }, [path]);
+
+  useEffect(() => {
+    getTree();
+  }, []);
 
   return (
     <>

@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Box, Grid, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Loading from '../../pages/Loading';

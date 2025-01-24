@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import {
   TableContainer,
   Table,
@@ -23,8 +23,6 @@ import { Trans } from 'react-i18next';
 // redux
 import { useSelector } from '../../../redux/store';
 import { setTokens } from '../../../redux/slices/session';
-// hooks
-import useAuth from '../../../hooks/useAuth';
 // api
 import { getTokensByPath, deleteTokensByPath } from '../../../api/sharedfiles';
 
@@ -33,13 +31,16 @@ interface TokensTableProps {
 }
 
 export default function TokensTable({ url }: TokensTableProps) {
+  const [loading, setLoading] = useState(false);
   const { access_token, tokens } = useSelector((state) => state.session);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     async function getTokensEffect() {
+      setLoading(true);
       const tokensRes = await getTokensByPath(url, access_token);
-      setTokens(tokensRes)
+      setTokens(tokensRes);
+      setLoading(false);
     }
     getTokensEffect();
   }, [access_token]);
@@ -76,6 +77,7 @@ export default function TokensTable({ url }: TokensTableProps) {
           </TableBody>
         </Table>
       </TableContainer>
+      {loading && <Box sx={{ textAlign: 'center', mt: 2, fontSize: '1em' }}><Trans i18nKey="common.loading">Cargando</Trans></Box>}
     </Box>
   );
 }

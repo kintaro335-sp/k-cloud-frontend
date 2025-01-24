@@ -4,9 +4,9 @@
  * MIT Licensed
  */
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { RouteBar } from '../components/files/routebar';
-import { Grid, Stack, Card, CardContent, useMediaQuery } from '@mui/material';
+import { Grid, Card, CardContent } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import FilesList from '../components/files/FilesList';
 import GoToFiles from '../components/files/GoToFiles';

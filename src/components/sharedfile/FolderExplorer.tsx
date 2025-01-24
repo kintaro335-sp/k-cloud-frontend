@@ -7,10 +7,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // mui
-import { Grid, Box, Stack, Typography, Button } from '@mui/material';
+import { Grid, Box, Stack, Typography } from '@mui/material';
 import { DownloadButton } from '../atoms';
 import { RouteBar } from '../files/routebar';
 import FileElement from './FileElement';
+import Loading from '../../pages/Loading';
 // redux
 import { useSelector } from '../../redux/store';
 import { setPath, setContent } from '../../redux/slices/sharedfile';
@@ -22,6 +23,7 @@ import { fullDateFormat } from '../../utils/dateformat';
 import { apiUrl } from '../../config';
 
 export default function FolderExplorer() {
+  const [loading, setLoading] = useState(false)
   const { id } = useParams();
   const { path, content, info } = useSelector((state) => state.sharedfile);
   const diagonal = path !== '' ? '/' : '';
@@ -33,17 +35,23 @@ export default function FolderExplorer() {
   };
 
   useEffect(() => {
-    async function getContentEffect() {
+    async function getContentEffect(path_a: string = '') {
       if (id === undefined) return;
+      setShowQ(48);
+      setLoading(true);
       if (path === '') {
         const content = await getContentToken(id);
         setContent(content.list);
+        setLoading(false);
       } else {
         const content = await getContentTokenPath(id, path);
-        setContent(content.list);
+        if (path === path_a) {
+          setContent(content.list);
+          setLoading(false);
+        }
       }
     }
-    getContentEffect();
+    getContentEffect(path);
   }, [path, id]);
 
   return (
@@ -75,13 +83,14 @@ export default function FolderExplorer() {
           }
         }}
       >
-        <Grid container spacing={2}>
+        {loading && <Loading width="100%" height="100%" />}
+        {!loading && <Grid container spacing={2}>
           {content.slice(0, showQ).map((file, i) => (
             <Grid key={`${file.name}-${i}`} item xs={12} md={4} lg={3}>
               <FileElement file={file} arrayIndex={i} />
             </Grid>
           ))}
-        </Grid>
+        </Grid>}
       </Box>
     </Box>
   );

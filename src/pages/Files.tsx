@@ -46,6 +46,7 @@ export default function Files() {
       return { list: [] };
     });
     if (pathM.current === path) {
+      setLoading(false);
       setFiles(list);
     }
   }
@@ -96,9 +97,7 @@ export default function Files() {
 
   useEffect(() => {
     setLoading(true);
-    getFiles(path).then(() => {
-      setLoading(false);
-    });
+    getFiles(path);
     pathM.current = path;
   }, [path]);
 

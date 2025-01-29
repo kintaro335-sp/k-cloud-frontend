@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useCallback } from 'react';
 import { Box, Grid, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Loading from '../../pages/Loading';
@@ -24,6 +24,7 @@ export default function FilesList({ loading }: FilesListProps) {
   const { files, path, start, showQ } = useSelector((state) => state.session);
   const scrollElement = useRef<HTMLDivElement>(null);
   const divBottom = useRef<HTMLDivElement>(null);
+  const observerBottom = useRef<IntersectionObserver | null>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const elementsPerPage = 200;
 
@@ -36,7 +37,7 @@ export default function FilesList({ loading }: FilesListProps) {
     setShowQ(showQ + 8);
   };
 
-  const handleChangeStart = (direction: 'back' | 'go') => {
+  const handleChangeStart = useCallback((direction: 'back' | 'go') => {
     if (direction === 'back') {
       if (start < 0) {
         setStart(0);
@@ -72,7 +73,7 @@ export default function FilesList({ loading }: FilesListProps) {
       };
       setStart(onSetStartGo(start));
     }
-  };
+  }, [start, showQ, files.length]);
 
   useEffect(() => {
     setShowQ(48);
@@ -80,11 +81,13 @@ export default function FilesList({ loading }: FilesListProps) {
   }, [path]);
 
   useEffect(() => {
-    let observer
     if (divBottom.current === null || scrollElement.current === undefined) return;
+    if (observerBottom.current !== null) {
+      observerBottom.current.disconnect();
+    }
     if (loading) return;
 
-    observer = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         console.log(entries[0]);
         if (entries[0].isIntersecting) {
@@ -94,12 +97,16 @@ export default function FilesList({ loading }: FilesListProps) {
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.5
+        threshold: 0.35
       }
     );
 
     observer.observe(divBottom.current);
-  }, [loading]);
+    observerBottom.current = observer;
+    return () => {
+      observer.disconnect();
+    };
+  }, [loading, handleChangeStart]);
 
   const filesMemo = useMemo(() => files, [files]);
 
@@ -133,7 +140,7 @@ export default function FilesList({ loading }: FilesListProps) {
             ))}
             <Grid item xs={12}>
               <Box sx={{ padding: isMobile ? '205px' : '105px' }} />
-              <Box ref={divBottom} sx={{ padding: isMobile ? '8px' : '5px' }} />
+              <Box ref={divBottom} sx={{ padding: '12px' }} />
             </Grid>
           </Grid>
         </Box>

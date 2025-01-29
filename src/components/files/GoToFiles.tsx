@@ -29,7 +29,7 @@ export default function GoToFiles() {
   
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const { pos } = data;
-    setStart(pos * 96)
+    setStart(pos * 200);
     clickClose();
   };
 
@@ -46,10 +46,10 @@ export default function GoToFiles() {
   };
 
   useEffect(() => {
-    setValue('pos', Math.floor(start / 96));
+    setValue('pos', Math.floor(start / 200));
   }, [start]);
 
-  const pages = Math.floor(totalFiles / 96);
+  const pages = Math.floor(totalFiles / 200);
 
   return (
     <>

@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 import gotoIcon from '@iconify/icons-material-symbols/arrow-right-alt-rounded';
 // redux
-import { setStart } from '../../redux/slices/session';
+import { setStart, setShowQ } from '../../redux/slices/session';
 import { useSelector } from '../../redux/store';
 // misc
 import { Trans } from 'react-i18next';
@@ -30,6 +30,7 @@ export default function GoToFiles() {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const { pos } = data;
     setStart(pos * 200);
+    setShowQ(200);
     clickClose();
   };
 

@@ -45,9 +45,6 @@ export default function FilesList({ loading }: FilesListProps) {
       }
       if (start === 0) return;
       const onSetStartBack = (st: number) => {
-        const scrollHeight = scrollElement.current?.scrollHeight as number;
-        const multiplier = isMobile ? 0.96 : 0.955;
-        scrollElement.current?.scroll({ top: scrollHeight * multiplier });
         const newVal = st - elementsPerPage;
         if (newVal < 0) {
           return 0;
@@ -55,20 +52,22 @@ export default function FilesList({ loading }: FilesListProps) {
         return newVal;
       };
       setStart(onSetStartBack(start));
+      const scrollHeight = scrollElement.current?.scrollHeight as number;
+      const multiplier = scrollHeight < 17000 ? 0.90 : 0.957;
+      scrollElement.current?.scroll({ top: scrollHeight * multiplier });
     }
     if (direction === 'go' && showQ >= elementsPerPage) {
       const onSetStartGo = (st: number) => {
-        const scrollHeight = scrollElement.current?.scrollHeight as number;
         const isLastPage = st + elementsPerPage > files.length;
         const newVal = st + elementsPerPage;
         if (newVal > files.length - elementsPerPage) {
           if (!isLastPage) {
-            scrollElement.current?.scroll({ top: scrollHeight * 0.001 });
+            scrollElement.current?.scroll({ top: 13 });
             return st + elementsPerPage;
           }
           return st;
         }
-        scrollElement.current?.scroll({ top: scrollHeight * 0.001 });
+        scrollElement.current?.scroll({ top: 13 });
         return newVal;
       };
       setStart(onSetStartGo(start));
@@ -89,7 +88,6 @@ export default function FilesList({ loading }: FilesListProps) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log(entries[0]);
         if (entries[0].isIntersecting) {
           handleChangeStart('go');
         }

@@ -132,6 +132,17 @@
       "title_total": "Total",
       "title_buffers": "Buffers",
       "title_cpu_usage": "CPU Usage"
+    },
+    "api_keys": {
+      "tab_sessions": "Sessions",
+      "tab_api_keys": "API Keys",
+      "btn_new_api_key": "New API Key",
+      "btn_revoke_api_key": "Remove API Key",
+      "btn_revoke_session": "Revoke Session",
+      "label_name": "Name",
+      "label_scopes": "Scopes",
+      "btn_add_scope": "Add Scope",
+      "btn_create": "Create"
     }
   },
   "ui": {

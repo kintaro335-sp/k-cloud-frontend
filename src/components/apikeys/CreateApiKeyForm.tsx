@@ -5,21 +5,29 @@
  */
 
 import { useState } from 'react';
+import { t } from 'i18next';
 // hookform
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 // compoenents
-import { Grid, TextField, Dialog, DialogContent, Button } from '@mui/material';
+import { Grid, TextField, Dialog, DialogContent, Button, Typography, Box } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
+import SelectScopes from './SelectScopes';
+import { Trans } from 'react-i18next';
+// constants
+import { scopeList } from './constants';
 // redux
 import { useSelector } from '../../redux/store';
 // api
 import { createApiKey } from '../../api/auth';
+// types
+import { Scope } from '../../@types/apikeys';
 
 interface FormFields {
   name: string;
+  scopes: Scope[];
 }
 
 export default function CreateApiKeyForm() {
@@ -36,7 +44,16 @@ export default function CreateApiKeyForm() {
   };
 
   const validationSchema = yup.object().shape({
-    name: yup.string().required()
+    name: yup.string().required(),
+    scopes: yup
+      .array()
+      .of(
+        yup
+          .string()
+          .oneOf(scopeList)
+          .required()
+      )
+      .required()
   });
 
   const form = useForm<FormFields>({
@@ -46,11 +63,19 @@ export default function CreateApiKeyForm() {
     resolver: yupResolver(validationSchema)
   });
 
-  const { register, handleSubmit, reset, formState: { errors, touchedFields, isSubmitting } } = form;
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, touchedFields, isSubmitting }
+  } = form;
+
+  const scopes = watch('scopes');
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const response = await createApiKey(access_token, data.name);
+      const response = await createApiKey(access_token, data.name, data.scopes);
       enqueueSnackbar('API Key creada', { variant: 'success' });
       reset();
       clickClose();
@@ -62,24 +87,32 @@ export default function CreateApiKeyForm() {
   return (
     <>
       <Button onClick={clickOpen} variant="contained" color="primary">
-        Crear API Key
+        <Trans i18nKey="pages.api_keys.btn_new_api_key">Crear API Key</Trans>
       </Button>
       <Dialog open={open} onClose={clickClose} maxWidth="md">
         <DialogContent>
-          <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+          <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  label="Nombre"
+                  label={t('pages.api_keys.label_name')}
                   fullWidth
                   {...register('name')}
                   helperText={errors.name?.message}
                   error={Boolean(errors.name) && Boolean(touchedFields.name)}
                 />
               </Grid>
+              <Grid>
+                <Typography variant="h6">
+                  <Trans i18nKey="pages.api_keys.label_scopes">Scopes</Trans>
+                </Typography>
+                <Box>
+                  <SelectScopes scopes={scopes} onChange={(new_scopes) => form.setValue('scopes', new_scopes)} />
+                </Box>
+              </Grid>
               <Grid item xs={12}>
                 <LoadingButton type="submit" variant="contained" fullWidth loading={isSubmitting}>
-                  Crear
+                  <Trans i18nKey="pages.api_keys.btn_create">Crear</Trans>
                 </LoadingButton>
               </Grid>
             </Grid>

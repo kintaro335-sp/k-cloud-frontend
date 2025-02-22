@@ -58,7 +58,8 @@ export default function CreateApiKeyForm() {
 
   const form = useForm<FormFields>({
     defaultValues: {
-      name: ''
+      name: '',
+      scopes: []
     },
     resolver: yupResolver(validationSchema)
   });

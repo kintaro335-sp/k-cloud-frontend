@@ -7,16 +7,6 @@
 import { Scope } from '../../@types/apikeys';
 
 export const scopeList: Scope[] = [
-  'admin:activity-read',
-  'admin:manage-options',
-  'admin:memory-usage',
-  'admin:stats',
-  'admin:users',
-  'auth:create-api-keys',
-  'auth:delete-sessions',
-  'auth:edit-api-keys',
-  'auth:read-api-keys',
-  'auth:read-sessions',
   'files:create',
   'files:delete',
   'files:move',
@@ -25,5 +15,15 @@ export const scopeList: Scope[] = [
   'tokens:create',
   'tokens:delete',
   'tokens:read',
-  'tokens:update'
+  'tokens:update',
+  'auth:create-api-keys',
+  'auth:delete-sessions',
+  'auth:edit-api-keys',
+  'auth:read-api-keys',
+  'auth:read-sessions',
+  'admin:activity-read',
+  'admin:manage-options',
+  'admin:memory-usage',
+  'admin:stats',
+  'admin:users'
 ];

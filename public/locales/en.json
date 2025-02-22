@@ -142,7 +142,8 @@
       "label_name": "Name",
       "label_scopes": "Scopes",
       "btn_add_scope": "Add Scope",
-      "btn_create": "Create"
+      "btn_create": "Create",
+      "btn_remove": "Remove"
     }
   },
   "ui": {

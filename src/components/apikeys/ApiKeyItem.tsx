@@ -5,7 +5,8 @@
  */
 
 // components
-import { Card, CardHeader, CardContent, TextField, Box, Button } from '@mui/material';
+import { Card, CardHeader, CardContent, TextField, Box, Button, Chip, Stack } from '@mui/material';
+import { Trans } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 // types
 import { ApiKey } from '../../@types/apikeys';
@@ -28,14 +29,21 @@ export default function ApiKeyItem({ apiKey }: { apiKey: ApiKey }) {
       <CardHeader
         title={apiKey.name}
         subheader={
-          <Box sx={{ padding: '50px' }}>
+          <Box sx={{ padding: '10px' }}>
             <TextField defaultValue={apiKey.token} value={apiKey.token} variant="standard" fullWidth />
+            <Box sx={{ marginTop: '10px' }}>
+              <Stack direction="row" spacing={1}>
+                {apiKey.scopes.map((scope) => (
+                  <Chip key={scope} label={scope} />
+                ))}
+              </Stack>
+            </Box>
           </Box>
         }
       />
       <CardContent>
         <Button variant="outlined" color="error" onClick={handleRevokeSession}>
-          Remover
+          <Trans i18nKey="pages.api_keys.btn_remove">Remover</Trans>
         </Button>
       </CardContent>
     </Card>

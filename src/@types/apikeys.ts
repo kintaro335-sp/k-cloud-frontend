@@ -4,18 +4,6 @@
  * MIT Licensed
  */
 
-export interface ApiKey {
-  id: string;
-  token: string;
-  name: string;
-}
-
-export interface Session {
-  id: string;
-  expire: Date;
-  device: string;
-}
-
 export type Scope =
   | 'files:read'
   | 'files:create'
@@ -37,3 +25,15 @@ export type Scope =
   | 'auth:delete-sessions'
   | 'auth:edit-api-keys';
 
+export interface ApiKey {
+  id: string;
+  token: string;
+  name: string;
+  scopes: Scope[];
+}
+
+export interface Session {
+  id: string;
+  expire: Date;
+  device: string;
+}

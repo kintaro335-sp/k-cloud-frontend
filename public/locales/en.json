@@ -143,7 +143,12 @@
       "label_scopes": "Scopes",
       "btn_add_scope": "Add Scope",
       "btn_create": "Create",
-      "btn_remove": "Remove"
+      "btn_remove": "Remove",
+      "btn_edit": "Edit",
+      "title_edit_scopes": "Edit API Key ",
+      "btn_save": "Save",
+      "msg_scopes_updated": "Scopes updated successfully",
+      "msg_error_scopes_updated": "Error updating scopes"
     }
   },
   "ui": {

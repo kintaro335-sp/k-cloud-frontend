@@ -6,6 +6,7 @@
 
 // components
 import { Card, CardHeader, CardContent, TextField, Box, Button, Chip, Stack } from '@mui/material';
+import EditApiKeyForm from './EditApiKeyForm';
 import { Trans } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 // types
@@ -42,9 +43,12 @@ export default function ApiKeyItem({ apiKey }: { apiKey: ApiKey }) {
         }
       />
       <CardContent>
-        <Button variant="outlined" color="error" onClick={handleRevokeSession}>
-          <Trans i18nKey="pages.api_keys.btn_remove">Remover</Trans>
-        </Button>
+        <Stack spacing={1} direction="row">
+          <EditApiKeyForm id={apiKey.id} name={apiKey.name} scopes={apiKey.scopes} />
+          <Button variant="outlined" color="error" onClick={handleRevokeSession}>
+            <Trans i18nKey="pages.api_keys.btn_remove">Remover</Trans>
+          </Button>
+        </Stack>
       </CardContent>
     </Card>
   );

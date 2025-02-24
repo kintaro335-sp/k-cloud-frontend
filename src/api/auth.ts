@@ -69,3 +69,9 @@ export async function createApiKey(token: string, name: string, scopes: Scope[])
   const response = await connAuth.post(`/apikeys?t=${token}`, { name, scopes });
   return response.data;
 }
+
+
+export async function editApiKey(token: string, id: string, scopes: Scope[]): Promise<ApiKey> {
+  const response = await connAuth.patch(`/apikeys/${id}?t=${token}`, { scopes });
+  return response.data;
+}

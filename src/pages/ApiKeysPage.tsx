@@ -39,13 +39,13 @@ export default function ApiKeysPage() {
 
   useEffect(() => {
     socketClient.on('sessions-update', () => {
-      getSessionData()
+      getSessionData();
     });
 
     return () => {
       socketClient.removeListener('sessions-update');
     }
-  }, []);
+  }, [getSessionData]);
 
   return <Box>
     <TabContext value={tabValue}>

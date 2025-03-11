@@ -57,6 +57,12 @@
         "tb_label_expiration_date": "Expiration Date"
       }
     },
+    "tokens": {
+      "label_expire": "expire",
+      "label_permanent": "permanent",
+      "menu_opc_edit": "Edit",
+      "menu_opc_delete": "Delete"
+    },
     "userstats":{
       "title": "Space used by you"
     },
@@ -217,6 +223,6 @@
     "stop_sharing_confirm": "Are you sure you want to stop sharing this file?",
     "msg_sharing_stopped": "Sharing stopped",
     "msg_deleted": "Deleted",
-    "msg_delete_token_confirm": "do you want to delete "
+    "msg_delete_token_confirm": "Do you want to delete "
   }
 }

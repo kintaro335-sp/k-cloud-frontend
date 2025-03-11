@@ -10,6 +10,8 @@ import { useTheme } from '@mui/material/styles';
 import { CustomDialog } from '../molecules';
 import NewTokenForm from '../files/tokens/NewTokenForm';
 import { TokenElement } from '../../@types/sharedfiles';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 import { useSnackbar } from 'notistack';
 // icons
 import { Icon } from '@iconify/react';
@@ -42,9 +44,10 @@ export default function TokenMenu({ token }: TokenMenuProps) {
   };
 
   const handleDeleteToken = async () => {
-    if (window.confirm(`desea eliminar ${token.id}?`)) {
+    if (window.confirm(`${t('snackbar.msg_delete_token_confirm')} ${token.name} (${token.id})?`)) {
       await deleteToken(token.id, access_token);
-      enqueueSnackbar('Token Eliminado', { variant: 'success' });
+      clickClose();
+      enqueueSnackbar(t('snackbar.msg_deleted'), { variant: 'success' });
     }
   };
 
@@ -63,7 +66,7 @@ export default function TokenMenu({ token }: TokenMenuProps) {
           Button={(onlcickB) => (
             <MenuItem onClick={onlcickB}>
               <Icon icon={iconEdit} width="25px" height="height" />
-              Editar
+              <Trans i18nKey="pages.tokens.menu_opc_edit">Editar</Trans>
             </MenuItem>
           )}
           onClose={clickClose}
@@ -71,7 +74,8 @@ export default function TokenMenu({ token }: TokenMenuProps) {
           <NewTokenForm url="" edit token={token} />
         </CustomDialog>
         <MenuItem onClick={handleDeleteToken}>
-          <Icon icon={iconDelete} width="25px" height="25px" /> Eliminar
+          <Icon icon={iconDelete} width="25px" height="25px" />
+            <Trans i18nKey="pages.tokens.menu_opc_delete">Eliminar</Trans>
         </MenuItem>
       </Menu>
     </>

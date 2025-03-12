@@ -18,9 +18,10 @@ export async function shareFile(
   expires: boolean,
   publict: boolean,
   expire: number,
-  token: string
+  token: string,
+  id?: string
 ): Promise<{ id: string }> {
-  const response = await sfconn.post(`share/${path}?t=${token}`, { expires, expire, public: publict });
+  const response = await sfconn.post(`share/${path}?t=${token}`, { id, expires, expire, public: publict });
   return response.data;
 }
 

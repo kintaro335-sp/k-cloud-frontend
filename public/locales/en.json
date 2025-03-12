@@ -47,6 +47,7 @@
         "label_expire": "Expire",
         "label_public": "Public",
         "label_save": "Save",
+        "label_customid": "Custom ID",
         "label_date_expiration": "Expiration Date",
         "btn_save": "Save",
         "title_token_list": "Tokens List",

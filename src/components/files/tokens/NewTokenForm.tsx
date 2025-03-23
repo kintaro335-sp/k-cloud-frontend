@@ -61,7 +61,7 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
     formState: { isSubmitting, errors, touchedFields }
   } = useForm<NewTokenValues>({
     defaultValues: {
-      id: '',
+      id: customId ? '' : undefined,
       expire: token?.expire || false,
       publict: token?.publict || false,
       expires: token?.expires !== undefined ? new Date(token.expires) : new Date()

@@ -6,6 +6,7 @@
 
 // components
 import { Card, CardHeader, CardContent, Box, Button, Typography } from '@mui/material';
+import { Trans } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 // types
 import { Session } from '../../@types/apikeys';
@@ -42,7 +43,7 @@ export default function SessionItem({ session }: { session: Session }) {
       <CardContent>
         {sessionId !== session.id && (
           <Button variant="outlined" color="error" onClick={handleRevokeSession}>
-            Revocar sesión
+            <Trans i18nKey="pages.api_keys.btn_revoke_session">Revocar sesión</Trans>
           </Button>
         )}
       </CardContent>

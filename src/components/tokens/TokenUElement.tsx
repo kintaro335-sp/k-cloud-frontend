@@ -11,6 +11,7 @@ import { Card, Box, CardContent, Typography, CardHeader, Tooltip, Stack, Checkbo
 import { useTheme } from '@mui/material/styles';
 import TokenMenu from './TokenMenu';
 import { FileIcon } from '../atoms';
+import { t } from 'i18next';
 // icons
 import { Icon } from '@iconify/react';
 import publicIcon from '@iconify/icons-material-symbols/public';
@@ -109,7 +110,7 @@ export default function TokenUElement({ token }: TokenUElementProps) {
                   <Icon icon={publicOffIcon} width="25px" height="25px" />
                 )}
               </Box>
-              <Box>{expire ? 'expira' : 'permanente'}</Box>
+              <Box>{expire ? t('pages.tokens.label_expire') : t('pages.tokens.label_permanent')}</Box>
               <Box>{expire && fullDateFormat(new Date(expires))}</Box>
             </Stack>
           </Box>

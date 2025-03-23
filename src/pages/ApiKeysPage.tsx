@@ -4,7 +4,9 @@
  * MIT Licensed
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 // components
 import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
@@ -37,20 +39,20 @@ export default function ApiKeysPage() {
 
   useEffect(() => {
     socketClient.on('sessions-update', () => {
-      getSessionData()
+      getSessionData();
     });
 
     return () => {
       socketClient.removeListener('sessions-update');
     }
-  }, []);
+  }, [getSessionData]);
 
   return <Box>
     <TabContext value={tabValue}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <TabList onChange={(event, newValue) => setTabValue(newValue)} aria-label="api keys">
-          <Tab label="Sessiones" value="0" />
-          <Tab label="Api Keys" value="1" />
+          <Tab label={t('pages.api_keys.tab_sessions')} value="0" />
+          <Tab label={t('pages.api_keys.tab_api_keys')} value="1" />
         </TabList>
       </Box>
       <TabPanel value="0">

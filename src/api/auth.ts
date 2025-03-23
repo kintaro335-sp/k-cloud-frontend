@@ -7,7 +7,7 @@
 import axios from 'axios';
 import { apiUrl } from '../config';
 import { AuthResponse, MessageResponse, UserPayload } from '../@types/auth';
-import { ApiKey, Session } from '../@types/apikeys';
+import { ApiKey, Session, Scope } from '../@types/apikeys';
 
 const connAuth = axios.create({
   baseURL: `${apiUrl}/auth`,
@@ -65,7 +65,13 @@ export async function getApiKeys(token: string): Promise<{ data: ApiKey[]; total
   return response.data;
 }
 
-export async function createApiKey(token: string, name: string): Promise<ApiKey> {
-  const response = await connAuth.post(`/apikeys?t=${token}`, { name });
+export async function createApiKey(token: string, name: string, scopes: Scope[]): Promise<ApiKey> {
+  const response = await connAuth.post(`/apikeys?t=${token}`, { name, scopes });
+  return response.data;
+}
+
+
+export async function editApiKey(token: string, id: string, scopes: Scope[]): Promise<ApiKey> {
+  const response = await connAuth.patch(`/apikeys/${id}?t=${token}`, { scopes });
   return response.data;
 }

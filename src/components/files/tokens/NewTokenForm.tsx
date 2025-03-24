@@ -96,32 +96,34 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <FormControlLabel
-                label={t('pages.files.tokens_menu.label_customid')}
-                labelPlacement="bottom"
-                checked={customId}
-                onChange={(e) => {
-                  //@ts-ignore
-                  const checked = e.target.checked;
-                  if (checked) {
-                    setValue('id', '');
-                  } else {
-                    setValue('id', undefined);
-                  }
-                  setCustomId(checked);
-                }}
-                control={<Switch />}
-              />
-              {customId && (
-                <TextField
+            {!edit && (
+              <Grid item xs={12}>
+                <FormControlLabel
                   label={t('pages.files.tokens_menu.label_customid')}
-                  {...register('id')}
-                  helperText={errors.id?.message}
-                  error={Boolean(errors.id) && Boolean(touchedFields.id)}
+                  labelPlacement="bottom"
+                  checked={customId}
+                  onChange={(e) => {
+                    //@ts-ignore
+                    const checked = e.target.checked;
+                    if (checked) {
+                      setValue('id', '');
+                    } else {
+                      setValue('id', undefined);
+                    }
+                    setCustomId(checked);
+                  }}
+                  control={<Switch />}
                 />
-              )}
-            </Grid>
+                {customId && (
+                  <TextField
+                    label={t('pages.files.tokens_menu.label_customid')}
+                    {...register('id')}
+                    helperText={errors.id?.message}
+                    error={Boolean(errors.id) && Boolean(touchedFields.id)}
+                  />
+                )}
+              </Grid>
+            )}
             <Grid item xs={4}>
               <FormControlLabel
                 label={t('pages.files.tokens_menu.label_expire')}

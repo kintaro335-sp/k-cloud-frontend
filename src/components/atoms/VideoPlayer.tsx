@@ -27,6 +27,7 @@ interface BufferRange {
 
 export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: string }) {
   const theme = useTheme();
+  const VOLUME_KEY = 'videovolume';
 
   const timeOutId = useRef<number>(null);
 
@@ -38,10 +39,17 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(() => {
+    const savedVolume = localStorage.getItem(VOLUME_KEY);
+    return savedVolume !== null ? parseFloat(savedVolume) : 1;
+  });
   const [isMuted, setIsMuted] = useState(false);
   const [bufferRanges, setBufferRanges] = useState<BufferRange[]>([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem(VOLUME_KEY, String(volume));
+  }, [volume]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -195,6 +203,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
           ref={videoRef}
           style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%' }}
           src={url}
+          preload="metadata"
           onClick={() => {
             setHideTimeout();
             togglePlay();

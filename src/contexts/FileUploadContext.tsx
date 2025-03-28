@@ -19,7 +19,7 @@ import {
   setCurrentBlobSizeSend
 } from '../redux/slices/fileUploader';
 import { initializeFileAPI, uploadBlobAPI, uploadFileAPI } from '../api/files';
-import { getNumberBlobs, BLOB_SIZE } from '../utils/files';
+import { getNumberBlobs, BLOB_SIZE, generatePathFile } from '../utils/files';
 import { isAxiosError } from 'axios';
 // import { useSnackbar } from 'notistack';
 // hooks
@@ -94,7 +94,7 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
     setTotalBlobs(dir, blobs);
     if (blobs === 1) {
       const b = await uploadFileAPI(dir, file, access_token, (p) => {
-        setBlobProgress(dir, p)
+        setBlobProgress(dir, p);
       });
     } else {
       for (let i = 0; i < blobs; i++) {
@@ -132,8 +132,8 @@ export default function FileUploadC({ children }: { children: React.ReactNode })
 
   const uploadFile = (path: string, file: File | null) => {
     if (file === null) return;
+    const filePath = generatePathFile(path, file.name);
     addFile(path, file);
-    const filePath = `${path}/${file.name}`;
     startUpload(filePath, file);
   };
 

@@ -7,6 +7,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { dispatch } from '../store';
 import { FileToUpload, NewFile, BlobToWrite } from '../../@types/files';
+import { generatePathFile } from '../../utils/files';
 import { set } from 'lodash';
 import { setUsedSpaceFiles } from './stats';
 
@@ -31,7 +32,7 @@ const slice = createSlice({
     addFile(state, action) {
       const { path, file } = action.payload as NewFile;
       if (file === null) return;
-      const fileDir = `${path}/${file.name}`;
+      const fileDir = generatePathFile(path, file.name);
       state.files[fileDir] = {
         uploading: false,
         size: file.size,

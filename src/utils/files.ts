@@ -30,3 +30,10 @@ export function getNumberBlobs(size: number) {
     blobNum++;
   }
 }
+
+export function generatePathFile(path: string, fileName: string) {
+  if (path === '') {
+    return fileName;
+  }
+  return `${path}/${fileName}`;
+}

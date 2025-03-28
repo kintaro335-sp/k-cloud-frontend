@@ -2,7 +2,7 @@
   "name": "k-cloud-frontend",
   "author": "Kintaro Ponce",
   "private": true,
-  "version": "1.3.1",
+  "version": "1.3.11",
   "license": "MIT",
   "type": "module",
   "scripts": {

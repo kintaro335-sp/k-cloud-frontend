@@ -17,7 +17,7 @@ interface BarProps {
 }
 
 export default function Bar({ children }: BarProps) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const { pathname } = useLocation();
   const pagesShowList = ['/files'];
   const showMenuL = isAuthenticated && pagesShowList.includes(pathname);
@@ -39,13 +39,42 @@ export default function Bar({ children }: BarProps) {
               Cloud
             </Typography>
             {isAuthenticated && <UserProfile />}
-            <Stack spacing={2} direction="row" sx={{ display: 'flex', float: 'right', overflowX: 'auto', marginRight: '5px' }}>
-              {!isAuthenticated && pathname !== '/login' && <LinkBar to="/login"><Trans i18nKey="ui.bar.login">Login</Trans></LinkBar>}
-              {isAuthenticated && pathname !== '/files' && <LinkBar to="/files"><Trans i18nKey="ui.bar.files">Archivos</Trans></LinkBar>}
+            {loading && (
+              <Typography variant='caption'>
+                <Trans i18nKey="common.loading">Cargando</Trans>...
+              </Typography>
+            )}
+            <Stack
+              spacing={2}
+              direction="row"
+              sx={{ display: 'flex', float: 'right', overflowX: 'auto', marginRight: '5px' }}
+            >
+              {!isAuthenticated && pathname !== '/login' && (
+                <LinkBar to="/login">
+                  <Trans i18nKey="ui.bar.login">Login</Trans>
+                </LinkBar>
+              )}
+              {isAuthenticated && pathname !== '/files' && (
+                <LinkBar to="/files">
+                  <Trans i18nKey="ui.bar.files">Archivos</Trans>
+                </LinkBar>
+              )}
               {isAuthenticated && pathname === '/files' && <FilesSubMenu />}
-              {isAuthenticated && pathname !== '/search' && <LinkBar to="/search"><Trans i18nKey="ui.bar.search">Buscar</Trans></LinkBar>}
-              {isAuthenticated && pathname !== '/tokens' && <LinkBar to="/tokens"><Trans i18nKey="ui.bar.tokens">Tokens</Trans></LinkBar>}
-              {pathname !== '/shared-files' && <LinkBar to="/shared-files"><Trans i18nKey="ui.bar.shared_files">Shared Files</Trans></LinkBar>}
+              {isAuthenticated && pathname !== '/search' && (
+                <LinkBar to="/search">
+                  <Trans i18nKey="ui.bar.search">Buscar</Trans>
+                </LinkBar>
+              )}
+              {isAuthenticated && pathname !== '/tokens' && (
+                <LinkBar to="/tokens">
+                  <Trans i18nKey="ui.bar.tokens">Tokens</Trans>
+                </LinkBar>
+              )}
+              {pathname !== '/shared-files' && (
+                <LinkBar to="/shared-files">
+                  <Trans i18nKey="ui.bar.shared_files">Shared Files</Trans>
+                </LinkBar>
+              )}
               {mobile && isAuthenticated && <Uploads />}
             </Stack>
           </Toolbar>

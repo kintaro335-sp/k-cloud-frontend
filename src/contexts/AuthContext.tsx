@@ -16,6 +16,7 @@ import { isAxiosError } from 'axios';
 export const AuthContext = createContext({
   isAdmin: false,
   isAuthenticated: false,
+  loading: false,
   init: false,
   username: '',
   sessionId: '',
@@ -32,11 +33,13 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const [sessionId, setSessionId] = useState<string>('');
   const [username, setUsername] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     async function verifyAuthToken() {
       if (access_token !== '') {
+        setLoading(true);
         verifyAuth(access_token)
           .then((u) => {
             setIsAdmin(u.isadmin);
@@ -44,6 +47,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             setUsername(u.username);
             setIsAuthenticated(true);
             setInit(true);
+            setLoading(false);
           })
           .catch((err) => {
             if (isAxiosError(err)) {
@@ -53,10 +57,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             }
             setIsAuthenticated(false);
             setInit(true);
+            setLoading(false);
           });
       } else {
         setIsAuthenticated(false);
         setIsAdmin(false);
+        setLoading(false);
       }
       setInit(true);
     }
@@ -72,8 +78,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   }, [access_token]);
 
   const value = useMemo(
-    () => ({ isAuthenticated, init, isAdmin, sessionId, username, socketClient: socketClient.current }),
-    [isAuthenticated, init, isAdmin, username, sessionId, socketClient]
+    () => ({ isAuthenticated, loading, init, isAdmin, sessionId, username, socketClient: socketClient.current }),
+    [isAuthenticated, loading, init, isAdmin, username, sessionId, socketClient]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

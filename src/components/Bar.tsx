@@ -40,7 +40,7 @@ export default function Bar({ children }: BarProps) {
             </Typography>
             {isAuthenticated && <UserProfile />}
             {loading && (
-              <Typography variant='caption'>
+              <Typography variant='subtitle1'>
                 <Trans i18nKey="common.loading">Cargando</Trans>...
               </Typography>
             )}

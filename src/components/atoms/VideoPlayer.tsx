@@ -163,9 +163,12 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   };
 
   const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor(time / 60) - hours * 60;
     const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return `${hours === 0 ? '' : hours.toString().padStart(2, '0') + ':'}${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const setHideTimeout = () => {
@@ -180,6 +183,13 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
     }, 3000);
     videoControls.style.display = 'block';
   };
+
+  useEffect(() => {
+    if (videoRef.current === null) return;
+    const savedVolume = localStorage.getItem(VOLUME_KEY);
+    if (savedVolume === null) return;
+    videoRef.current.volume = parseFloat(savedVolume);
+  }, [videoRef.current]);
 
   const videoplayerWidth = isFullscreen ? '100vw' : '100%';
   const videoplayerHeight = isFullscreen ? '100vh' : 'auto';
@@ -227,7 +237,12 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
             }
           }}
         />
-        <Box ref={videoControlsRef} className="video-controls-show" sx={{ position: 'absolute', bottom: 0, left: 0 }}>
+        <Box
+          ref={videoControlsRef}
+          onClick={() => videoRef.current?.focus()}
+          className="video-controls-show"
+          sx={{ position: 'absolute', bottom: 0, left: 0 }}
+        >
           <Box sx={{ position: 'relative', width: videoContainerRef.current?.clientWidth }}>
             <Box
               sx={{
@@ -238,7 +253,10 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                 bgcolor: 'rgba(255, 255, 255, 0.3)',
                 cursor: 'pointer'
               }}
-              onClick={handleSeek}
+              onClick={(e) => {
+                videoRef.current?.focus();
+                handleSeek(e);
+              }}
               ref={progressRef}
             >
               {bufferRanges.map((range, index) => (
@@ -265,20 +283,44 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <IconButton onClick={() => skip(-10)} size="small">
+                <IconButton
+                  onClick={() => {
+                    videoRef.current?.focus();
+                    skip(-10);
+                  }}
+                  size="small"
+                >
                   <Icon icon={fastRewindIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                 </IconButton>
-                <IconButton onClick={togglePlay} size="small">
+                <IconButton
+                  onClick={() => {
+                    videoRef.current?.focus();
+                    togglePlay();
+                  }}
+                  size="small"
+                >
                   {isPlaying ? (
                     <Icon icon={pauseIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                   ) : (
                     <Icon icon={playArrow} width="20px" height="20px" color={theme.palette.text.secondary} />
                   )}
                 </IconButton>
-                <IconButton onClick={() => skip(10)} size="small">
+                <IconButton
+                  onClick={() => {
+                    videoRef.current?.focus();
+                    skip(10);
+                  }}
+                  size="small"
+                >
                   <Icon icon={fastforwardIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                 </IconButton>
-                <IconButton onClick={toggleMute} size="small">
+                <IconButton
+                  onClick={() => {
+                    videoRef.current?.focus();
+                    toggleMute();
+                  }}
+                  size="small"
+                >
                   {isMuted ? (
                     <Icon icon={volumeOff} width="20px" height="20px" color={theme.palette.text.secondary} />
                   ) : (
@@ -291,13 +333,22 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                   max="1"
                   step="0.01"
                   value={isMuted ? 0 : volume}
-                  onChange={handleVolumeChange}
+                  onChange={(e) => {
+                    videoRef.current?.focus();
+                    handleVolumeChange(e);
+                  }}
                   style={{ width: '75px', marginLeft: '8px', verticalAlign: 'middle' }}
                 />
                 <Typography variant="body2">
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </Typography>
-                <IconButton onClick={toggleFullscreen} size="small">
+                <IconButton
+                  onClick={() => {
+                    videoRef.current?.focus();
+                    toggleFullscreen();
+                  }}
+                  size="small"
+                >
                   {isFullscreen ? (
                     <Icon icon={fullscreenExitIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                   ) : (

@@ -9,7 +9,7 @@ import { explorerContext } from '../../@types/general';
 import { Box } from '@mui/material';
 import { Icon } from '@iconify/react';
 import FolderIcon from '@iconify/icons-ant-design/folder';
-import { ImgFileT, VideoFile, OtherFile } from './filespreview';
+import { ImgFileT, VideoFile, AudioFile, OtherFile } from './filespreview';
 
 export default function TokenIcon({
   type,
@@ -42,6 +42,10 @@ export default function TokenIcon({
 
   if (mime_type.includes('image/')) {
     return <ImgFileT url={url} context={context} index={arrayIndex} />;
+  }
+
+  if (mime_type.includes('audio/')) {
+    return <AudioFile />;
   }
 
   return <OtherFile url={url} />;

@@ -224,6 +224,8 @@
     "stop_sharing_confirm": "Are you sure you want to stop sharing this file?",
     "msg_sharing_stopped": "Sharing stopped",
     "msg_deleted": "Deleted",
-    "msg_delete_token_confirm": "Do you want to delete "
+    "msg_delete_token_confirm": "Do you want to delete ",
+    "msg_first_user_created": "First user created successfully",
+    "msg_register_user": "Register success"
   }
 }

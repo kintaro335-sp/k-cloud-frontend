@@ -65,11 +65,11 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
           await createFirstUser(username, password);
           const resultLogin = await loginApi(username, password);
           dispatch(setAccessToken(resultLogin.access_token));
-          enqueueSnackbar('Primer usuario agregado con exito', { variant: 'success' });
+          enqueueSnackbar(t('snackbar.msg_first_user_created'), { variant: 'success' });
           navigate('/files');          
         } else {
           const { access_token } = await registerApi(username, password);
-          enqueueSnackbar('Register success', { variant: 'success' });
+          enqueueSnackbar(t('snackbar.msg_register_user'), { variant: 'success' });
           dispatch(setAccessToken(access_token));
         }
       } else {
@@ -86,14 +86,14 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
 
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          <Trans i18nKey="ui.resgiter_form.title">Crear Usuario</Trans>
+          <Trans i18nKey="ui.register_form.title">Crear Usuario</Trans>
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label={t('ui.resgiter_form.label_username')}
+                label={t('ui.register_form.label_username')}
                 {...register('username')}
                 error={Boolean(errors.username) || touchedFields.username}
                 // @ts-ignore
@@ -103,7 +103,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label={t('ui.resgiter_form.label_password')}
+                label={t('ui.register_form.label_password')}
                 type="password"
                 {...register('password')}
                 error={Boolean(errors.password) || touchedFields.password}
@@ -114,7 +114,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label={t('ui.resgiter_form.label_password_confirm')}
+                label={t('ui.register_form.label_password_confirm')}
                 type="password"
                 {...register('confirmPassword')}
                 error={Boolean(errors.confirmPassword) || touchedFields.confirmPassword}
@@ -126,7 +126,7 @@ export default function RegisterForm({ cardProps, setup }: RegisterFormProps) {
             </Grid>
             <Grid item xs={12}>
               <LoadingButton type="submit" variant="contained" color="primary" loading={isSubmitting}>
-                <Trans i18nKey='ui.resgiter_form.btn_register'>Register</Trans>
+                <Trans i18nKey='ui.register_form.btn_register'>Register</Trans>
               </LoadingButton>
             </Grid>
           </Grid>

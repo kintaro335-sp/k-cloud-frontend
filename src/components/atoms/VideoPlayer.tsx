@@ -181,7 +181,6 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
       const pos = (e.clientX - rect.left) / rect.width;
       const time = pos * duration;
       const finalPos = pos * 100;
-      console.log(finalPos);
       setHoverPositionBar(finalPos);
       if (finalPos < 2.5) {
         setHoverPosition(2.5);

@@ -90,7 +90,14 @@ export default function FileElement({ file, arrayIndex, context = 'sharedFile' }
   if (type === 'file') {
     return (
       <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete}>
-        <FileIcon type={type} mime_type={mime_type} url={urlComplete} context={context} arrayIndex={arrayIndex} />
+        <FileIcon
+          type={type}
+          mime_type={mime_type}
+          url={urlComplete}
+          context={context}
+          arrayIndex={arrayIndex}
+          fileName={name}
+        />
       </FileInfo>
     );
   }

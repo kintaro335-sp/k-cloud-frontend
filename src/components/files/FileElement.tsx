@@ -40,7 +40,6 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
   const selected = files.includes(file.name);
 
   useEffect(() => {
-    
     resizeObserver.current = new ResizeObserver((entries) => {
       if (!cardHeaderRef.current || !fileNameContainer.current) return;
       fileNameContainer.current.style.setProperty('width', `${entries[0].contentRect.width - 35}px`);
@@ -49,7 +48,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
     resizeObserver.current.observe(cardHeaderRef.current as Element);
     return () => {
       resizeObserver.current?.disconnect();
-    }
+    };
   }, []);
 
   return (
@@ -74,7 +73,7 @@ function FileInfo({ file, children, url, urlComplete, sf }: FileInfoProps) {
         ref={cardHeaderRef}
         title={
           <Tooltip title={<Typography variant="body2">{file.name}</Typography>}>
-            <Box ref={fileNameContainer} sx={{  }}>
+            <Box ref={fileNameContainer} sx={{}}>
               <Box
                 sx={{
                   whiteSpace: 'nowrap',
@@ -140,9 +139,16 @@ export default function FileElement({ file, sf = false, arrayIndex }: FileElemen
   if (type === 'file') {
     return (
       <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf={sf}>
-        <FileIcon type={type} mime_type={mime_type} url={urlComplete} context={sf ? 'sharedFile' : 'default'} arrayIndex={arrayIndex} />
+        <FileIcon
+          type={type}
+          mime_type={mime_type}
+          url={urlComplete}
+          context={sf ? 'sharedFile' : 'default'}
+          arrayIndex={arrayIndex}
+          fileName={name}
+        />
       </FileInfo>
-    )
+    );
   }
 
   return (

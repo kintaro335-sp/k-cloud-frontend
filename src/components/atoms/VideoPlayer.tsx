@@ -172,16 +172,20 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   };
 
   const setHideTimeout = () => {
+    const videoPlayer = videoRef.current;
     const videoControls = videoControlsRef.current;
     if (!videoControls) return;
+    if (!videoPlayer) return;
     if (timeOutId.current) {
       clearTimeout(timeOutId.current);
     }
     // @ts-ignore
     timeOutId.current = setTimeout(() => {
       videoControls.style.display = 'none';
+      videoPlayer.style.cursor = 'none';
     }, 3000);
     videoControls.style.display = 'block';
+    videoPlayer.style.cursor = 'default';
   };
 
   useEffect(() => {
@@ -289,6 +293,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     skip(-10);
                   }}
                   size="small"
+                  className='player-button'
                 >
                   <Icon icon={fastRewindIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                 </IconButton>
@@ -298,6 +303,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     togglePlay();
                   }}
                   size="small"
+                  className='player-button'
                 >
                   {isPlaying ? (
                     <Icon icon={pauseIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
@@ -311,6 +317,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     skip(10);
                   }}
                   size="small"
+                  className='player-button'
                 >
                   <Icon icon={fastforwardIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                 </IconButton>
@@ -320,6 +327,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     toggleMute();
                   }}
                   size="small"
+                  className='player-button'
                 >
                   {isMuted ? (
                     <Icon icon={volumeOff} width="20px" height="20px" color={theme.palette.text.secondary} />
@@ -337,6 +345,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     videoRef.current?.focus();
                     handleVolumeChange(e);
                   }}
+                  className="player-button"
                   style={{ width: '75px', marginLeft: '8px', verticalAlign: 'middle' }}
                 />
                 <Typography variant="body2">
@@ -348,6 +357,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     toggleFullscreen();
                   }}
                   size="small"
+                  className='player-button'
                 >
                   {isFullscreen ? (
                     <Icon icon={fullscreenExitIcon} width="20px" height="20px" color={theme.palette.text.secondary} />

@@ -28,7 +28,7 @@ export default function TokenItem({ token }: TokenElementProps) {
     <Card>
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-          <FileIcon type={type} mime_type={mime_type} url={urlRaw} context="sharedFile" />
+          <FileIcon type={type} mime_type={mime_type} url={urlRaw} context="sharedFile" fileName={name} />
         </Box>
       </CardContent>
       <CardHeader

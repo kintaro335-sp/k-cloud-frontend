@@ -17,16 +17,18 @@ export default function TokenIcon({
   url,
   context,
   arrayIndex,
+  fileName,
   onClickFolder
 }: {
   type: FileType;
   mime_type: string;
   url: string;
   context: explorerContext;
+  fileName?: string;
   arrayIndex?: number;
   onClickFolder?: VoidFunction;
 }) {
-  const name = url.split('/').pop() || '';
+  const name = fileName || '';
 
   if (type === 'folder') {
     return (

@@ -4,8 +4,8 @@
  * MIT Licensed
  */
 
-import moment from 'moment';
+import dayjs from 'dayjs';
 
-export function fullDateFormat(date: Date | string | number) {
-  return moment(date).format('YYYY-MM-DD h:mm A');
-}
+export const fullDateFormat = (date: string | Date | number) => {
+  return dayjs(date).format('YYYY-MM-DD h:mm A');
+};

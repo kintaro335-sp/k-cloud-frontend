@@ -13,7 +13,7 @@ import { apiUrl } from '../../config';
 // redux
 import { useSelector } from '../../redux/store';
 import { bytesFormat } from '../../utils/files';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 function FilePreview({ mime, url }: { mime: string; url: string }) {
   if (mime.includes('image/')) {
@@ -48,8 +48,8 @@ export default function FileInfo() {
           subheader={
             <Stack>
               <Typography>{info.type === 'file' && bytesFormat(info.size)}</Typography>
-              <Typography>Creado: {moment(info.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
-              {info.expire && <Typography>Expira: {moment(info.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>}
+              <Typography>Creado: {dayjs(info.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
+              {info.expire && <Typography>Expira: {dayjs(info.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>}
             </Stack>
           }
         />

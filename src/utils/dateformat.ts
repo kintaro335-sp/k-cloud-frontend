@@ -6,6 +6,6 @@
 
 import dayjs from 'dayjs';
 
-export const formatDate = (date: string | Date) => {
+export const fullDateFormat = (date: string | Date) => {
   return dayjs(date).format('YYYY-MM-DD h:mm A');
 };

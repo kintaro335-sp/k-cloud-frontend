@@ -4,3 +4,7 @@
   background: rgb(0,0,0);
   background: linear-gradient(0deg, rgba(0,0,0,0.6432773793110995) 18%, rgba(0,0,0,0.5340336818321079) 34%, rgba(0,0,0,0.3827731776304272) 59%, rgba(0, 0, 0, 0) 92%);
 }
+
+.player-button {
+  cursor: pointer;
+}

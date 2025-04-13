@@ -39,6 +39,10 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [hoverPosition, setHoverPosition] = useState(0);
+  const [hoverPositionBar, setHoverPositionBar] = useState(0);
+  const [hoverTime, setHoverTime] = useState(0);
   const [volume, setVolume] = useState(() => {
     const savedVolume = localStorage.getItem(VOLUME_KEY);
     return savedVolume !== null ? parseFloat(savedVolume) : 1;
@@ -171,17 +175,47 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
       .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (progressRef.current) {
+      const rect = progressRef.current.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      const time = pos * duration;
+      const finalPos = pos * 100;
+      setHoverPositionBar(finalPos);
+      if (finalPos < 2.5) {
+        setHoverPosition(2.5);
+      } else if (finalPos > 97.5) {
+        setHoverPosition(97.5);
+      } else {
+        setHoverPosition(finalPos);
+      }
+      setHoverTime(time);
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
+
   const setHideTimeout = () => {
+    const videoPlayer = videoRef.current;
     const videoControls = videoControlsRef.current;
     if (!videoControls) return;
+    if (!videoPlayer) return;
     if (timeOutId.current) {
       clearTimeout(timeOutId.current);
     }
     // @ts-ignore
     timeOutId.current = setTimeout(() => {
       videoControls.style.display = 'none';
+      videoPlayer.style.cursor = 'none';
     }, 3000);
     videoControls.style.display = 'block';
+    videoPlayer.style.cursor = 'default';
   };
 
   useEffect(() => {
@@ -253,6 +287,9 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                 bgcolor: 'rgba(255, 255, 255, 0.3)',
                 cursor: 'pointer'
               }}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               onClick={(e) => {
                 videoRef.current?.focus();
                 handleSeek(e);
@@ -280,6 +317,40 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                   bgcolor: 'primary.main'
                 }}
               />
+              {isHovering && (
+                <>
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      left: `${hoverPositionBar}%`,
+                      height: '100%',
+                      width: '2px',
+                      bgcolor: 'white',
+                      transform: 'translateX(-50%)',
+                      zIndex: 2
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      left: `${hoverPosition}%`,
+                      top: '-30px',
+                      transform: 'translateX(-50%)',
+                      bgcolor: 'rgba(0, 0, 0, 0.8)',
+                      color: 'white',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '14px',
+                      fontWeight: 'medium',
+                      zIndex: 2,
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)'
+                    }}
+                  >
+                    {formatTime(hoverTime)}
+                  </Box>
+                </>
+              )}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -289,6 +360,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     skip(-10);
                   }}
                   size="small"
+                  className="player-button"
                 >
                   <Icon icon={fastRewindIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                 </IconButton>
@@ -298,6 +370,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     togglePlay();
                   }}
                   size="small"
+                  className="player-button"
                 >
                   {isPlaying ? (
                     <Icon icon={pauseIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
@@ -311,6 +384,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     skip(10);
                   }}
                   size="small"
+                  className="player-button"
                 >
                   <Icon icon={fastforwardIcon} width="20px" height="20px" color={theme.palette.text.secondary} />
                 </IconButton>
@@ -320,6 +394,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     toggleMute();
                   }}
                   size="small"
+                  className="player-button"
                 >
                   {isMuted ? (
                     <Icon icon={volumeOff} width="20px" height="20px" color={theme.palette.text.secondary} />
@@ -337,6 +412,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     videoRef.current?.focus();
                     handleVolumeChange(e);
                   }}
+                  className="player-button"
                   style={{ width: '75px', marginLeft: '8px', verticalAlign: 'middle' }}
                 />
                 <Typography variant="body2">
@@ -348,6 +424,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                     toggleFullscreen();
                   }}
                   size="small"
+                  className="player-button"
                 >
                   {isFullscreen ? (
                     <Icon icon={fullscreenExitIcon} width="20px" height="20px" color={theme.palette.text.secondary} />

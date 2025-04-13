@@ -92,7 +92,14 @@ export default function FileElement({ file, arrayIndex, context = 'default' }: F
   if (type === 'file') {
     return (
       <FileInfo file={{ name, size, tokens, type, mime_type, extension }} url={url} urlComplete={urlComplete} sf>
-        <FileIcon type={type} mime_type={mime_type} url={urlComplete} context={context} arrayIndex={arrayIndex} />
+        <FileIcon
+          type={type}
+          mime_type={mime_type}
+          url={urlComplete}
+          context={context}
+          arrayIndex={arrayIndex}
+          fileName={name}
+        />
       </FileInfo>
     );
   }

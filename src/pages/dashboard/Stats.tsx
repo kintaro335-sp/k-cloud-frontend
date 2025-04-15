@@ -5,8 +5,11 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Toolbar, Grid, RadioGroup, FormControlLabel, Radio, Box, Tab, Button } from '@mui/material';
+import { Toolbar, Grid, RadioGroup, FormControlLabel, Radio, Box, Tab, Button, TextField } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useTheme } from '@mui/material/styles';
 import { BackButton } from '../../components/atoms';
 import { UsedSpacePie, UsedSpaceUserPie, UsedSpaceFileTPie, CpuUsagePie } from '../../components/dashboard/stats';
@@ -43,6 +46,7 @@ import { TIMEOPTION, GROUPFILTER } from '../../@types/stats';
 import useAuth from '../../hooks/useAuth';
 // utils
 import { bytesFormat } from '../../utils/files';
+import dayjs from 'dayjs';
 import { SerieLineChart } from '../../@types/stats';
 
 export default function Stats() {
@@ -54,6 +58,8 @@ export default function Stats() {
   const [updating, setUpdating] = useState(false);
   const [time, setTime] = useState<TIMEOPTION>(TIMEOPTION.TODAY);
   const [tabValue, setTabValue] = useState('0');
+  const [startDate, setStartDate] = useState<Date>(() => dayjs().subtract(8, 'hour').toDate());
+  const [endDate, setEndDate] = useState<Date>(new Date());
 
   const handleChange = (event: React.SyntheticEvent, newV: string) => {
     setTabValue(newV);
@@ -85,19 +91,19 @@ export default function Stats() {
 
   async function getActivityStats() {
     // methods
-    const dataMethods = await getLineChartData(GROUPFILTER.ACTION, time, access_token);
+    const dataMethods = await getLineChartData(access_token, GROUPFILTER.ACTION, time, startDate, endDate);
     setActivityActions(dataMethods);
     // methods
-    const dataStatusCode = await getLineChartData(GROUPFILTER.STATUS, time, access_token);
+    const dataStatusCode = await getLineChartData(access_token, GROUPFILTER.STATUS, time, startDate, endDate);
     setActivityStatus(dataStatusCode);
     // methods
-    const dataRoute = await getLineChartData(GROUPFILTER.RESAON, time, access_token);
+    const dataRoute = await getLineChartData(access_token, GROUPFILTER.RESAON, time, startDate, endDate);
     setActivityReason(dataRoute);
   }
 
   useEffect(() => {
     getActivityStats();
-  }, [access_token, time]);
+  }, [access_token, time, startDate, endDate]);
 
   async function getMemoryUsageHEffect() {
     const data = await getMemoryUsageData(access_token);
@@ -126,13 +132,15 @@ export default function Stats() {
   const handleUpdate = () => {
     setUpdating(true);
     enqueueSnackbar('Actualizando...', { variant: 'info' });
-    updateUsersTrees(access_token).then((resp) => {
-      getusedSpaceEffect();
-      setUpdating(false);
-      enqueueSnackbar(resp.message, { variant: 'success' });
-    }).catch((err) => {
-      setUpdating(false);
-    })
+    updateUsersTrees(access_token)
+      .then((resp) => {
+        getusedSpaceEffect();
+        setUpdating(false);
+        enqueueSnackbar(resp.message, { variant: 'success' });
+      })
+      .catch((err) => {
+        setUpdating(false);
+      });
   };
 
   return (
@@ -149,14 +157,12 @@ export default function Stats() {
         <Box>
           <TabPanel value="0">
             <Toolbar>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleUpdate}
-                disabled={updating}
-                sx={{ mr: 2 }}
-              >
-                {updating ? <Trans i18nKey="admin_stats.btn_updating">Updating</Trans> : <Trans i18nKey="admin_stats.btn_update">Update</Trans>}
+              <Button variant="contained" color="primary" onClick={handleUpdate} disabled={updating} sx={{ mr: 2 }}>
+                {updating ? (
+                  <Trans i18nKey="admin_stats.btn_updating">Updating</Trans>
+                ) : (
+                  <Trans i18nKey="admin_stats.btn_update">Update</Trans>
+                )}
               </Button>
             </Toolbar>
             <Grid container spacing={2}>
@@ -184,26 +190,81 @@ export default function Stats() {
                 <FormControlLabel
                   value={TIMEOPTION.TODAY}
                   control={<Radio />}
-                  label={<Box sx={{ color: theme.palette.text.primary }}><Trans i18nKey="pages.admin_stats.label_today">hoy</Trans></Box>}
+                  label={
+                    <Box sx={{ color: theme.palette.text.primary }}>
+                      <Trans i18nKey="pages.admin_stats.label_today">hoy</Trans>
+                    </Box>
+                  }
                 />
                 <FormControlLabel
                   value={TIMEOPTION.LAST7DAYS}
                   control={<Radio />}
-                  label={<Box sx={{ color: theme.palette.text.primary }}><Trans i18nKey="pages.admin_stats.label_last_7_days">ultimos 7 dias</Trans></Box>}
+                  label={
+                    <Box sx={{ color: theme.palette.text.primary }}>
+                      <Trans i18nKey="pages.admin_stats.label_last_7_days">ultimos 7 dias</Trans>
+                    </Box>
+                  }
                 />
                 <FormControlLabel
                   value={TIMEOPTION.THISMONTH}
                   control={<Radio />}
-                  label={<Box sx={{ color: theme.palette.text.primary }}><Trans i18nKey="pages.admin_stats.label_this_month">este mes</Trans></Box>}
+                  label={
+                    <Box sx={{ color: theme.palette.text.primary }}>
+                      <Trans i18nKey="pages.admin_stats.label_this_month">este mes</Trans>
+                    </Box>
+                  }
                 />
                 <FormControlLabel
                   value={TIMEOPTION.LAST30DAYS}
                   control={<Radio />}
-                  label={<Box sx={{ color: theme.palette.text.primary }}><Trans i18nKey="pages.admin_stats.label_last_30_days">ultimos 30 dias</Trans></Box>}
+                  label={
+                    <Box sx={{ color: theme.palette.text.primary }}>
+                      <Trans i18nKey="pages.admin_stats.label_last_30_days">ultimos 30 dias</Trans>
+                    </Box>
+                  }
+                />
+                <FormControlLabel
+                  value={TIMEOPTION.CUSTOM}
+                  control={<Radio />}
+                  label={
+                    <Box sx={{ color: theme.palette.text.primary }}>
+                      <Trans i18nKey="pages.admin_stats.label_custom">rango</Trans>
+                    </Box>
+                  }
                 />
               </RadioGroup>
             </Toolbar>
             <Grid container spacing={3}>
+              {time === TIMEOPTION.CUSTOM && (
+                <Grid item xs={12}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DesktopDateTimePicker
+                      label={
+                        <Box sx={{ color: theme.palette.text.primary }}>
+                          <Trans i18nKey="pages.admin_stats.label_from">desde</Trans>
+                        </Box>
+                      }
+                      value={dayjs(startDate)}
+                      onChange={(val) => {
+                        if (!val) return;
+                        setStartDate(val.toDate());
+                      }}
+                    />
+                    <DesktopDateTimePicker
+                      label={
+                        <Box sx={{ color: theme.palette.text.primary }}>
+                          <Trans i18nKey="pages.admin_stats.label_to">hasta</Trans>
+                        </Box>
+                      }
+                      value={dayjs(endDate)}
+                      onChange={(val) => {
+                        if (!val) return;
+                        setEndDate(val.toDate());
+                      }}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <LineChartGeneral title={t('pages.admin_stats.title_action')} data={activityActions} />
               </Grid>
@@ -221,10 +282,18 @@ export default function Stats() {
                 <CpuUsagePie />
               </Grid>
               <Grid item xs={12}>
-                <LineChartGeneral title={t('pages.admin_stats.title_total')} data={[total]} yFormat={(val) => bytesFormat(Number(val))} />
+                <LineChartGeneral
+                  title={t('pages.admin_stats.title_total')}
+                  data={[total]}
+                  yFormat={(val) => bytesFormat(Number(val))}
+                />
               </Grid>
               <Grid item xs={12}>
-                <LineChartGeneral title={t('pages.admin_stats.title_buffers')} data={[buffer_info]} yFormat={(val) => bytesFormat(Number(val))} />
+                <LineChartGeneral
+                  title={t('pages.admin_stats.title_buffers')}
+                  data={[buffer_info]}
+                  yFormat={(val) => bytesFormat(Number(val))}
+                />
               </Grid>
             </Grid>
           </TabPanel>

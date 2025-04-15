@@ -95,8 +95,12 @@ export async function getCPUUsageData(token: string): Promise<{ usage: number }>
   return result.data;
 }
 
-export async function getLineChartData(group: GROUPFILTER, time: TIMEOPTION, token: string): Promise<StatsLineChart> {
-  const result = await conn.get(`logs/stats/${group}/line/${time}?t=${token}`);
+export async function getLineChartData(token: string, group: GROUPFILTER, time: TIMEOPTION, from?:Date, to?:Date): Promise<StatsLineChart> {
+  const fromISO = from ? from.toISOString() : '';
+  const toISO = to ? to.toISOString() : '';
+  const query = fromISO && toISO ? `from=${fromISO}&to=${toISO}&` : '';
+
+  const result = await conn.get(`logs/stats/${group}/line/${time}?${query}t=${token}`);
   return result.data;
 }
 

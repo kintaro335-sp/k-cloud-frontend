@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch, Grid, Box, FormControlLabel, Typography, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -84,6 +84,12 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
     }
   };
 
+  useEffect(() => {
+    if (values.expire) {
+      setValue('expires', dayjs().add(1, 'hour').toDate());
+    }
+  }, [values.expire]);
+
   return (
     <Box>
       <Typography variant="h6">
@@ -160,6 +166,7 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
             {values.expire && (
               <Grid item xs={12}>
                 <DesktopDateTimePicker
+                  disablePast
                   label={t('pages.files.tokens_menu.label_date_expiration')}
                   value={dayjs(values.expires)}
                   onChange={(value) => {

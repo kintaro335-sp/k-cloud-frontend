@@ -38,10 +38,11 @@ import dayjs from 'dayjs';
 
 interface ActivityTokenProps {
   tokenId: string;
+  onClose?: VoidFunction;
   variant?: 'icon' | 'menu';
 }
 
-export default function TokenActivity({ tokenId, variant = 'icon' }: ActivityTokenProps) {
+export default function TokenActivity({ tokenId, onClose, variant = 'icon' }: ActivityTokenProps) {
   const theme = useTheme();
   const { access_token } = useSelector((state) => state.session);
   const [open, setOpen] = useState(false);
@@ -57,6 +58,9 @@ export default function TokenActivity({ tokenId, variant = 'icon' }: ActivityTok
 
   const clickClose = () => {
     setOpen(false);
+    if (typeof onClose === 'function') {
+      onClose();
+    }
   };
 
   const getChartData = useCallback(async () => {
@@ -87,10 +91,10 @@ export default function TokenActivity({ tokenId, variant = 'icon' }: ActivityTok
           <Trans i18nKey="ui.token_activity.btn_stats">Estadisticas</Trans>
         </MenuItem>
       )}
-      <Dialog open={open} onClose={clickClose} maxWidth="lg">
+      <Dialog open={open} onClose={clickClose} maxWidth="lg" fullScreen>
         <AppBar position="relative">
           <Toolbar>
-            <IconButton>
+            <IconButton onClick={clickClose}>
               <Icon icon={closeIcon} />
             </IconButton>
             <Button variant="contained" onClick={getChartData}>
@@ -189,9 +193,9 @@ export default function TokenActivity({ tokenId, variant = 'icon' }: ActivityTok
             )}
           </Box>
           {loading ? (
-            <Loading width="900px" height="600px" />
+            <Loading width="90vw" height="600px" />
           ) : (
-            <Box sx={{ width: '990px', height: '620px' }}>
+            <Box sx={{ width: '90vw', height: '620px' }}>
               <LineChartPrefab data={data} />
             </Box>
           )}

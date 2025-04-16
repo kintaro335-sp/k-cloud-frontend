@@ -32,8 +32,12 @@ export default function UploadFile() {
         type="file"
         ref={inputRef}
         onChange={(e) => {
-          const files = e.target.files || [null];
-          uploadFile(path, files[0]);
+          const files = e.target.files;
+          if(!files) return
+          const fileArr = [...Array(files.length)]
+          fileArr.forEach((_, i) => {
+            uploadFile(path, files.item(i));
+          });
         }}
         style={{ display: 'none' }}
       />

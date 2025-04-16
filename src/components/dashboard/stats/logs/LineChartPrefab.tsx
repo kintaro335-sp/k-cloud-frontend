@@ -6,7 +6,7 @@
 
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
-import { ResponsiveLine, DatumValue } from '@nivo/line';
+import { ResponsiveLine } from '@nivo/line';
 import { StatsLineChart } from '../../../../@types/stats';
 
 interface LineChartPrefabProps {
@@ -31,9 +31,9 @@ export default function LineChartPrefab({ data, yFormat, maxY = 'auto' }: LineCh
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
-        tickRotation: 0,
+        tickRotation: 50,
         legend: 'Time',
-        legendOffset: 36,
+        legendOffset: 70,
         legendPosition: 'middle'
       }}
       axisLeft={{
@@ -63,7 +63,7 @@ export default function LineChartPrefab({ data, yFormat, maxY = 'auto' }: LineCh
           direction: 'row',
           justify: false,
           translateX: 0,
-          translateY: 60,
+          translateY: 110,
           itemsSpacing: 0,
           itemDirection: 'left-to-right',
           itemWidth: 110,

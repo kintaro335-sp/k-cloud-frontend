@@ -10,6 +10,7 @@ import { User, SpaceUsed, SpaceConfig, UsedSpaceUser, UsageG, SharedFileActivity
 import { MessageResponse } from '../@types/auth';
 import { UsedSpaceType } from '../@types/files';
 import { GROUPFILTER, TIMEOPTION, StatsLineChart } from '../@types/stats';
+import { getFromToDateISO } from '../utils/dateformat';
 
 const conn = axios.create({
   baseURL: `${apiUrl}/admin`
@@ -96,10 +97,7 @@ export async function getCPUUsageData(token: string): Promise<{ usage: number }>
 }
 
 export async function getLineChartData(token: string, group: GROUPFILTER, time: TIMEOPTION, from?:Date, to?:Date): Promise<StatsLineChart> {
-  const fromISO = from ? from.toISOString() : '';
-  const toISO = to ? to.toISOString() : '';
-  const query = fromISO && toISO ? `from=${fromISO}&to=${toISO}&` : '';
-
+  const query = getFromToDateISO(from, to);
   const result = await conn.get(`logs/stats/${group}/line/${time}?${query}t=${token}`);
   return result.data;
 }

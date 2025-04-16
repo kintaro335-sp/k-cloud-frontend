@@ -9,6 +9,7 @@ import { useTheme } from '@mui/material/styles';
 import { CopyClipboard } from '../../atoms';
 import { CustomDialog } from '../../molecules';
 import NewTokenForm from './NewTokenForm';
+import TokenActivity from '../../tokens/TokenActivity';
 import { t } from 'i18next';
 // icons
 import { Icon } from '@iconify/react';
@@ -56,6 +57,7 @@ export default function TokenActions({ id, token }: TokenActionsProps) {
       >
         <NewTokenForm url="" edit token={token} />
       </CustomDialog>
+      <TokenActivity tokenId={id} variant='icon' />
       <CopyClipboard url={urlToken} />
     </Stack>
   );

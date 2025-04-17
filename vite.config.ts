@@ -18,7 +18,6 @@ function renderchinks(deps): Record<string, string> {
         '@iconify/icons-ant-design',
         '@iconify/icons-carbon',
         '@iconify/icons-material-symbols',
-        'base-64',
         'lodash'
       ].includes(key)
     )
@@ -39,7 +38,8 @@ const iconsPack1 = [
   '@iconify/icons-ant-design/video-camera-filled',
   '@iconify/icons-ant-design/caret-right-fill',
   '@iconify/icons-ant-design/bars-outlined',
-  '@iconify/icons-ant-design/down-circle-outline'
+  '@iconify/icons-ant-design/down-circle-outline',
+  '@iconify/icons-carbon/iso-filled'
 ];
 
 const iconsPack2 = [

@@ -9,7 +9,7 @@ import { explorerContext } from '../../@types/general';
 import { Box } from '@mui/material';
 import { Icon } from '@iconify/react';
 import FolderIcon from '@iconify/icons-ant-design/folder';
-import { ImgFileT, VideoFile, AudioFile, OtherFile } from './filespreview';
+import { ImgFileT, VideoFile, AudioFile, CompressedFile, ISOFile, OtherFile } from './filespreview';
 
 export default function TokenIcon({
   type,
@@ -32,7 +32,7 @@ export default function TokenIcon({
 
   if (type === 'folder') {
     return (
-      <Box sx={{ display: 'inline-block', cursor: onClickFolder ? 'pointer': undefined }} onClick={onClickFolder} >
+      <Box sx={{ display: 'inline-block', cursor: onClickFolder ? 'pointer' : undefined }} onClick={onClickFolder}>
         <Icon icon={FolderIcon} width="250px" height="250px" />
       </Box>
     );
@@ -48,6 +48,20 @@ export default function TokenIcon({
 
   if (mime_type.includes('audio/')) {
     return <AudioFile />;
+  }
+
+  if (
+    mime_type.includes('7z') ||
+    mime_type.includes('zip') ||
+    mime_type.includes('gzip') ||
+    mime_type.includes('rar') ||
+    mime_type.includes('tar')
+  ) {
+    return <CompressedFile />;
+  }
+
+  if (mime_type.includes('iso9660')) {
+    return <ISOFile />;
   }
 
   return <OtherFile url={url} />;

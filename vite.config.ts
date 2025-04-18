@@ -39,6 +39,7 @@ const iconsPack1 = [
   '@iconify/icons-ant-design/caret-right-fill',
   '@iconify/icons-ant-design/bars-outlined',
   '@iconify/icons-ant-design/down-circle-outline',
+  '@iconify/icons-ant-design/file-pdf-filled',
   '@iconify/icons-carbon/iso-filled'
 ];
 

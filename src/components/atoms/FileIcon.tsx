@@ -51,7 +51,7 @@ export default function TokenIcon({
   }
 
   if (mime_type.includes('application/pdf')) {
-    return <PDFFile />;
+    return <PDFFile name={name} url={url} />;
   }
 
   if (

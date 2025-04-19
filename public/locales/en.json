@@ -4,7 +4,8 @@
     "no": "No",
     "copy_clipboard": "Copy to clipboard",
     "copied": "Copied",
-    "loading": "Loading"
+    "loading": "Loading",
+    "download": "Download"
   },
   "pages": {
     "404": {
@@ -213,6 +214,9 @@
     "token_activity": {
       "btn_stats": "Stats",
       "btn_update": "Update"
+    },
+    "pdf_viewer": {
+      "btn_open_new_tab": "Open in new tab"
     }
   },
   "snackbar": {

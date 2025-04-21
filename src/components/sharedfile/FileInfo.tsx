@@ -6,25 +6,13 @@
 
 import { useParams } from 'react-router-dom';
 import { Box, Card, CardHeader, CardContent, Button, Stack, Typography } from '@mui/material';
-import { ImgFileT, VideoFile, OtherFile } from '../../components/atoms/filespreview'
+import { FileIcon } from '../atoms';
 // config
 import { apiUrl } from '../../config';
 // redux
 import { useSelector } from '../../redux/store';
 import { bytesFormat } from '../../utils/files';
 import dayjs from 'dayjs';
-
-function FilePreview({ mime, url }: { mime: string; url: string }) {
-  if (mime.includes('image/')) {
-    return <ImgFileT url={url} context='sharedFile' />;
-  }
-
-  if (mime.includes('video')) {
-    return <VideoFile nameFile={url.split('/').pop() || ''} url={url} />;
-  }
-
-  return <OtherFile url={url} />;
-}
 
 export default function FileInfo() {
   const { id } = useParams();
@@ -39,7 +27,13 @@ export default function FileInfo() {
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Card sx={{ width: { xs: '70%', md: '50%', lg: '30%' } }}>
         <CardContent>
-          <FilePreview mime={info?.mime_type} url={urlDirect} />
+          <FileIcon
+            type={info?.type}
+            mime_type={info?.mime_type}
+            url={urlDirect}
+            context="sharedFile"
+            fileName={info?.name}
+          />
         </CardContent>
         <CardHeader
           title={<>{info?.name}</>}

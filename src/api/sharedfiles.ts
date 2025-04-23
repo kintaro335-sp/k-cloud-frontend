@@ -1,12 +1,14 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
 import axios from 'axios';
 import { TokenElement, SFInfoResponse } from '../@types/sharedfiles';
 import { FileI } from '../@types/files';
+import { StatsLineChart, TIMEOPTION } from '../@types/stats';
+import { getFromToDateISO } from '../utils/dateformat';
 import { apiUrl } from '../config';
 
 const sfconn = axios.create({
@@ -27,6 +29,18 @@ export async function shareFile(
 
 export async function getTokenInfo(id: string): Promise<SFInfoResponse> {
   const response = await sfconn.get(`info/${id}`);
+  return response.data;
+}
+
+export async function getTokenActivity(
+  token: string,
+  tokneId: string,
+  time: TIMEOPTION,
+  from?: Date,
+  to?: Date
+): Promise<StatsLineChart> {
+  const query = getFromToDateISO(from, to);
+  const response = await sfconn.get(`activity/${tokneId}/${time}?${query}t=${token}`);
   return response.data;
 }
 

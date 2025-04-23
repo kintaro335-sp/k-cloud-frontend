@@ -1,6 +1,6 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
@@ -18,7 +18,6 @@ function renderchinks(deps): Record<string, string> {
         '@iconify/icons-ant-design',
         '@iconify/icons-carbon',
         '@iconify/icons-material-symbols',
-        'base-64',
         'lodash'
       ].includes(key)
     )
@@ -39,7 +38,9 @@ const iconsPack1 = [
   '@iconify/icons-ant-design/video-camera-filled',
   '@iconify/icons-ant-design/caret-right-fill',
   '@iconify/icons-ant-design/bars-outlined',
-  '@iconify/icons-ant-design/down-circle-outline'
+  '@iconify/icons-ant-design/down-circle-outline',
+  '@iconify/icons-ant-design/file-pdf-filled',
+  '@iconify/icons-carbon/iso-filled'
 ];
 
 const iconsPack2 = [
@@ -76,7 +77,8 @@ const iconsPack4 = [
   '@iconify/icons-material-symbols/volume-off',
   '@iconify/icons-material-symbols/volume-up',
   '@iconify/icons-material-symbols/fullscreen',
-  '@iconify/icons-material-symbols/fullscreen-exit'
+  '@iconify/icons-material-symbols/fullscreen-exit',
+  '@iconify/icons-material-symbols/file-open-sharp'
 ]
 
 // https://vitejs.dev/config/

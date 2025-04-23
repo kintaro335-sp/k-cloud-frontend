@@ -1,6 +1,6 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
@@ -37,6 +37,7 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false, on
   const [pathTo, setPathTo] = useState('');
   const [files, setFiles] = useState<FileI[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingB, setLoadingB] = useState(false);
 
   const [open, setOpen] = useState(false);
 
@@ -53,19 +54,21 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false, on
 
   useEffect(() => {
     async function getFiles() {
+      setLoading(true);
       const listfiles = await getListFiles(pathTo, access_token);
       setFiles(listfiles.list);
+      setLoading(false);
     }
     getFiles();
   }, [pathTo, access_token]);
 
   const clickMove = async () => {
-    setLoading(true);
+    setLoadingB(true);
     if (filesToMove.length === 1) {
       await moveFile(pathFrom, pathTo, filesToMove[0], access_token).then(() => {
         enqueueSnackbar('file moved success', { variant: 'success' });
       });
-      setLoading(false);
+      setLoadingB(false);
     } else if (filesToMove.length !== 0) {
     }
     clickClose();
@@ -122,7 +125,7 @@ export default function OptionMove({ pathFrom, filesToMove, menuItem = false, on
           </Grid>}
           {loading && <Loading width={'60vw'} height={'60vh'} />}
           <Stack>
-            <LoadingButton variant="contained" disabled={allowMove} onClick={clickMove} loading={loading}>
+            <LoadingButton variant="contained" disabled={allowMove} onClick={clickMove} loading={loadingB}>
               <Trans i18nKey="ui.move_menu.move_here">Mover Aqui</Trans>
             </LoadingButton>
           </Stack>

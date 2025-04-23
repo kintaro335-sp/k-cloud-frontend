@@ -1,6 +1,6 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
@@ -28,7 +28,7 @@ export default function TokenItem({ token }: TokenElementProps) {
     <Card>
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-          <FileIcon type={type} mime_type={mime_type} url={urlRaw} context="sharedFile" />
+          <FileIcon type={type} mime_type={mime_type} url={urlRaw} context="sharedFile" fileName={name} />
         </Box>
       </CardContent>
       <CardHeader

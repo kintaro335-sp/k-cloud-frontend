@@ -1,6 +1,6 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
@@ -10,6 +10,7 @@ import { User, SpaceUsed, SpaceConfig, UsedSpaceUser, UsageG, SharedFileActivity
 import { MessageResponse } from '../@types/auth';
 import { UsedSpaceType } from '../@types/files';
 import { GROUPFILTER, TIMEOPTION, StatsLineChart } from '../@types/stats';
+import { getFromToDateISO } from '../utils/dateformat';
 
 const conn = axios.create({
   baseURL: `${apiUrl}/admin`
@@ -95,8 +96,9 @@ export async function getCPUUsageData(token: string): Promise<{ usage: number }>
   return result.data;
 }
 
-export async function getLineChartData(group: GROUPFILTER, time: TIMEOPTION, token: string): Promise<StatsLineChart> {
-  const result = await conn.get(`logs/stats/${group}/line/${time}?t=${token}`);
+export async function getLineChartData(token: string, group: GROUPFILTER, time: TIMEOPTION, from?:Date, to?:Date): Promise<StatsLineChart> {
+  const query = getFromToDateISO(from, to);
+  const result = await conn.get(`logs/stats/${group}/line/${time}?${query}t=${token}`);
   return result.data;
 }
 

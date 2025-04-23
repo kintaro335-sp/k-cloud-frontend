@@ -1,30 +1,18 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
 import { useParams } from 'react-router-dom';
 import { Box, Card, CardHeader, CardContent, Button, Stack, Typography } from '@mui/material';
-import { ImgFileT, VideoFile, OtherFile } from '../../components/atoms/filespreview'
+import { FileIcon } from '../atoms';
 // config
 import { apiUrl } from '../../config';
 // redux
 import { useSelector } from '../../redux/store';
 import { bytesFormat } from '../../utils/files';
-import moment from 'moment';
-
-function FilePreview({ mime, url }: { mime: string; url: string }) {
-  if (mime.includes('image/')) {
-    return <ImgFileT url={url} context='sharedFile' />;
-  }
-
-  if (mime.includes('video')) {
-    return <VideoFile nameFile={url.split('/').pop() || ''} url={url} />;
-  }
-
-  return <OtherFile url={url} />;
-}
+import dayjs from 'dayjs';
 
 export default function FileInfo() {
   const { id } = useParams();
@@ -39,15 +27,21 @@ export default function FileInfo() {
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Card sx={{ width: { xs: '70%', md: '50%', lg: '30%' } }}>
         <CardContent>
-          <FilePreview mime={info?.mime_type} url={urlDirect} />
+          <FileIcon
+            type={info?.type}
+            mime_type={info?.mime_type}
+            url={urlDirect}
+            context="sharedFile"
+            fileName={info?.name}
+          />
         </CardContent>
         <CardHeader
           title={<>{info?.name}</>}
           subheader={
             <Stack>
               <Typography>{info.type === 'file' && bytesFormat(info.size)}</Typography>
-              <Typography>Creado: {moment(info.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
-              {info.expire && <Typography>Expira: {moment(info.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>}
+              <Typography>Creado: {dayjs(info.createdAt).format('YYYY-MM-DD h:mm:s a')}</Typography>
+              {info.expire && <Typography>Expira: {dayjs(info.expires).format('YYYY-MM-DD h:mm:s a')}</Typography>}
             </Stack>
           }
         />

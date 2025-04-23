@@ -1,6 +1,6 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
@@ -22,6 +22,7 @@ import iconDelete from '@iconify/icons-ant-design/delete-outlined';
 import { useSelector } from '../../redux/store';
 // api
 import { deleteToken } from '../../api/sharedfiles';
+import TokenActivity from './TokenActivity';
 
 interface TokenMenuProps {
   token: TokenElement;
@@ -73,6 +74,7 @@ export default function TokenMenu({ token }: TokenMenuProps) {
         >
           <NewTokenForm url="" edit token={token} />
         </CustomDialog>
+        <TokenActivity tokenId={token.id} onClose={clickClose} variant='menu' />
         <MenuItem onClick={handleDeleteToken}>
           <Icon icon={iconDelete} width="25px" height="25px" />
             <Trans i18nKey="pages.tokens.menu_opc_delete">Eliminar</Trans>

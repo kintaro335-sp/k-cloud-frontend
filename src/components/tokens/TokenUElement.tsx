@@ -1,6 +1,6 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
@@ -46,7 +46,6 @@ export default function TokenUElement({ token }: TokenUElementProps) {
   const resizeObserver = useRef<ResizeObserver | null>(null);
 
   useEffect(() => {
-    
     resizeObserver.current = new ResizeObserver((entries) => {
       if (!cardHeaderRef.current || !fileNameContainer.current) return;
       fileNameContainer.current.style.setProperty('width', `${entries[0].contentRect.width - 35}px`);
@@ -55,10 +54,8 @@ export default function TokenUElement({ token }: TokenUElementProps) {
     resizeObserver.current.observe(cardHeaderRef.current as Element);
     return () => {
       resizeObserver.current?.disconnect();
-    }
+    };
   }, []);
-
-
 
   return (
     <Card className="cardfile">
@@ -75,7 +72,7 @@ export default function TokenUElement({ token }: TokenUElementProps) {
           />
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-          <FileIcon type={type} mime_type={mime_type} url={urlRaw} context='tokenView' />
+          <FileIcon type={type} mime_type={mime_type} url={urlRaw} context="tokenView" fileName={name} />
         </Box>
       </CardContent>
       <CardHeader

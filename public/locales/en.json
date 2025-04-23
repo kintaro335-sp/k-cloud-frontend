@@ -4,7 +4,8 @@
     "no": "No",
     "copy_clipboard": "Copy to clipboard",
     "copied": "Copied",
-    "loading": "Loading"
+    "loading": "Loading",
+    "download": "Download"
   },
   "pages": {
     "404": {
@@ -133,6 +134,9 @@
       "label_last_7_days": "Last 7 days",
       "label_this_month": "This month",
       "label_last_30_days": "Last 30 days",
+      "label_custom": "Range",
+      "label_from": "From",
+      "label_to": "To",
       "title_action": "Action",
       "title_status": "Status",
       "title_reason": "Reason",
@@ -206,6 +210,13 @@
       "label_password": "Password",
       "label_password_confirm": "Confirm Password",
       "btn_register": "register"
+    },
+    "token_activity": {
+      "btn_stats": "Stats",
+      "btn_update": "Update"
+    },
+    "pdf_viewer": {
+      "btn_open_new_tab": "Open in new tab"
     }
   },
   "snackbar": {
@@ -224,6 +235,8 @@
     "stop_sharing_confirm": "Are you sure you want to stop sharing this file?",
     "msg_sharing_stopped": "Sharing stopped",
     "msg_deleted": "Deleted",
-    "msg_delete_token_confirm": "Do you want to delete "
+    "msg_delete_token_confirm": "Do you want to delete ",
+    "msg_first_user_created": "First user created successfully",
+    "msg_register_user": "Register success"
   }
 }

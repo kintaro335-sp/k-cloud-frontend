@@ -1,6 +1,6 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
@@ -25,4 +25,4 @@ const noPortwsUrlR = rawAuto ? urlWSOrigin : url_ws;
 export const apiUrl = rawAuto ? `${noPortUrl}${cPort}${api_prefix}` : url;
 export const wsUrl = rawAuto ? `${noPortwsUrlR}${cPortWS}${ws_prefix}` : url_ws;
 
-export const version = 'v1.3.11';
+export const version = 'v1.31.0';

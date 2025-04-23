@@ -1,14 +1,14 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch, Grid, Box, FormControlLabel, Typography, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import { useSnackbar } from 'notistack';
 import { t } from 'i18next';
@@ -26,7 +26,7 @@ import { useSelector } from '../../../redux/store';
 import { setTokens } from '../../../redux/slices/session';
 // api
 import { shareFile, getTokensByPath, updateToken } from '../../../api/sharedfiles';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 interface NewTokenFormProps {
   url: string;
@@ -84,6 +84,12 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
     }
   };
 
+  useEffect(() => {
+    if (values.expire) {
+      setValue('expires', dayjs().add(1, 'hour').toDate());
+    }
+  }, [values.expire]);
+
   return (
     <Box>
       <Typography variant="h6">
@@ -93,7 +99,7 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
           <Trans i18nKey="pages.files.tokens_menu.title_form">Nuevo Token</Trans>
         )}
       </Typography>
-      <LocalizationProvider dateAdapter={AdapterMoment}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <Grid container spacing={2}>
             {!edit && (
@@ -160,8 +166,9 @@ export default function NewTokenForm({ url, edit = false, token }: NewTokenFormP
             {values.expire && (
               <Grid item xs={12}>
                 <DesktopDateTimePicker
+                  disablePast
                   label={t('pages.files.tokens_menu.label_date_expiration')}
-                  value={moment(values.expires)}
+                  value={dayjs(values.expires)}
                   onChange={(value) => {
                     if (value === null) return;
                     setValue('expires', value.toDate());

@@ -1,16 +1,13 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
-import React, { createContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 // mui
-import { Dialog, AppBar, Toolbar, DialogContent, IconButton, Typography } from '@mui/material';
+import { Dialog, DialogContent, Typography, Stack } from '@mui/material';
 import VideoPlayer from '../components/atoms/VideoPlayer';
-// icons
-import { Icon } from '@iconify/react';
-import closeIcon from '@iconify/icons-material-symbols/close';
 
 export const VideoPlayerC = createContext({ setUrl: (url: string, nameFile: string) => {} });
 
@@ -36,7 +33,10 @@ export default function VideoPlayerContext({ children }: { children: React.React
         <DialogContent
           sx={{ width: '70vw', height: '93vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
-          <VideoPlayer url={source} nameFile={nameFile} />
+          <Stack sx={{ width: '100%', height: '100%' }} direction='column' spacing={0}>
+            <Typography variant="h5" sx={{ margin: '10px' }}>{nameFile}</Typography>
+            <VideoPlayer url={source} nameFile={nameFile} />
+          </Stack>
         </DialogContent>
       </Dialog>
       {children}

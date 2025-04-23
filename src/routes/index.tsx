@@ -1,6 +1,6 @@
 /*
  * k-cloud-frontend
- * Copyright(c) 2022 Kintaro Ponce
+ * Copyright(c) Kintaro Ponce
  * MIT Licensed
  */
 
@@ -22,14 +22,18 @@ import {
   SearchPage
 } from '../pages';
 import { Accounts, Stats, AdminMenu, SystemSettings, Logs, About } from '../pages/dashboard';
+// contexts
 import Authguard from '../guards/Authguard';
 import GalleryContext from '../contexts/GalleryContext';
 import VideoPlayerContext from '../contexts/VideoPlayerContext';
+import PDFViewerContext from '../contexts/PDFViewerContext';
 
 function ContextsR({ children }: { children: JSX.Element }) {
   return (
     <GalleryContext>
-      <VideoPlayerContext>{children}</VideoPlayerContext>
+      <VideoPlayerContext>
+        <PDFViewerContext>{children}</PDFViewerContext>
+      </VideoPlayerContext>
     </GalleryContext>
   );
 }

@@ -78,7 +78,8 @@ const iconsPack4 = [
   '@iconify/icons-material-symbols/volume-up',
   '@iconify/icons-material-symbols/fullscreen',
   '@iconify/icons-material-symbols/fullscreen-exit',
-  '@iconify/icons-material-symbols/file-open-sharp'
+  '@iconify/icons-material-symbols/file-open-sharp',
+  '@iconify/icons-material-symbols/music-note'
 ]
 
 // https://vitejs.dev/config/

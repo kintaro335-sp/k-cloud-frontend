@@ -8,6 +8,8 @@ import React, { useState, useRef, useEffect } from 'react';
 // mui
 import { Box, IconButton, Typography, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+// utils
+import { formatTime } from '../../utils/dateformat';
 // icons
 import { Icon } from '@iconify/react';
 import playArrow from '@iconify/icons-material-symbols/play-arrow';
@@ -164,15 +166,6 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
     } else {
       document.exitFullscreen();
     }
-  };
-
-  const formatTime = (time: number) => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor(time / 60) - hours * 60;
-    const seconds = Math.floor(time % 60);
-    return `${hours === 0 ? '' : hours.toString().padStart(2, '0') + ':'}${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {

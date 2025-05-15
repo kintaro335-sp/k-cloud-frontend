@@ -33,9 +33,7 @@ function ContextsR({ children }: { children: JSX.Element }) {
   return (
     <GalleryContext>
       <VideoPlayerContext>
-        <PDFViewerContext>
-          <MusicPlayerContext>{children}</MusicPlayerContext>
-        </PDFViewerContext>
+        <PDFViewerContext>{children}</PDFViewerContext>
       </VideoPlayerContext>
     </GalleryContext>
   );

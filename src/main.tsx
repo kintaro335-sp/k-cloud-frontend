@@ -17,6 +17,7 @@ import FileUploadC from './contexts/FileUploadContext';
 import AuthProvider from './contexts/AuthContext';
 import Systemcontext from './contexts/SystemContext';
 import FileSelectContext from './contexts/FileSelectContext';
+import MusicPlayerContext from './contexts/MusicPlayerContext';
 import ThemeP from './theme/ThemeP';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './contexts/i18next';
@@ -33,7 +34,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <FileUploadC>
                     <Systemcontext>
                       <ThemeP>
-                        <App />
+                        <MusicPlayerContext>
+                          <App />
+                        </MusicPlayerContext>
                       </ThemeP>
                     </Systemcontext>
                   </FileUploadC>

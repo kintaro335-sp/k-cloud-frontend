@@ -47,7 +47,7 @@ export default function TokenIcon({
   }
 
   if (mime_type.includes('audio/')) {
-    return <AudioFile />;
+    return <AudioFile nameFile={name} url={url} />;
   }
 
   if (mime_type.includes('application/pdf')) {

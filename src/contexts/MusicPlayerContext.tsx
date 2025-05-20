@@ -144,6 +144,7 @@ export default function MusicPlayerContext({ children }: MusicPlayerCtxProps) {
   const handleVolumeChange = (_: Event, newValue: number | number[]) => {
     const value = newValue as number;
     setVolume(value);
+    localStorage.setItem(VOLUME_KEY, value.toString());
   };
 
   const toggleMute = () => {

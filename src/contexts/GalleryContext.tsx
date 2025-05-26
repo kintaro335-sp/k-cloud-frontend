@@ -7,6 +7,7 @@
 import { createContext, useState, useMemo, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Dialog, DialogContent, Box, Stack, IconButton, Toolbar, AppBar, Tooltip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 // icon
 import { Icon } from '@iconify/react';
 import iconRight from '@iconify/icons-material-symbols/arrow-right-alt-rounded';
@@ -32,6 +33,7 @@ interface GalleryContextProps {
 type OptionImg = 'next' | 'before';
 
 export default function GalleryContext({ children }: GalleryContextProps) {
+  const theme = useTheme();
   const galleryRef = useRef<HTMLDivElement>(null);
   const { id } = useParams();
   const [open, setOpen] = useState(false);
@@ -182,13 +184,13 @@ export default function GalleryContext({ children }: GalleryContextProps) {
           <Stack direction="row">
             {RawURL === '' && (
               <IconButton onClick={() => changeImage('before')}>
-                <Icon icon={iconLeft} width="25px" height="25px" />
+                <Icon icon={iconLeft} width="25px" height="25px" color={theme.palette.text.secondary} />
               </IconButton>
             )}
             <img src={urlFinal} height="auto" width="100%" loading='lazy' />
             {RawURL === '' && (
               <IconButton onClick={() => changeImage('next')}>
-                <Icon icon={iconRight} width="25px" height="25px" />
+                <Icon icon={iconRight} width="25px" height="25px" color={theme.palette.text.secondary} />
               </IconButton>
             )}
           </Stack>

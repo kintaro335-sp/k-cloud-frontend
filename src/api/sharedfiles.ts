@@ -152,3 +152,13 @@ export async function updateToken(idT: string, newSF: newTokenInfoProps, token: 
   });
   return result.data;
 }
+
+export async function getMostViewedTokens(): Promise<TokenElement[]> {
+  const result = await sfconn.get(`most-viewed`);
+  return result.data;
+}
+
+export async function getRecentViewedTokens(): Promise<TokenElement[]> {
+  const result = await sfconn.get(`recent-viewed`);
+  return result.data;
+}

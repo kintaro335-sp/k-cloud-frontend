@@ -5,3 +5,4 @@
  */
 
 export { default as TokensList } from './TokensList';
+export { default as TokenElement } from './TokenElement';

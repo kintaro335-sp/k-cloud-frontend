@@ -16,6 +16,186 @@ import closeIcon from '@iconify/icons-material-symbols/close';
 
 export const musicPlayerCtx = createContext({ playAudio: (src: string, title: string) => {} });
 
+interface CustomSliderProps {
+  value: number;
+  max: number;
+  buffered: number;
+  onChange: (value: number) => void;
+  formatTime: (time: number) => string;
+}
+
+function CustomSlider({ value, max, buffered, onChange, formatTime }: CustomSliderProps) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [hoverTime, setHoverTime] = useState<number | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  const progressPercentage = max > 0 ? (value / max) * 100 : 0;
+  const bufferedPercentage = max > 0 ? (buffered / max) * 100 : 0;
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    handleSliderClick(e);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (sliderRef.current) {
+      const rect = sliderRef.current.getBoundingClientRect();
+      const percentage = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      const timeAtPosition = (percentage / 100) * max;
+
+      setHoverTime(timeAtPosition);
+      setMousePosition({ x: e.clientX, y: e.clientY });
+
+      if (isDragging) {
+        onChange(timeAtPosition);
+      }
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHoverTime(null);
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleSliderClick = (e: React.MouseEvent) => {
+    if (sliderRef.current) {
+      const rect = sliderRef.current.getBoundingClientRect();
+      const percentage = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      const newTime = (percentage / 100) * max;
+      onChange(newTime);
+    }
+  };
+
+  useEffect(() => {
+    const handleGlobalMouseUp = () => setIsDragging(false);
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (isDragging && sliderRef.current) {
+        const rect = sliderRef.current.getBoundingClientRect();
+        const percentage = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+        const timeAtPosition = (percentage / 100) * max;
+        onChange(timeAtPosition);
+      }
+    };
+
+    if (isDragging) {
+      document.addEventListener('mouseup', handleGlobalMouseUp);
+      document.addEventListener('mousemove', handleGlobalMouseMove);
+    }
+
+    return () => {
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
+    };
+  }, [isDragging, max, onChange]);
+
+  return (
+    <Box sx={{ position: 'relative', width: '100%' }}>
+      <Box
+        ref={sliderRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onMouseUp={handleMouseUp}
+        sx={{
+          height: 6,
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: 3,
+          position: 'relative',
+          cursor: 'pointer',
+          '&:hover': {
+            height: 8
+          },
+          transition: 'height 0.2s ease'
+        }}
+      >
+        {/* Buffer progress */}
+        <Box
+          sx={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            height: '100%',
+            width: `${bufferedPercentage}%`,
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            borderRadius: 3,
+            transition: 'width 0.3s ease'
+          }}
+        />
+
+        {/* Current progress */}
+        <Box
+          sx={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            height: '100%',
+            width: `${progressPercentage}%`,
+            backgroundColor: 'primary.main',
+            borderRadius: 3,
+            transition: isDragging ? 'none' : 'width 0.1s ease'
+          }}
+        />
+
+        {/* Progress thumb */}
+        <Box
+          sx={{
+            position: 'absolute',
+            left: `${progressPercentage}%`,
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 12,
+            height: 12,
+            backgroundColor: 'primary.main',
+            borderRadius: '50%',
+            border: '2px solid white',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+            opacity: isDragging ? 1 : 0,
+            transition: 'opacity 0.2s ease',
+            '&:hover': {
+              opacity: 1
+            }
+          }}
+        />
+      </Box>
+
+      {/* Time tooltip */}
+      {hoverTime !== null && (
+        <Box
+          sx={{
+            position: 'fixed',
+            left: mousePosition.x,
+            top: mousePosition.y - 40,
+            transform: 'translateX(-50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            padding: '4px 8px',
+            borderRadius: 1,
+            fontSize: '0.75rem',
+            pointerEvents: 'none',
+            zIndex: 1000,
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              top: '100%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              border: '4px solid transparent',
+              borderTopColor: 'rgba(0, 0, 0, 0.8)'
+            }
+          }}
+        >
+          {formatTime(hoverTime)}
+        </Box>
+      )}
+    </Box>
+  );
+}
+
 interface MusicPlayerCtxProps {
   children: React.ReactNode;
 }
@@ -38,6 +218,7 @@ export default function MusicPlayerContext({ children }: MusicPlayerCtxProps) {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isRepeat, setIsRepeat] = useState(false);
+  const [bufferedTime, setBufferedTime] = useState(0);
 
   const handleOpen = () => {
     setOpen(true);
@@ -72,6 +253,12 @@ export default function MusicPlayerContext({ children }: MusicPlayerCtxProps) {
       setDuration(audioRef.current?.duration || 10);
     });
 
+    audioRef.current.addEventListener('progress', () => {
+      if (audioRef.current === null) return;
+      if (audioRef.current.buffered.length > 0) {
+        setBufferedTime(audioRef.current.buffered.end(audioRef.current.buffered.length - 1));
+      }
+    });
     audioRef.current.addEventListener('ended', handleTrackEnd);
 
     audioRef.current.play();
@@ -133,7 +320,7 @@ export default function MusicPlayerContext({ children }: MusicPlayerCtxProps) {
     }
   };
 
-  const handleProgressChange = (_: Event, newValue: number | number[]) => {
+  const handleProgressChange = (_: Event | null, newValue: number | number[]) => {
     const value = newValue as number;
     setCurrentTime(value);
     if (audioRef.current) {
@@ -187,35 +374,12 @@ export default function MusicPlayerContext({ children }: MusicPlayerCtxProps) {
 
           {/* Progress bar */}
           <Box sx={{ mb: 1 }}>
-            <Slider
-              aria-label="time-indicator"
-              size="small"
+            <CustomSlider
               value={currentTime}
-              min={0}
-              max={duration || 100}
-              onChange={handleProgressChange}
-              sx={{
-                color: 'primary.main',
-                height: 4,
-                '& .MuiSlider-thumb': {
-                  width: 12,
-                  height: 12,
-                  transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
-                  '&:before': {
-                    boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)'
-                  },
-                  '&:hover, &.Mui-focusVisible': {
-                    boxShadow: '0px 0px 0px 8px rgb(25 118 210 / 16%)'
-                  },
-                  '&.Mui-active': {
-                    width: 16,
-                    height: 16
-                  }
-                },
-                '& .MuiSlider-rail': {
-                  opacity: 0.28
-                }
-              }}
+              max={duration}
+              buffered={bufferedTime}
+              onChange={(val) => handleProgressChange(null, val)}
+              formatTime={formatTime}
             />
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="caption" color="text.secondary">

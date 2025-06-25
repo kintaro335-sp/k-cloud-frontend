@@ -27,6 +27,7 @@ import Authguard from '../guards/Authguard';
 import GalleryContext from '../contexts/GalleryContext';
 import VideoPlayerContext from '../contexts/VideoPlayerContext';
 import PDFViewerContext from '../contexts/PDFViewerContext';
+import MusicPlayerContext from '../contexts/MusicPlayerContext';
 
 function ContextsR({ children }: { children: JSX.Element }) {
   return (

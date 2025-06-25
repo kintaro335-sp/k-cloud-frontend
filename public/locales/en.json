@@ -12,6 +12,10 @@
       "message": "Page not found",
       "btn_go": "Go to Home"
     },
+    "home": {
+      "most_viewed": "Most Viewed Tokens",
+      "most_recent": "Recent Viewed Tokens"
+    },
     "login": {
       "username": "Username",
       "password": "Password",

@@ -402,8 +402,10 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                   step="0.01"
                   value={isMuted ? 0 : volume}
                   onChange={(e) => {
-                    videoRef.current?.focus();
                     handleVolumeChange(e);
+                  }}
+                  onMouseUp={() => {
+                    videoRef.current?.focus();
                   }}
                   className="player-button"
                   style={{ width: '75px', marginLeft: '8px', verticalAlign: 'middle' }}

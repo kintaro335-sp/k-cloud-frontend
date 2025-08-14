@@ -23,7 +23,7 @@ export default function LandingPage() {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Stack>
+      <Stack sx={{ height: '90vh', overflowY: 'auto', width: '100%' }}>
         <Typography variant="h3" sx={{ color: 'text.secondary', textAlign: 'center' }}>
           K Cloud
         </Typography>

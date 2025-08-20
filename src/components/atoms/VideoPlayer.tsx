@@ -73,7 +73,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
           }
         }
       }
-      if (bufferEnd - currentTime < 30 && currentTime > 0 && duration - currentTime > 30) {
+      if (bufferEnd - currentTime < 10 && currentTime > 0 && duration - currentTime > 30) {
         video.load();
       }
       setBufferRanges(ranges);
@@ -235,10 +235,10 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
         setHideTimeout();
       }}
     >
-      <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', paddingTop: videoContainerPadding }}>
+      <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', height: 'auto', paddingTop: videoContainerPadding }}>
         <video
           ref={videoRef}
-          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%' }}
+          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 'auto' }}
           src={url}
           preload="metadata"
           onClick={() => {
@@ -402,8 +402,10 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
                   step="0.01"
                   value={isMuted ? 0 : volume}
                   onChange={(e) => {
-                    videoRef.current?.focus();
                     handleVolumeChange(e);
+                  }}
+                  onMouseUp={() => {
+                    videoRef.current?.focus();
                   }}
                   className="player-button"
                   style={{ width: '75px', marginLeft: '8px', verticalAlign: 'middle' }}

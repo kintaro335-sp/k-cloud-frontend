@@ -2,7 +2,7 @@
   "name": "k-cloud-frontend",
   "author": "Kintaro Ponce",
   "private": true,
-  "version": "1.31.0",
+  "version": "1.31.1",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -28,10 +28,10 @@
     "@nivo/pie": "^0.87.0",
     "@reduxjs/toolkit": "^2.2.6",
     "axios": "^1.7.2",
+    "dayjs": "^1.11.13",
     "i18next": "^24.1.0",
     "i18next-browser-languagedetector": "^8.0.2",
     "i18next-http-backend": "^3.0.1",
-    "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
     "notistack": "^3.0.1",
     "numeral": "^2.0.6",
@@ -55,8 +55,8 @@
     "@types/react": "^18.3.3",
     "@types/react-beforeunload": "^2.1.5",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^5.1.2",
     "typescript": "^5.5.3",
-    "vite": "^5.3.3"
+    "vite": "^7.3.1"
   }
 }

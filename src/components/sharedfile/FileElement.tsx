@@ -56,7 +56,7 @@ function FileInfo({ file, children, url, urlComplete }: FileInfoProps) {
         }
         action={
           <Stack direction="row" spacing={0}>
-            <DownloadButton url={`${urlComplete}?d=1`} name={file.name} />
+            {file.type === 'file' && <DownloadButton url={`${urlComplete}?d=1`} name={file.name} />}
             <DownloadButton url={`${apiUrl}/shared-file/zip/${id}/${url}`} name={file.name} variant="zip" />
           </Stack>
         }

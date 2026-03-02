@@ -36,7 +36,7 @@ export default function FileElement({ info }: { info: IndexElement }) {
   useEffect(() => {
     resizeObserver.current = new ResizeObserver((entries) => {
       if (!cardHeaderRef.current || !fileNameContainer.current) return;
-      fileNameContainer.current.style.setProperty('width', `${entries[0].contentRect.width - 71}px`);
+      fileNameContainer.current.style.setProperty('width', `${entries[0].contentRect.width - 140}px`);
     });
 
     resizeObserver.current.observe(cardHeaderRef.current as Element);

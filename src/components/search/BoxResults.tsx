@@ -21,7 +21,7 @@ export default function BoxResults() {
 
   const handleShowMore = useCallback(() => {
     if (list.length <= 16 || elementsShow > list.length) return
-    setElementsShow((val) => val + 8);
+    setElementsShow((val) => val + 16);
   }, [list, elementsShow]);
 
   useEffect(() => {

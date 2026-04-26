@@ -27,7 +27,7 @@ interface BufferRange {
   end: number;
 }
 
-export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: string }) {
+export default function VideoPlayer({ url }: { url: string; }) {
   const theme = useTheme();
   const VOLUME_KEY = 'videovolume';
 
@@ -38,6 +38,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const resizeObserver = useRef<ResizeObserver | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -52,6 +53,8 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   const [isMuted, setIsMuted] = useState(false);
   const [bufferRanges, setBufferRanges] = useState<BufferRange[]>([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [videoWidth, setVideoWidth] = useState<number>(1);
+  const [videoHeight, setVideoHeight] = useState<number>(0);
 
   useEffect(() => {
     localStorage.setItem(VOLUME_KEY, String(volume));
@@ -218,10 +221,46 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
     videoRef.current.volume = parseFloat(savedVolume);
   }, [videoRef.current]);
 
-  const videoplayerWidth = isFullscreen ? '100vw' : '100%';
-  const videoplayerHeight = isFullscreen ? '100vh' : 'auto';
+  const isHorizontal = videoWidth > videoHeight;
+
+  const videoWidthScale = isHorizontal ? '100%' : 'auto';
+  const videoHeightScale = isHorizontal ? 'auto' : '100%';
+
+  const videoplayerWidth = isFullscreen ? '100vw' : videoWidthScale;
+  const videoplayerHeight = isFullscreen ? '100vh' : videoHeightScale;
 
   const videoContainerPadding = isFullscreen ? '56%' : '50%';
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.onloadedmetadata = () => {
+      setTimeout(() => {
+        setVideoWidth(video.videoWidth);
+        setVideoHeight(video.videoHeight);
+      }, 50)
+    }
+    
+  },[]);
+
+  useEffect(() => {
+    if (!videoContainerRef.current || !videoRef.current || !containerRef.current || !videoControlsRef.current) return;
+
+    resizeObserver.current = new ResizeObserver((entries) => {
+      if (!videoContainerRef.current || !videoRef.current) return;
+      const entry = entries[0]
+      console.log(entry)
+      videoRef.current.style.setProperty('width', `${entry.contentRect.width}px`)
+      videoRef.current.style.setProperty('height', `${entry.contentRect.height}px`)
+      const heightVideoCointrols = videoControlsRef.current?.clientHeight || 90
+      videoControlsRef.current?.style.setProperty('top', `${containerRef.current?.clientHeight || 500 - heightVideoCointrols}px`)
+    });
+
+    resizeObserver.current.observe(containerRef.current as Element);
+    return () => {
+      resizeObserver.current?.disconnect();
+    };
+  }, []);
 
   return (
     <Paper
@@ -235,10 +274,10 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
         setHideTimeout();
       }}
     >
-      <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', height: 'auto', paddingTop: videoContainerPadding }}>
+      <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', height: '100%', paddingTop: videoContainerPadding }}>
         <video
           ref={videoRef}
-          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 'auto' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'auto' }}
           src={url}
           preload="metadata"
           onClick={() => {
@@ -268,7 +307,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
           ref={videoControlsRef}
           onClick={() => videoRef.current?.focus()}
           className="video-controls-show"
-          sx={{ position: 'absolute', bottom: 0, left: 0 }}
+          sx={{ position: 'absolute', left: 0 }}
         >
           <Box sx={{ position: 'relative', width: videoContainerRef.current?.clientWidth }}>
             <Box

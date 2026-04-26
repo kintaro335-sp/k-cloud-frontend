@@ -165,7 +165,7 @@ export default function GalleryContext({ children }: GalleryContextProps) {
       <Dialog open={open} maxWidth="lg" onClose={clickClose} fullScreen={fullScreen}>
         <AppBar position="relative">
           <Toolbar>
-            <IconButton onClick={clickClose}>
+            <IconButton onClick={clickClose} >
               <Icon icon={closeIcon} width="25px" height="25px" />
             </IconButton>
             <Tooltip title={fullScreen ? 'salir pantalla completa' : 'pantalla completa'}>

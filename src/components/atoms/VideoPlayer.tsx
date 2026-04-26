@@ -247,13 +247,13 @@ export default function VideoPlayer({ url }: { url: string; }) {
     if (!videoContainerRef.current || !videoRef.current || !containerRef.current || !videoControlsRef.current) return;
 
     resizeObserver.current = new ResizeObserver((entries) => {
-      if (!videoContainerRef.current || !videoRef.current) return;
+      if (!videoContainerRef.current || !videoRef.current || !containerRef.current || !videoControlsRef.current) return;
       const entry = entries[0]
       console.log(entry)
       videoRef.current.style.setProperty('width', `${entry.contentRect.width}px`)
       videoRef.current.style.setProperty('height', `${entry.contentRect.height}px`)
       const heightVideoCointrols = videoControlsRef.current?.clientHeight || 90
-      videoControlsRef.current?.style.setProperty('top', `${containerRef.current?.clientHeight || 500 - heightVideoCointrols}px`)
+      videoControlsRef.current?.style.setProperty('top', `${containerRef.current.clientHeight - heightVideoCointrols}px`)
     });
 
     resizeObserver.current.observe(containerRef.current as Element);

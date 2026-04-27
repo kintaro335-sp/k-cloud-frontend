@@ -13,7 +13,7 @@ import { set, values } from 'lodash';
 
 export default function BoxResults() {
   const theme = useTheme();
-  const [elementsShow, setElementsShow] = useState<number>(16);
+  const [elementsShow, setElementsShow] = useState<number>(32);
   const { list } = useSelector((state) => state.search);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const divBottom = useRef<HTMLDivElement>(null);
@@ -49,6 +49,10 @@ export default function BoxResults() {
       observer.disconnect();
     };
   }, [handleShowMore]);
+
+  useEffect(() => {
+    setElementsShow(32);
+  }, [list]);
 
   return (<Box sx={{ overflowY: 'scroll', maxHeight: 'calc(100vh - 200px)' }}>
     <Grid container spacing={2}>

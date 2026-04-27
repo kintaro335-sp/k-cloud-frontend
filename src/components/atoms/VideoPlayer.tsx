@@ -30,6 +30,7 @@ interface BufferRange {
 export default function VideoPlayer({ url }: { url: string; }) {
   const theme = useTheme();
   const VOLUME_KEY = 'videovolume';
+  const MUTED_KEY = 'videomuted';
 
   const timeOutId = useRef<number>(null);
 
@@ -50,7 +51,10 @@ export default function VideoPlayer({ url }: { url: string; }) {
     const savedVolume = localStorage.getItem(VOLUME_KEY);
     return savedVolume !== null ? parseFloat(savedVolume) : 1;
   });
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(() => {
+    const savedMuted = localStorage.getItem(MUTED_KEY);
+    return savedMuted !== '1'
+  });
   const [bufferRanges, setBufferRanges] = useState<BufferRange[]>([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [videoWidth, setVideoWidth] = useState<number>(1);
@@ -134,6 +138,7 @@ export default function VideoPlayer({ url }: { url: string; }) {
       videoRef.current.volume = newVolume;
       setVolume(newVolume);
       setIsMuted(newVolume === 0);
+      localStorage.setItem(MUTED_KEY, newVolume === 0 ? '1' : '0')
     }
   };
 
@@ -142,6 +147,7 @@ export default function VideoPlayer({ url }: { url: string; }) {
       videoRef.current.volume = value;
       setVolume(value);
       setIsMuted(value === 0);
+      localStorage.setItem(MUTED_KEY, value === 0 ? '1' : '0')
     }
   };
 
@@ -149,6 +155,7 @@ export default function VideoPlayer({ url }: { url: string; }) {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
+      localStorage.setItem(MUTED_KEY, !isMuted ? '1' : '0')
       if (isMuted) {
         videoRef.current.volume = volume;
       } else {

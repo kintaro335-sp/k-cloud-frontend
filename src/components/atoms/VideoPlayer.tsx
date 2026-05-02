@@ -135,7 +135,7 @@ export default function VideoPlayer({ url }: { url: string; }) {
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
     if (videoRef.current) {
-      videoRef.current.volume = newVolume;
+      videoRef.current.volume = newVolume * newVolume;
       setVolume(newVolume);
       setIsMuted(newVolume === 0);
       localStorage.setItem(MUTED_KEY, newVolume === 0 ? '1' : '0')
@@ -144,7 +144,7 @@ export default function VideoPlayer({ url }: { url: string; }) {
 
   const setVolumeKey = (value: number) => {
     if (videoRef.current && value >= 0 && value <= 1) {
-      videoRef.current.volume = value;
+      videoRef.current.volume = value * value;
       setVolume(value);
       setIsMuted(value === 0);
       localStorage.setItem(MUTED_KEY, value === 0 ? '1' : '0')
@@ -157,7 +157,7 @@ export default function VideoPlayer({ url }: { url: string; }) {
       setIsMuted(!isMuted);
       localStorage.setItem(MUTED_KEY, !isMuted ? '1' : '0')
       if (isMuted) {
-        videoRef.current.volume = volume;
+        videoRef.current.volume = volume * volume;
       } else {
         videoRef.current.volume = 0;
       }

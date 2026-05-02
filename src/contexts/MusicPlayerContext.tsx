@@ -277,7 +277,7 @@ export default function MusicPlayerContext({ children }: MusicPlayerCtxProps) {
   useEffect(() => {
     // Update volume
     if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : volume;
+      audioRef.current.volume = isMuted ? 0 : volume * volume;
     }
   }, [volume, isMuted]);
 

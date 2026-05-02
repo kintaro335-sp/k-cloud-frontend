@@ -25,4 +25,4 @@ const noPortwsUrlR = rawAuto ? urlWSOrigin : url_ws;
 export const apiUrl = rawAuto ? `${noPortUrl}${cPort}${api_prefix}` : url;
 export const wsUrl = rawAuto ? `${noPortwsUrlR}${cPortWS}${ws_prefix}` : url_ws;
 
-export const version = 'v1.31.1';
+export const version = 'v1.31.2';

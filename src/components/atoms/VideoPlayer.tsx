@@ -27,9 +27,10 @@ interface BufferRange {
   end: number;
 }
 
-export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: string }) {
+export default function VideoPlayer({ url }: { url: string; }) {
   const theme = useTheme();
   const VOLUME_KEY = 'videovolume';
+  const MUTED_KEY = 'videomuted';
 
   const timeOutId = useRef<number>(null);
 
@@ -38,6 +39,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const resizeObserver = useRef<ResizeObserver | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -49,9 +51,14 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
     const savedVolume = localStorage.getItem(VOLUME_KEY);
     return savedVolume !== null ? parseFloat(savedVolume) : 1;
   });
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(() => {
+    const savedMuted = localStorage.getItem(MUTED_KEY);
+    return savedMuted !== '1'
+  });
   const [bufferRanges, setBufferRanges] = useState<BufferRange[]>([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [videoWidth, setVideoWidth] = useState<number>(1);
+  const [videoHeight, setVideoHeight] = useState<number>(0);
 
   useEffect(() => {
     localStorage.setItem(VOLUME_KEY, String(volume));
@@ -128,17 +135,19 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
     if (videoRef.current) {
-      videoRef.current.volume = newVolume;
+      videoRef.current.volume = newVolume * newVolume;
       setVolume(newVolume);
       setIsMuted(newVolume === 0);
+      localStorage.setItem(MUTED_KEY, newVolume === 0 ? '1' : '0')
     }
   };
 
   const setVolumeKey = (value: number) => {
     if (videoRef.current && value >= 0 && value <= 1) {
-      videoRef.current.volume = value;
+      videoRef.current.volume = value * value;
       setVolume(value);
       setIsMuted(value === 0);
+      localStorage.setItem(MUTED_KEY, value === 0 ? '1' : '0')
     }
   };
 
@@ -146,8 +155,9 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
+      localStorage.setItem(MUTED_KEY, !isMuted ? '1' : '0')
       if (isMuted) {
-        videoRef.current.volume = volume;
+        videoRef.current.volume = volume * volume;
       } else {
         videoRef.current.volume = 0;
       }
@@ -218,10 +228,46 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
     videoRef.current.volume = parseFloat(savedVolume);
   }, [videoRef.current]);
 
-  const videoplayerWidth = isFullscreen ? '100vw' : '100%';
-  const videoplayerHeight = isFullscreen ? '100vh' : 'auto';
+  const isHorizontal = videoWidth > videoHeight;
+
+  const videoWidthScale = isHorizontal ? '100%' : 'auto';
+  const videoHeightScale = isHorizontal ? 'auto' : '100%';
+
+  const videoplayerWidth = isFullscreen ? '100vw' : videoWidthScale;
+  const videoplayerHeight = isFullscreen ? '100vh' : videoHeightScale;
 
   const videoContainerPadding = isFullscreen ? '56%' : '50%';
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.onloadedmetadata = () => {
+      setTimeout(() => {
+        setVideoWidth(video.videoWidth);
+        setVideoHeight(video.videoHeight);
+      }, 50)
+    }
+    
+  },[]);
+
+  useEffect(() => {
+    if (!videoContainerRef.current || !videoRef.current || !containerRef.current || !videoControlsRef.current) return;
+
+    resizeObserver.current = new ResizeObserver((entries) => {
+      if (!videoContainerRef.current || !videoRef.current || !containerRef.current || !videoControlsRef.current) return;
+      const entry = entries[0]
+      console.log(entry)
+      videoRef.current.style.setProperty('width', `${entry.contentRect.width}px`)
+      videoRef.current.style.setProperty('height', `${entry.contentRect.height}px`)
+      const heightVideoCointrols = videoControlsRef.current?.clientHeight || 90
+      videoControlsRef.current?.style.setProperty('top', `${containerRef.current.clientHeight - heightVideoCointrols}px`)
+    });
+
+    resizeObserver.current.observe(containerRef.current as Element);
+    return () => {
+      resizeObserver.current?.disconnect();
+    };
+  }, []);
 
   return (
     <Paper
@@ -235,10 +281,10 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
         setHideTimeout();
       }}
     >
-      <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', height: 'auto', paddingTop: videoContainerPadding }}>
+      <Box ref={videoContainerRef} sx={{ position: 'relative', width: '100%', height: '100%', paddingTop: videoContainerPadding }}>
         <video
           ref={videoRef}
-          style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: 'auto' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'auto' }}
           src={url}
           preload="metadata"
           onClick={() => {
@@ -268,7 +314,7 @@ export default function VideoPlayer({ url, nameFile }: { url: string; nameFile: 
           ref={videoControlsRef}
           onClick={() => videoRef.current?.focus()}
           className="video-controls-show"
-          sx={{ position: 'absolute', bottom: 0, left: 0 }}
+          sx={{ position: 'absolute', left: 0 }}
         >
           <Box sx={{ position: 'relative', width: videoContainerRef.current?.clientWidth }}>
             <Box

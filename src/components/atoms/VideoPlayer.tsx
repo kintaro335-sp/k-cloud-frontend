@@ -53,7 +53,7 @@ export default function VideoPlayer({ url }: { url: string; }) {
   });
   const [isMuted, setIsMuted] = useState(() => {
     const savedMuted = localStorage.getItem(MUTED_KEY);
-    return savedMuted !== '1'
+    return savedMuted === '1'
   });
   const [bufferRanges, setBufferRanges] = useState<BufferRange[]>([]);
   const [isFullscreen, setIsFullscreen] = useState(false);

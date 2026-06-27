@@ -5,11 +5,13 @@
  */
 
 import { useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from '../redux/store';
 import { useSnackbar } from 'notistack';
 import { verifyAuth } from '../api/auth';
 import useAuth from '../hooks/useAuth';
+import { Loading } from '../pages';
+import { isAxiosError } from 'axios';
 
 type AuthGuardProps = {
   children: JSX.Element | React.ReactNode | undefined;
@@ -30,15 +32,15 @@ export default function Authguard({ children, redirect, redirectTo, admin }: Aut
         navigate(redirectTo || '/');
         enqueueSnackbar('You are not an admin', { variant: 'error' });
       }
+    }).catch((err) => {
+      if (isAxiosError(err)) {
+        navigate(redirectTo || '/');
+      }
     });
   }, []);
 
-  if (!isAuthenticated && redirect) {
-    return <Navigate to={redirectTo || '/'} />;
-  }
-
   if (!isAuthenticated) {
-    return <></>;
+    return <Loading />;
   }
 
   return <>{children}</>;

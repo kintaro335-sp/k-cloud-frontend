@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 // mui
 import { Grid, Box, Stack, Typography } from '@mui/material';
 import { DownloadButton } from '../atoms';
@@ -23,7 +23,10 @@ import { fullDateFormat } from '../../utils/dateformat';
 import { apiUrl } from '../../config';
 
 export default function FolderExplorer() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { id } = useParams();
   const { path, content, info } = useSelector((state) => state.sharedfile);
   const diagonal = path !== '' ? '/' : '';
@@ -50,9 +53,28 @@ export default function FolderExplorer() {
           setLoading(false);
         }
       }
+      // URL search params
+      const searchParams = new URLSearchParams();
+      if (path !== '') {
+        searchParams.append('path', path);
+        const paramsString = searchParams.toString();
+        const sign = paramsString === '' ? '' : '?';
+        navigate(`${location.pathname}${sign}${paramsString}`, { replace: false });
+      } else {
+        navigate(`${location.pathname}`, { replace: false });
+      }
     }
     getContentEffect(path);
   }, [path, id]);
+
+  useEffect(() => {
+    const pathParam = searchParams.get('path');
+    if (pathParam !== null) {
+      setPath(pathParam);
+    } else {
+      setPath('');
+    }
+  }, [location.search]);
 
   return (
     <Box>

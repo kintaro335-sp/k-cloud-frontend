@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { RouteBar } from '../components/files/routebar';
 import { Grid, Card, CardContent } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -26,6 +27,9 @@ import useFileSelect from '../hooks/useFileSelect';
 
 export default function Files() {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { socketClient } = useAuth();
   const { access_token, path } = useSelector((state) => state.session);
   const pathM = useRef<string>(path);
@@ -48,6 +52,16 @@ export default function Files() {
     if (pathM.current === path) {
       setLoading(false);
       setFiles(list);
+      // URL search params
+      const searchParams = new URLSearchParams();
+      if (path !== '') {
+        searchParams.append('path', path);
+        const paramsString = searchParams.toString();
+        const sign = paramsString === '' ? '' : '?';
+        navigate(`${location.pathname}${sign}${paramsString}`, { replace: false });
+      } else {
+        navigate(`${location.pathname}`, { replace: false });
+      }
     }
   }
 
@@ -96,6 +110,15 @@ export default function Files() {
     getFiles(path);
     pathM.current = path;
   }, [path]);
+
+  useEffect(() => {
+    const pathParam = searchParams.get('path');
+    if (pathParam !== null) {
+      setPath(pathParam);
+    } else {
+      setPath('');
+    }
+  }, [location.search]);
 
   useEffect(() => {
     getTree();

@@ -118,15 +118,16 @@ export default function FileElement({ file, sf = false, arrayIndex }: FileElemen
   const { name, size, type, mime_type, extension, tokens } = file;
   const { id } = useParams();
   const session = useSelector((state) => state.session);
+  const fileexplorer = useSelector((state) => state.fileexplorer);
   const sharedfile = useSelector((state) => state.sharedfile);
-  const pathSelected = sf ? sharedfile.path : session.path;
+  const pathSelected = sf ? sharedfile.path : fileexplorer.path;
 
   const diagonal = pathSelected ? '/' : '';
 
-  const url = sf ? `${sharedfile.path}${diagonal}${name}` : `${session.path}${diagonal}${name}`;
+  const url = sf ? `${sharedfile.path}${diagonal}${name}` : `${fileexplorer.path}${diagonal}${name}`;
   const urlComplete = sf
     ? `${apiUrl}/shared-file/content/${id}/${sharedfile.path}${diagonal}${name}`
-    : `${apiUrl}/files/list/${session.path}${diagonal}${name}?t=${session.access_token}`;
+    : `${apiUrl}/files/list/${fileexplorer.path}${diagonal}${name}?t=${session.access_token}`;
 
   const onClickFolder = () => {
     if (sf) {

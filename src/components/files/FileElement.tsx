@@ -18,7 +18,7 @@ import { apiUrl } from '../../config';
 
 // redux
 import { useSelector } from '../../redux/store';
-import { setPath as setPathSession } from '../../redux/slices/session';
+import { setPath as setPathSession } from '../../redux/slices/fileexplorer';
 import { setPath as setPathSF } from '../../redux/slices/sharedfile';
 //css
 import './css/fileelement.css';

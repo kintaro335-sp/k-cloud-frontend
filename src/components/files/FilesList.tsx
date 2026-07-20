@@ -11,7 +11,7 @@ import Loading from '../../pages/Loading';
 import FileElement from './FileElement';
 // redux
 import { useSelector } from '../../redux/store';
-import { setStart, setShowQ } from '../../redux/slices/session';
+import { setStart, setShowQ } from '../../redux/slices/fileexplorer';
 // types
 import { FileI } from '../../@types/files';
 
@@ -21,7 +21,7 @@ interface FilesListProps {
 
 export default function FilesList({ loading }: FilesListProps) {
   const theme = useTheme();
-  const { files, path, start, showQ } = useSelector((state) => state.session);
+  const { files, path, start, showQ } = useSelector((state) => state.fileexplorer);
   const scrollElement = useRef<HTMLDivElement>(null);
   const divBottom = useRef<HTMLDivElement>(null);
   const observerBottom = useRef<IntersectionObserver | null>(null);

@@ -11,7 +11,7 @@ import NewTokenForm from './NewTokenForm';
 import TokensTable from './TokensTable';
 import { Trans } from 'react-i18next';
 // redux
-import { setTokens } from '../../../redux/slices/session';
+import { setTokens } from '../../../redux/slices/fileexplorer';
 import { Icon } from '@iconify/react';
 import tokensIcon from '@iconify/icons-material-symbols/format-list-bulleted';
 

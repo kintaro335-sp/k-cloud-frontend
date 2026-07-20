@@ -42,24 +42,25 @@ export default function GalleryContext({ children }: GalleryContextProps) {
   const [selected, setSelected] = useState(0);
   const [contextExplorer, setContextExplorer] = useState<explorerContext>('default');
   const session = useSelector((state) => state.session);
+  const fileexplorer = useSelector((state) => state.fileexplorer);
   const sharedFile = useSelector((state) => state.sharedfile);
   const tokenView = useSelector((state) => state.tokenview);
 
   const paths = useMemo(
     () => ({
-      default: session.path,
+      default: fileexplorer.path,
       sharedFile: sharedFile.path,
       tokenView: tokenView.path
     }),
-    [session, sharedFile, tokenView]
+    [fileexplorer, sharedFile, tokenView]
   );
   const contents = useMemo(
     () => ({
-      default: session.files,
+      default: fileexplorer.files,
       sharedFile: sharedFile.content,
       tokenView: tokenView.content
     }),
-    [session, sharedFile, tokenView]
+    [fileexplorer, sharedFile, tokenView]
   );
   const urlPrefixes = {
     default: '/files/list',

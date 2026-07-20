@@ -9,7 +9,7 @@ import { TreeItem } from '@mui/x-tree-view';
 import { Folder } from '../../../@types/files';
 // redux
 import { useDispatch } from '../../../redux/store';
-import { setPath } from '../../../redux/slices/session';
+import { setPath } from '../../../redux/slices/fileexplorer';
 // icon
 import { Icon } from '@iconify/react';
 import FolderIcon from '@iconify/icons-material-symbols/folder';

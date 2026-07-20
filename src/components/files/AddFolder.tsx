@@ -18,7 +18,6 @@ import { isAxiosError } from 'axios';
 import { createFolder, getListFiles } from '../../api/files';
 
 // redux
-import { setFiles } from '../../redux/slices/session';
 import { useSelector, useDispatch } from '../../redux/store';
 
 export default function AddFolder() {
@@ -27,8 +26,8 @@ export default function AddFolder() {
   const [loading, setLoading] = useState<boolean>(false);
   const anchorRef = useRef<HTMLButtonElement | null>(null);
   const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
-  const { path, access_token } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
 
   const clickOpen = () => {
     setOpen(true);

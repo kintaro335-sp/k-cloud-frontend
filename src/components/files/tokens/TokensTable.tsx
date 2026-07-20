@@ -22,7 +22,7 @@ import { t } from 'i18next';
 import { Trans } from 'react-i18next';
 // redux
 import { useSelector } from '../../../redux/store';
-import { setTokens } from '../../../redux/slices/session';
+import { setTokens } from '../../../redux/slices/fileexplorer';
 // api
 import { getTokensByPath, deleteTokensByPath } from '../../../api/sharedfiles';
 

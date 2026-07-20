@@ -18,7 +18,7 @@ import { Icon } from '@iconify/react';
 import gotoLocaltion from '@iconify/icons-material-symbols/arrow-right-alt-rounded';
 // redux
 import { useSelector } from '../../redux/store';
-import { setPath } from '../../redux/slices/session';
+import { setPath } from '../../redux/slices/fileexplorer';
 import { bytesFormat } from '../../utils/files';
 
 export default function FileElement({ info }: { info: IndexElement }) {

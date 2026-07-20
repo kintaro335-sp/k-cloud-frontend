@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 import gotoIcon from '@iconify/icons-material-symbols/arrow-right-alt-rounded';
 // redux
-import { setStart, setShowQ } from '../../redux/slices/session';
+import { setStart, setShowQ } from '../../redux/slices/fileexplorer';
 import { useSelector } from '../../redux/store';
 // misc
 import { Trans } from 'react-i18next';
@@ -23,7 +23,7 @@ interface Inputs {
 
 export default function GoToFiles() {
   const theme = useTheme();
-  const { files, start } = useSelector((state) => state.session);
+  const { files, start } = useSelector((state) => state.fileexplorer);
   const totalFiles = files.length;
   const [open, setOpen] = useState(false);
   

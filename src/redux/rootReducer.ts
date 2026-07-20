@@ -9,6 +9,7 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 // slices
 import sessionReducer from './slices/session';
+import fileexplorerReducer from './slices/fileexplorer';
 import adminReducer from './slices/admin';
 import fileUploaderReducer from './slices/fileUploader';
 import statsReducer from './slices/stats';
@@ -38,6 +39,7 @@ const sessionPersistConfig = {
 
 const rootReducer = combineReducers({
   session: persistReducer(sessionPersistConfig, sessionReducer),
+  fileexplorer: fileexplorerReducer,
   admin: adminReducer,
   files: fileUploaderReducer,
   stats: statsReducer,

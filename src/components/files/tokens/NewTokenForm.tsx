@@ -23,7 +23,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 // redux
 import { useSelector } from '../../../redux/store';
-import { setTokens } from '../../../redux/slices/session';
+import { setTokens } from '../../../redux/slices/fileexplorer';
 // api
 import { shareFile, getTokensByPath, updateToken } from '../../../api/sharedfiles';
 import dayjs from 'dayjs';

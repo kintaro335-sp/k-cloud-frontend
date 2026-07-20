@@ -16,7 +16,7 @@ import DropFiles from '../components/files/DropFiles';
 import { ContextualMenuSelect } from '../components/files/menuselect';
 // redux
 import { useSelector } from '../redux/store';
-import { setFiles, setTree, setPath, addFile, substituteFile } from '../redux/slices/session';
+import { setFiles, setTree, setPath, addFile, substituteFile } from '../redux/slices/fileexplorer';
 // hooks
 import useAuth from '../hooks/useAuth';
 // api
@@ -31,7 +31,8 @@ export default function Files() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { socketClient } = useAuth();
-  const { access_token, path } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
   const pathM = useRef<string>(path);
   const { enqueueSnackbar } = useSnackbar();
   const { showOptions } = useFileSelect();

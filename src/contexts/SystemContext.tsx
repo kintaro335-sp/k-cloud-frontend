@@ -21,7 +21,7 @@ interface SystemcontextProps {
 
 export default function Systemcontext({ children }: SystemcontextProps) {
   const { socketClient } = useAuth();
-  const { path } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
   const { filesDir } = useSelector((state) => state.files);
   const { pathname } = useLocation();
   const { clearSelect } = useFileSelect();

@@ -18,7 +18,7 @@ import editIcon from '@iconify/icons-material-symbols/edit';
 import { useSnackbar } from 'notistack';
 // redux
 import { useSelector } from '../../../redux/store';
-import { setTokens } from '../../../redux/slices/session';
+import { setTokens } from '../../../redux/slices/fileexplorer';
 // api
 import { deleteToken } from '../../../api/sharedfiles';
 import { TokenElement } from '../../../@types/sharedfiles';

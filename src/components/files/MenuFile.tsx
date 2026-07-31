@@ -32,7 +32,8 @@ import { apiUrl } from '../../config';
 
 export default function MenuFile({ file, url, urlComplete }: { file: FileI; url: string; urlComplete: string }) {
   const [open, setOpen] = useState(false);
-  const { access_token, path } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
   const { enqueueSnackbar } = useSnackbar();
   const anchorRef = useRef<HTMLButtonElement>(null);
   const theme = useTheme();

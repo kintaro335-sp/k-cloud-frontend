@@ -12,7 +12,7 @@ import { useSelector } from '../../../../redux/store';
 
 export default function SelectAllButton() {
   const { selectAll } = useFileSelect();
-  const { files } = useSelector((state) => state.session);
+  const { files } = useSelector((state) => state.fileexplorer);
 
   const onClickSelectAll = () => {
     selectAll(files.map((f) => f.name));

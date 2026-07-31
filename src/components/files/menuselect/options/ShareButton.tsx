@@ -18,7 +18,8 @@ import { shareMultipleFiles } from '../../../../api/sharedfiles';
 
 export default function ShareButton() {
   const { enqueueSnackbar } = useSnackbar();
-  const { path, access_token } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
   const { files, clearSelect } = useFileSelect();
 
   const onClickShare = () => {

@@ -16,7 +16,8 @@ import { StopShareFiles } from '../../../../api/sharedfiles';
 
 export default function StopShareButton() {
   const { files, clearSelect } = useFileSelect();
-  const { path, access_token } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
   const { enqueueSnackbar } = useSnackbar();
 
   const onClickStopShare = () => {

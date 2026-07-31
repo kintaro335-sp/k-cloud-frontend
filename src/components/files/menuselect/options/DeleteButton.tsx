@@ -15,7 +15,8 @@ import { deleteSelectedFiles } from '../../../../api/files';
 
 export default function DeleteButton() {
   const { enqueueSnackbar } = useSnackbar();
-  const { access_token, path } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
   const { files, clearSelect } = useFileSelect();
 
   const handleDeleteFiles = () => {

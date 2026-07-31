@@ -11,7 +11,7 @@ import FolderItemTree from './FolderItemTree';
 
 
 export default function Tree() {
-  const { tree } = useSelector((state) => state.session);
+  const { tree } = useSelector((state) => state.fileexplorer);
 
   return (
     <Box>

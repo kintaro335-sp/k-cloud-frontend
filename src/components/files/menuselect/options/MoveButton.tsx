@@ -27,7 +27,8 @@ import { isAxiosError } from 'axios';
 export default function OptionMove() {
   const { enqueueSnackbar } = useSnackbar();
   const { files, clearSelect } = useFileSelect();
-  const { access_token, path } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
   const [pathTo, setPathTo] = useState('');
   const [filesListE, setFilesListE] = useState<FileI[]>([]);
   const [loading, setLoading] = useState(false);

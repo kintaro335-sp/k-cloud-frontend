@@ -11,7 +11,7 @@ import { Trans } from 'react-i18next';
 import useFileU from '../../hooks/useFileU';
 
 export default function DropFiles() {
-  const { path } = useSelector((state) => state.session);
+  const { path } = useSelector((state) => state.fileexplorer);
   const { uploadFile } = useFileU();
 
   return (

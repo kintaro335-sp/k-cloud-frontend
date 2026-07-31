@@ -32,7 +32,7 @@ export const FileUploadContext = createContext({ uploadFile: (path: string, file
 
 export default function FileUploadC({ children }: { children: React.ReactNode }) {
   // const { enqueueSnackbar } = useSnackbar();
-  const { access_token, path } = useSelector((state) => state.session);
+  const { access_token } = useSelector((state) => state.session);
   const { socketClient } = useAuth();
   const { uploading } = useSelector((state) => state.files);
 
